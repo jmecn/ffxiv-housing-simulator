@@ -21,5 +21,10 @@
             <groupId>org.jmonkeyengine</groupId>
             <artifactId>jme3-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ffxiv.housim</groupId>
+            <artifactId>saint-coinach</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

@@ -30,6 +30,12 @@
             <groupId>org.jmonkeyengine</groupId>
             <artifactId>jme3-lwjgl</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>ffxiv.housim</groupId>
+            <artifactId>graphics</artifactId>
+            <version>${project.version}</version>
+        </dependency>
      </dependencies>
 
     <build>

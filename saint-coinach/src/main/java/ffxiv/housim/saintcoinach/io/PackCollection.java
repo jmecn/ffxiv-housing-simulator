@@ -20,11 +20,7 @@ public class PackCollection {
         return packs.values();
     }
 
-    public PackCollection(@NonNull String dataDirectory) throws IOException {
-        if (!new File(dataDirectory).exists()) {
-            throw new FileNotFoundException("dataDirectory");
-        }
-
+    public PackCollection(@NonNull String dataDirectory) {
         this.dataDirectory = dataDirectory;
     }
 

@@ -16,27 +16,23 @@ public class TestSqpack {
         String file3 = "common/graphics/texture/_zone001_y.tex";
         String file4 = "bgcommon/hou/dyna/opt/wl/0002/texture/opt_wl_m0002_0a_d.tex";
 
-        try {
-            SqPack sqPack = new SqPack(gameDir);
-            PackCollection collection = new PackCollection(sqPack.getPackDir());
-            PackFile packFile = collection.tryGetFile(file);
-            byte[] data = packFile.getData();
-            System.out.println(data.length);
+        SqPack sqPack = new SqPack(gameDir);
+        PackCollection collection = new PackCollection(sqPack.getPackDir());
+        PackFile packFile = collection.tryGetFile(file);
+        byte[] data = packFile.getData();
+        System.out.println(data.length);
 
-            packFile = collection.tryGetFile(file2);
-            data = packFile.getData();
-            System.out.println(data.length);
+        packFile = collection.tryGetFile(file2);
+        data = packFile.getData();
+        System.out.println(data.length);
 
-            packFile = collection.tryGetFile(file3);
-            data = packFile.getData();
-            System.out.println(data.length);
+        packFile = collection.tryGetFile(file3);
+        data = packFile.getData();
+        System.out.println(data.length);
 
-            packFile = collection.tryGetFile(file4);
-            data = packFile.getData();
-            System.out.println(data.length);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        packFile = collection.tryGetFile(file4);
+        data = packFile.getData();
+        System.out.println(data.length);
 
     }
 

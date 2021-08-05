@@ -17,7 +17,7 @@ public class TestPackIdentifier {
     }
 
     @Test
-    public void test010000() {
+    public void test010103() {
         PackIdentifier id = PackIdentifier.tryGet("bgcommon/ex1/03_/texture");
         assertEquals("bgcommon", id.getType());
         assertEquals(1, id.getTypeKey());
