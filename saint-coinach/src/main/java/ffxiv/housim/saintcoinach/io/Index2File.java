@@ -31,6 +31,6 @@ public class Index2File implements IIndexFile {
 
     @Override
     public String toString() {
-        return String.format("fileKey=%08X, offset=%08X, dat=%d", fileKey, offset, datFile);
+        return String.format("Index2(fileKey=%08X, offset=%08X, dat=%d)", fileKey, offset, datFile);
     }
 }

@@ -43,10 +43,6 @@ public abstract class PackFile {
 
     public abstract byte[] getData();
 
-    public InputStream getStream() throws IOException {
-        return new ByteArrayInputStream(getData());
-    }
-
     protected FileChannel getSourceStream() throws IOException {
         return this.pack.getDataStream(getIndex().getDatFile());
     }

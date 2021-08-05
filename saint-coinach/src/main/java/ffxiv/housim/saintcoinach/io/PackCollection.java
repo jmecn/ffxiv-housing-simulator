@@ -1,6 +1,7 @@
 package ffxiv.housim.saintcoinach.io;
 
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,6 +10,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public class PackCollection {
     private Map<PackIdentifier, Pack> packs = new ConcurrentHashMap<>();
 

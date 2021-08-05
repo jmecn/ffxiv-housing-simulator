@@ -1,6 +1,8 @@
 package ffxiv.housim.saintcoinach.imaging;
 
 import lombok.Getter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -10,8 +12,11 @@ import java.nio.channels.FileChannel;
 /**
  * Header of an image file inside SqPack.
  */
+@ToString
+@Slf4j
 public class ImageHeader {
     final static int LENGTH = 0x50;
+    final static int MIPMAP_OFFSET = 0x1C;
 
     @Getter
     private ByteBuffer buffer;
@@ -22,12 +27,17 @@ public class ImageHeader {
     @Getter
     private int height;
     @Getter
+    private int depth;
+    @Getter
     private int numMipmaps;
+    @Getter
+    private int[] mipmapOffsets;
     @Getter
     private long endOfHeader;
 
     public ImageHeader(FileChannel channel) throws IOException {
         buffer = ByteBuffer.allocate(LENGTH);
+
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         channel.read(buffer);
         buffer.flip();
@@ -38,8 +48,16 @@ public class ImageHeader {
         buffer.getShort();// unknown
         width = buffer.getShort();
         height = buffer.getShort();
-        buffer.getShort();// unknown
+        depth = buffer.getShort();// unknown
         numMipmaps = buffer.getShort();
 
+        mipmapOffsets = new int[numMipmaps];
+
+        buffer.position(MIPMAP_OFFSET);
+        for (int i=0; i<numMipmaps; i++) {
+            mipmapOffsets[i] = buffer.getInt() - LENGTH;
+        }
+
+        log.info("format:{}, width:{}, height:{}, depth:{}, numMipmaps:{}, mipmapOffsets:{}", format, width, height, depth, numMipmaps, mipmapOffsets);
     }
 }

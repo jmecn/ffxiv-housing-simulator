@@ -3,6 +3,7 @@ package ffxiv.housim.saintcoinach.io;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -10,10 +11,8 @@ import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 
 @ToString
+@Slf4j
 public class FileCommonHeader {
-    final static int FileTypeOffset = 0x04;
-    final static int FileLengthOffset = 0x10;
-    final static int FileLengthShift = 7;
 
     @Getter
     private ByteBuffer buffer;
@@ -23,7 +22,7 @@ public class FileCommonHeader {
     @Getter
     private int headerLength;
     @Getter
-    private int fileType;
+    private FileType fileType;
     @Getter
     private int fileLength;// uncompressed file length
     @Getter
@@ -58,7 +57,8 @@ public class FileCommonHeader {
 
         //
         buffer.getInt();// 0x00 headerLength
-        fileType = buffer.getInt();// 0x04 file type
+        int type = buffer.getInt();// 0x04 file type
+        fileType = FileType.of(type);
 
         fileLength = buffer.getInt();// 0x08 uncompressed file size
         buffer.getInt();// 0x0C skip
@@ -67,6 +67,7 @@ public class FileCommonHeader {
         blockCount = buffer.getInt(); // 0x14
         endOfHeader = channel.position();// 0x18
 
-        length = blockSize << FileLengthShift;
+        length = blockSize * PackFile.BlockPadding;
+        log.info("headerLength:{}, fileType:{}, fileLength:{}, blockSize:{}, blockCount:{}", headerLength, fileType, fileLength, blockSize, blockCount);
     }
 }

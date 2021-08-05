@@ -17,7 +17,7 @@ public class SqPack {
 
     private List<Pack> packs;
 
-    public SqPack(String gameDir) throws IOException {
+    public SqPack(String gameDir) {
         Path dir = Paths.get(gameDir);
         Path sqpack = Paths.get(gameDir, "game", "sqpack");
         File ffxivGameVer = Paths.get(gameDir, "game", "ffxivgame.ver").toFile();

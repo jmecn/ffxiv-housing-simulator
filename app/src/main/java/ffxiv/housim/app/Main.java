@@ -12,6 +12,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.shape.Box;
+import com.jme3.system.AppSettings;
 
 public class Main extends SimpleApplication {
     public void simpleInitApp() {
@@ -47,13 +48,26 @@ public class Main extends SimpleApplication {
         rootNode.addLight(dl);
 
         flyCam.setMoveSpeed(10f);
+        flyCam.setDragToRotate(true);
     }
 
-    public void simpleUpdate(float tpf) {}
+    public void simpleUpdate(float tpf) {
+
+    }
+
     public static void main(String[] args) {
+        AppSettings setting = new AppSettings(true);
+        setting.setTitle("Final Fantasy XIV Housing Simulator v0.0.1-SNAPSHOT");
+        setting.setResolution(1280, 720);
+        setting.setResizable(true);
+        setting.setFrameRate(60);
+        setting.setSamples(4);
+        // LWJGL-OpenGL2
+        setting.setRenderer(AppSettings.LWJGL_OPENGL41);
+        System.out.println(setting.getRenderer());
+
         Main app = new Main();
-        //app.setShowSettings(false);
-        app.start(
-        );
+        app.setSettings(setting);
+        app.start();
     }
 }

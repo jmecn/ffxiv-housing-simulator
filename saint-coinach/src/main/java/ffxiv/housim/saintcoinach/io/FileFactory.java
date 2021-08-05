@@ -1,5 +1,6 @@
 package ffxiv.housim.saintcoinach.io;
 
+import ffxiv.housim.saintcoinach.graphics.ModelFile;
 import ffxiv.housim.saintcoinach.imaging.ImageFile;
 
 import java.io.IOException;
@@ -20,18 +21,16 @@ public final class FileFactory {
         }
 
         switch (header.getFileType()) {
-            case FileType.Empty:
+            case Empty:
                 return new EmptyFile(pack, header);
-            case FileType.Binary:
+            case Binary:
                 return new BinaryFile(pack, header);
-            case FileType.Model:
-                break;
-            case FileType.Image:
+            case Model:
+                return new ModelFile(pack, header);
+            case Image:
                 return new ImageFile(pack, header);
             default :
                 throw new UnsupportedOperationException("Unknown file type " + header.getFileType());
         }
-
-        return null;
     }
 }
