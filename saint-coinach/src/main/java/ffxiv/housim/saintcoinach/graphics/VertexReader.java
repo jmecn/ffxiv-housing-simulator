@@ -1,12 +1,13 @@
 package ffxiv.housim.saintcoinach.graphics;
 
 import ffxiv.housim.saintcoinach.HalfHelper;
+import lombok.NonNull;
 
 import java.nio.ByteBuffer;
 
-public class VertexReader {
+public final class VertexReader {
 
-    public static Vertex read(ByteBuffer buffer, VertexFormat format, int[] offsets) {
+    public static Vertex read(@NonNull ByteBuffer buffer, @NonNull VertexFormat format, @NonNull int[] offsets) {
         Vertex vertex = new Vertex();
 
         for (VertexFormatElement element : format.getElements()) {

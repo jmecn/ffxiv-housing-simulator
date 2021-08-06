@@ -8,6 +8,7 @@ import com.jme3.texture.plugins.DXTFlipper;
 import com.jme3.util.BufferUtils;
 import ffxiv.housim.saintcoinach.imaging.ImageFile;
 import ffxiv.housim.saintcoinach.imaging.ImageHeader;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.ByteBuffer;
@@ -15,7 +16,7 @@ import java.nio.ByteBuffer;
 @Slf4j
 public class TextureFactory {
 
-    public static Texture get(ImageFile imageFile) {
+    public static Texture get(@NonNull ImageFile imageFile) {
         Image image = null;
 
         switch(imageFile.getFormat()) {
@@ -64,7 +65,7 @@ public class TextureFactory {
         return texture;
     }
 
-    public static Image getImage(ImageFile imageFile, Image.Format format) {
+    public static Image getImage(@NonNull ImageFile imageFile, @NonNull Image.Format format) {
         byte[] data = imageFile.getData();
         ImageHeader header = imageFile.getImageHeader();
 
