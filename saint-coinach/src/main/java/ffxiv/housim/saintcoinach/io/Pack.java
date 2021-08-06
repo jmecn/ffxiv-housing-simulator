@@ -30,9 +30,9 @@ public class Pack {
         }
     }
 
-    private final static String IndexFileFormat = "%02d%02d%02d.win32.index";
-    private final static String Index2FileFormat = "%02d%02d%02d.win32.index2";
-    private final static String DatFileFormat = "%02d%02d%02d.win32.dat%d";
+    private final static String IndexFileFormat = "%02x%02x%02x.win32.index";
+    private final static String Index2FileFormat = "%02x%02x%02x.win32.index2";
+    private final static String DatFileFormat = "%02x%02x%02x.win32.dat%d";
 
     private Map<Pair<Thread, Integer>, WeakReference<FileChannel>> dataStreams = new HashMap<>();
 

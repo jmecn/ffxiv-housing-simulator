@@ -99,7 +99,7 @@ public class PackIdentifier {
 
     @Override
     public String toString() {
-        return String.format("%02d%02d%02d", typeKey, expansionKey, number);
+        return String.format("%02x%02x%02x", typeKey, expansionKey, number);
     }
 
     public static PackIdentifier tryGet(@NonNull String fullPath) {
