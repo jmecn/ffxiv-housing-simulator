@@ -1,4 +1,7 @@
-package ffxiv.housim.saintcoinach.ex;
+package ffxiv.housim.saintcoinach.ex.sheet;
+
+import ffxiv.housim.saintcoinach.ex.Language;
+import ffxiv.housim.saintcoinach.ex.row.IMultiRow;
 
 public interface IMultiSheet extends ISheet {
 

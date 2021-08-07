@@ -1,5 +1,7 @@
 package ffxiv.housim.saintcoinach.ex;
 
+import ffxiv.housim.saintcoinach.ex.row.IDataRow;
+
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;

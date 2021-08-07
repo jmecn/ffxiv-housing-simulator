@@ -23,6 +23,6 @@ public class TestExCollection {
     @Test
     public void testRoot() {
         ExCollection exCollection = new ExCollection(collection);
-        exCollection.getSheet("housingfurniture");
+        exCollection.getSheet("HousingFurniture");
     }
 }

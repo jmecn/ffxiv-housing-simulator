@@ -7,16 +7,16 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.List;
 
 @Slf4j
 public class Header {
 
+    @Getter
     private int columnCount;
     private int rangeCount;
     private int languageCount;
-
-    private Column[] mColumns;
+    @Getter
+    private Column[] columns;
     private Range[] dataFileRanges;
     private Language[] availableLanguages;
 
@@ -28,11 +28,6 @@ public class Header {
     private String name;
     @Getter
     private int variant;
-    @Getter
-    private List<Column> columns;
-    public int getColumnCount() {
-        return columns.size();
-    }
     @Getter
     private int fixedSizeDataLength;
 
@@ -80,12 +75,12 @@ public class Header {
     }
 
     private void readColumns(ByteBuffer buffer) {
-        mColumns = new Column[columnCount];
+        columns = new Column[columnCount];
         for (int i = 0; i < columnCount; i++) {
             // 4 bytes
             int type = buffer.getShort();
             int offset = buffer.getShort();
-            mColumns[i] = new Column(this, i, type, offset);
+            columns[i] = new Column(this, i, type, offset);
 
             ColumnType columnType = ColumnType.of(type);
             log.info("index:{}, type:{}, offset:{}", i, columnType, offset);
@@ -114,5 +109,9 @@ public class Header {
             availableLanguages[i] = Language.of(lang);
             log.info("lang:{}", availableLanguages[i]);
         }
+    }
+
+    public Column getColumn(int columnIndex) {
+        return columns[columnIndex];
     }
 }

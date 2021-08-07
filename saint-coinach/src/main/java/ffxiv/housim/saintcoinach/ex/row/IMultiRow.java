@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach.ex;
+package ffxiv.housim.saintcoinach.ex.row;
 
 public interface IMultiRow extends IRow {
 }

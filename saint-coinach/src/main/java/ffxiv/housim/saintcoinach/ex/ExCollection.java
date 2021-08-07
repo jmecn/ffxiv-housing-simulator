@@ -1,5 +1,6 @@
 package ffxiv.housim.saintcoinach.ex;
 
+import ffxiv.housim.saintcoinach.ex.sheet.ISheet;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;
@@ -48,13 +49,14 @@ public class ExCollection {
                 continue;
             }
 
-            String name = split[0].toLowerCase();
+            String name = split[0];
             Integer id = Integer.parseInt(split[1]);
 
-            available.add(name);
-            availableSheetSet.add(name);
+            String lowerName = name.toLowerCase();
+            available.add(lowerName);
+            availableSheetSet.add(lowerName);
             if (id >= 0) {
-                sheetIdentifiers.put(id, name);
+                sheetIdentifiers.put(id, lowerName);
                 log.info("id:{}, name:{}", id, name);
             }
         }
@@ -65,7 +67,7 @@ public class ExCollection {
     }
 
     public boolean sheetExists(String name) {
-        return availableSheetSet.contains(name);
+        return availableSheetSet.contains(name.toLowerCase());
     }
 
     public ISheet getSheet(int id) {
@@ -74,16 +76,17 @@ public class ExCollection {
     }
 
     public ISheet getSheet(String name) {
-        WeakReference<ISheet> sheetRef = sheets.get(name);
+        String lowerName = name.toLowerCase();
+        WeakReference<ISheet> sheetRef = sheets.get(lowerName);
         if (sheetRef != null && sheetRef.get() != null) {
             return sheetRef.get();
         }
 
-        if (!availableSheetSet.contains(name)) {
+        if (!availableSheetSet.contains(lowerName)) {
             throw new IllegalArgumentException("Unknown sheet " + name);
         }
 
-        String exhPath = String.format("exd/%s.exh", name);
+        String exhPath = String.format("exd/%s.exh", lowerName);
         PackFile exh = packCollection.tryGetFile(exhPath);
 
         Header header = createHeader(name, exh);

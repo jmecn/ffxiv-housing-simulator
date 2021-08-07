@@ -1,5 +1,6 @@
 package ffxiv.housim.saintcoinach.ex;
 
+import ffxiv.housim.saintcoinach.ex.row.IDataRow;
 import lombok.Getter;
 
 /**
