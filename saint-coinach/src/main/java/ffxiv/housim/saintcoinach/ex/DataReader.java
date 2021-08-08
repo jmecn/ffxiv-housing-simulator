@@ -3,6 +3,7 @@ package ffxiv.housim.saintcoinach.ex;
 import ffxiv.housim.saintcoinach.ex.row.IDataRow;
 
 import java.lang.reflect.Type;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,9 +49,9 @@ public abstract class DataReader {
         return reader;
     }
 
-    public abstract Object read(byte[] buffer, Column col, IDataRow row);
+    public abstract Object read(ByteBuffer buffer, Column col, IDataRow row);
 
-    public abstract Object read(byte[] buffer, int offset);
+    public abstract Object read(ByteBuffer buffer, int offset);
 
     protected static int getFieldOffset(Column col, IDataRow row) {
         return row.getOffset() + col.getOffset();

@@ -5,6 +5,7 @@ import ffxiv.housim.saintcoinach.ex.sheet.IDataSheet;
 import lombok.Getter;
 
 import java.lang.ref.WeakReference;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public abstract class DataRowBase implements IDataRow {
     }
 
     @Override
-    public Object getRow(int columnIndex) {
+    public Object get(int columnIndex) {
         WeakReference<Object> valueRef = valueReferences.get(columnIndex);
         if (valueRef != null && valueRef.get() != null) {
             return valueRef.get();
@@ -42,8 +43,15 @@ public abstract class DataRowBase implements IDataRow {
         return value;
     }
 
+    @Override
+    public Object getRaw(int columnIndex) {
+        Column column = sheet.getHeader().getColumn(columnIndex);
+        Object value = column.readRaw(sheet.getBuffer(), this);
+        return value;
+    }
+
     public List<Object> getColumnValues() {
-        byte[] buffer = sheet.getBuffer();
+        ByteBuffer buffer = sheet.getBuffer();
         Column[] columns = sheet.getHeader().getColumns();
 
         List<Object> list = new ArrayList<>(columns.length);

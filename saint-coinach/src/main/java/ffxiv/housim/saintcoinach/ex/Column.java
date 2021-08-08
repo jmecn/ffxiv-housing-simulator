@@ -3,6 +3,8 @@ package ffxiv.housim.saintcoinach.ex;
 import ffxiv.housim.saintcoinach.ex.row.IDataRow;
 import lombok.Getter;
 
+import java.nio.ByteBuffer;
+
 /**
  * Class for represeting columns inside EX files.
  */
@@ -57,11 +59,11 @@ public class Column {
      * @param row The {@link IDataRow} whose data should be read.
      * @return Returns the column's value in <code>row</code>.
      */
-    public Object read(byte[] buffer, IDataRow row) {
+    public Object read(ByteBuffer buffer, IDataRow row) {
         return readRaw(buffer, row);
     }
 
-    public Object read(byte[] buffer, IDataRow row, int offset) {
+    public Object read(ByteBuffer buffer, IDataRow row, int offset) {
         return readRaw(buffer, row, offset);
     }
 
@@ -72,11 +74,11 @@ public class Column {
      * @param row The {@link IDataRow} whose data should be read.
      * @return Returns the raw column's value in <code>row</code>.
      */
-    public Object readRaw(byte[] buffer, IDataRow row) {
+    public Object readRaw(ByteBuffer buffer, IDataRow row) {
         return reader.read(buffer, this, row);
     }
 
-    public Object readRaw(byte[] buffer, IDataRow row, int offset) {
+    public Object readRaw(ByteBuffer buffer, IDataRow row, int offset) {
         return reader.read(buffer, offset);
     }
 }
