@@ -29,7 +29,7 @@ public class TestExCollection {
     public void testRoot() {
         ExCollection exCollection = new ExCollection(collection);
         exCollection.setActiveLanguage(Language.ChineseSimplified);
-        ISheet sheet = exCollection.getSheet("Action");
+        ISheet sheet = exCollection.getSheet("BaseParam");
 
         log.info("name={}, rows={}, columns={}, class={}", sheet.getName(), sheet.getCount(), sheet.getHeader().getColumnCount(), sheet.getClass());
 
