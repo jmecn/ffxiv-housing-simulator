@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class DataRowBase implements IDataRow {
-    private Map<Integer, WeakReference<Object>> valueReferences;
+    private final Map<Integer, WeakReference<Object>> valueReferences;
 
     @Getter
     protected IDataSheet sheet;
@@ -46,8 +46,7 @@ public abstract class DataRowBase implements IDataRow {
     @Override
     public Object getRaw(int columnIndex) {
         Column column = sheet.getHeader().getColumn(columnIndex);
-        Object value = column.readRaw(sheet.getBuffer(), this);
-        return value;
+        return  column.readRaw(sheet.getBuffer(), this);
     }
 
     public List<Object> getColumnValues() {

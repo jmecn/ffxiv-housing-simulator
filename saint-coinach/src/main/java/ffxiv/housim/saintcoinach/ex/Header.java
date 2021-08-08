@@ -17,15 +17,17 @@ public class Header {
     private int languageCount;
     @Getter
     private Column[] columns;
+    @Getter
     private Range[] dataFileRanges;
+    @Getter
     private Language[] availableLanguages;
 
     @Getter
-    private ExCollection collection;
+    private final ExCollection collection;
     @Getter
-    private PackFile file;
+    private final PackFile file;
     @Getter
-    private String name;
+    private final String name;
     @Getter
     private int variant;
     @Getter
@@ -56,7 +58,7 @@ public class Header {
 
         buffer.order(ByteOrder.BIG_ENDIAN);
 
-        int value1 = buffer.getShort();// skip 2 bytes;
+        buffer.getShort();// skip 2 bytes;
         fixedSizeDataLength = buffer.getShort();
         columnCount = buffer.getShort();
         rangeCount = buffer.getShort();
