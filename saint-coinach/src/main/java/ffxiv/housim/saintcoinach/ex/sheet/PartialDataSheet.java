@@ -9,8 +9,6 @@ import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.*;
@@ -33,19 +31,12 @@ public class PartialDataSheet<T extends IDataRow> implements IDataSheet<T> {
     @Getter
     private final PackFile file;
 
-    public PartialDataSheet(IDataSheet<T> sourceSheet, Range range, PackFile file) {
+    public PartialDataSheet(IDataSheet<T> sourceSheet, Range range, PackFile file, Class<T> clazz) {
         this.sourceSheet = sourceSheet;
         this.range = range;
         this.file = file;
 
-        Type type = getClass().getGenericSuperclass();
-        if (type instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) type;
-            Type[] types = parameterizedType.getActualTypeArguments();
-            if (types != null && types.length > 0) {
-                clazz = (Class<T>) types[0];
-            }
-        }
+        this.clazz = clazz;
 
         build();
     }
@@ -106,7 +97,7 @@ public class PartialDataSheet<T extends IDataRow> implements IDataSheet<T> {
         }
 
         try {
-            Constructor<T> constructor = clazz.getConstructor(ISheet.class, int.class, int.class);
+            Constructor<T> constructor = clazz.getConstructor(IDataSheet.class, int.class, int.class);
             result = constructor.newInstance(this, row, offset);
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();

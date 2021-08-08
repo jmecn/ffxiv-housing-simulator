@@ -1,7 +1,4 @@
-package ffxiv.housim.saintcoinach.ex.row.variant2;
-
-import ffxiv.housim.saintcoinach.ex.row.DataRowBase;
-import ffxiv.housim.saintcoinach.ex.row.IDataRow;
+package ffxiv.housim.saintcoinach.ex.row;
 
 public class SubRow extends DataRowBase {
 

@@ -9,8 +9,8 @@ public enum ColumnType {
     UInt16,
     Int32,
     UInt32,
-    SingleFloat,
-    Int64_OR_Quad,
+    Float,
+    XivQuad,
     MaskedBool_01,
     MaskedBool_02,
     MaskedBool_04,
@@ -39,9 +39,9 @@ public enum ColumnType {
             case 0x07:
                 return UInt32;
             case 0x09:
-                return SingleFloat;
+                return Float;
             case 0x0B:
-                return Int64_OR_Quad;
+                return XivQuad;
             case 0x19:
                 return MaskedBool_01;
             case 0x1a:

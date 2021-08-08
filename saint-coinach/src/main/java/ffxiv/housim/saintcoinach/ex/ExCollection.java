@@ -1,9 +1,15 @@
 package ffxiv.housim.saintcoinach.ex;
 
+import ffxiv.housim.saintcoinach.ex.row.*;
+import ffxiv.housim.saintcoinach.ex.row.DataRow1;
+import ffxiv.housim.saintcoinach.ex.row.DataRow2;
+import ffxiv.housim.saintcoinach.ex.sheet.DataSheet;
 import ffxiv.housim.saintcoinach.ex.sheet.ISheet;
+import ffxiv.housim.saintcoinach.ex.sheet.MultiSheet;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
@@ -20,7 +26,7 @@ public class ExCollection {
 
     @Getter
     private PackCollection packCollection;
-    @Getter
+    @Getter @Setter
     private Language activeLanguage;
     @Getter
     private String activeLanguageCode;
@@ -57,7 +63,7 @@ public class ExCollection {
             availableSheetSet.add(lowerName);
             if (id >= 0) {
                 sheetIdentifiers.put(id, lowerName);
-                log.info("id:{}, name:{}", id, name);
+                log.debug("id:{}, name:{}", id, name);
             }
         }
     }
@@ -98,11 +104,19 @@ public class ExCollection {
         return new Header(this, name, file);
     }
 
-    protected ISheet createSheet(Header header) {
+    protected ISheet<?> createSheet(Header header) {
         if (header.getVariant() == 1) {
-            // TODO
+            return createSheet(header, DataRow1.class);
+        } else {
+            return createSheet(header, DataRow2.class);
         }
-        // TODO
-        return null;
+    }
+
+    protected ISheet<?> createSheet(Header header, Class<? extends IDataRow> clazz) {
+        if (header.getAvailableLanguages().length >= 1) {
+            return new MultiSheet<>(this, header, clazz);
+        } else {
+            return new DataSheet<>(this, header, header.getAvailableLanguages()[0], clazz);
+        }
     }
 }

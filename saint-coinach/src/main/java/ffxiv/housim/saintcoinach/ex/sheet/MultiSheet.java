@@ -4,41 +4,31 @@ import ffxiv.housim.saintcoinach.ex.ExCollection;
 import ffxiv.housim.saintcoinach.ex.Header;
 import ffxiv.housim.saintcoinach.ex.Language;
 import ffxiv.housim.saintcoinach.ex.row.IDataRow;
-import ffxiv.housim.saintcoinach.ex.row.IMultiRow;
+import ffxiv.housim.saintcoinach.ex.row.MultiRow;
 import lombok.Getter;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MultiSheet<TMulti extends IMultiRow, TData extends IDataRow>
-        implements IMultiSheet<TMulti, TData> {
+public class MultiSheet<TData extends IDataRow>
+        implements IMultiSheet<MultiRow, TData> {
 
-    private Class<TMulti> clazz;
+    private Class<TData> dataRowClazz;
 
     private final Map<Language, ISheet<TData>> localisedSheets = new ConcurrentHashMap<>();
-    private final Map<Integer, TMulti> rows = new ConcurrentHashMap<>();
+    private final Map<Integer, MultiRow> rows = new ConcurrentHashMap<>();
 
     @Getter
     private final ExCollection collection;
     @Getter
     private final Header header;
 
-    public MultiSheet(ExCollection collection, Header header) {
+    public MultiSheet(ExCollection collection, Header header, Class<TData> dataRowClass) {
         this.collection = collection;
         this.header = header;
 
-        Type type = getClass().getGenericSuperclass();
-        if (type instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) type;
-            Type[] types = parameterizedType.getActualTypeArguments();
-            if (types != null && types.length > 0) {
-                clazz = (Class<TMulti>) types[0];
-            }
-        }
+        this.dataRowClazz = dataRowClass;
     }
 
     @Override
@@ -67,8 +57,8 @@ public class MultiSheet<TMulti extends IMultiRow, TData extends IDataRow>
     }
 
     @Override
-    public TMulti get(int key) {
-        TMulti row = rows.get(key);
+    public MultiRow get(int key) {
+        MultiRow row = rows.get(key);
         if (row != null) {
             return row;
         }
@@ -110,18 +100,11 @@ public class MultiSheet<TMulti extends IMultiRow, TData extends IDataRow>
         return sheet;
     }
 
-    protected TMulti createMultiRow(int row) {
-        TMulti result = null;
-        try {
-            Constructor<TMulti> constructor = clazz.getConstructor(IMultiSheet.class, int.class);
-            result = constructor.newInstance(this, row);
-        } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
-        }
-        return result;
+    protected MultiRow createMultiRow(int row) {
+        return new MultiRow(this, row);
     }
 
     protected ISheet<TData> createLocalisedSheet(Language language) {
-        return new DataSheet<>(collection, header, language);
+        return new DataSheet<>(collection, header, language, dataRowClazz);
     }
 }

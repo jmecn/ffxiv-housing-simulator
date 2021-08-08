@@ -60,4 +60,8 @@ public abstract class DataRowBase implements IDataRow {
         }
         return list;
     }
+
+    public String toString() {
+        return String.format("#%d_%08X", key, offset);
+    }
 }

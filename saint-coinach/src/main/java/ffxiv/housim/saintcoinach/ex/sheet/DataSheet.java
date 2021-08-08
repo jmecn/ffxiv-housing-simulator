@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
 
     private boolean partialSheetsCreated = false;
+    private Class<T> clazz;
 
     private final Map<Range, ISheet<T>> partialSheets = new HashMap<>();
     private final Map<Integer, ISheet<T>> rowToPartialSheetMap = new TreeMap<>();
@@ -27,18 +28,19 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
     @Getter
     private final Language language;
 
-    public DataSheet(ExCollection collection, Header header, Language language) {
+    public DataSheet(ExCollection collection, Header header, Language language, Class<T> clazz) {
         this.collection = collection;
         this.header = header;
         this.language = language;
+        this.clazz = clazz;
     }
 
     protected ISheet<T> createPartialSheet(Range range, PackFile file) {
-        return new PartialDataSheet<>(this, range, file);
+        return new PartialDataSheet<>(this, range, file, clazz);
     }
 
     protected PackFile getPartialFile(Range range) {
-        String partialFileName = String.format("exd/%s_%d%s.exd", header.getName(), range.getStart(), language.getSuffix());
+        String partialFileName = String.format("exd/%s_%d%s.exd", header.getName().toLowerCase(), range.getStart(), language.getSuffix());
         return collection.getPackCollection().tryGetFile(partialFileName);
     }
 
@@ -83,8 +85,9 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
 
         ISheet<T> partial = createPartialSheet(range, file);
         partialSheets.put(range, partial);
-        for (Integer key :  partial.getKeys())
+        for (Integer key :  partial.getKeys()) {
             rowToPartialSheetMap.put(key, partial);
+        }
         return partial;
     }
 

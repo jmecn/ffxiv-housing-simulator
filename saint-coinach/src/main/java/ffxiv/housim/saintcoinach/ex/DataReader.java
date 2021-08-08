@@ -1,5 +1,6 @@
 package ffxiv.housim.saintcoinach.ex;
 
+import ffxiv.housim.saintcoinach.ex.datareaders.*;
 import ffxiv.housim.saintcoinach.ex.row.IDataRow;
 
 import java.lang.reflect.Type;
@@ -10,7 +11,7 @@ import java.util.Map;
 /**
  * Base class used in reading data from EX data files.
  */
-public abstract class DataReader {
+public abstract class DataReader<T> {
     /**
      * Mappings of type identifiers used in EX headers to their corresponding {@link DataReader}.
      */
@@ -38,20 +39,34 @@ public abstract class DataReader {
 
     static {
         DataReaders = new HashMap<>();
+        DataReaders.put(0x00, new XivStringReader());
+        DataReaders.put(0x01, new BoolReader());
+        DataReaders.put(0x02, new ByteReader());
+        DataReaders.put(0x03, new UByteReader());
+        DataReaders.put(0x04, new Int16Reader());
+        DataReaders.put(0x05, new UInt16Reader());
+        DataReaders.put(0x06, new Int32Reader());
+        DataReaders.put(0x07, new UInt32Reader());
+        DataReaders.put(0x09, new FloatReader());
+        DataReaders.put(0x0B, new XivQuadReader());
+
+        for (byte i = 0; i < 8; i++) {
+            DataReaders.put(0x19 + i, new MaskedBoolReader((byte)(1 << i)));
+        }
     }
 
     public static DataReader getReader(int type) {
-        DataReader reader;
-        if ((reader = DataReaders.get(type)) == null) {
+        DataReader reader = DataReaders.get(type);
+        if (reader == null) {
             throw new IllegalArgumentException("Unsupported data type " + String.format("%04Xh", type));
         }
 
         return reader;
     }
 
-    public abstract Object read(ByteBuffer buffer, Column col, IDataRow row);
+    public abstract T read(ByteBuffer buffer, Column col, IDataRow row);
 
-    public abstract Object read(ByteBuffer buffer, int offset);
+    public abstract T read(ByteBuffer buffer, int offset);
 
     protected static int getFieldOffset(Column col, IDataRow row) {
         return row.getOffset() + col.getOffset();

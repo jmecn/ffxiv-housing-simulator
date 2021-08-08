@@ -2,12 +2,14 @@ package ffxiv.housim.saintcoinach.ex;
 
 import ffxiv.housim.saintcoinach.ex.row.IDataRow;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.ByteBuffer;
 
 /**
  * Class for represeting columns inside EX files.
  */
+@Slf4j
 public class Column {
     // Gets the Header of the EX file the column is in.
     @Getter
@@ -49,7 +51,7 @@ public class Column {
 
         this.type = type;
         this.offset = offset;
-        //this.reader = DataReader.getReader(type);
+        this.reader = DataReader.getReader(type);
     }
 
     /**
@@ -75,6 +77,7 @@ public class Column {
      * @return Returns the raw column's value in <code>row</code>.
      */
     public Object readRaw(ByteBuffer buffer, IDataRow row) {
+        log.debug("type:{}, row:{}", type, row);
         return reader.read(buffer, this, row);
     }
 

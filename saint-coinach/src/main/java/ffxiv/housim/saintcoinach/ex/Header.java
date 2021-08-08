@@ -83,9 +83,6 @@ public class Header {
             int type = buffer.getShort();
             int offset = buffer.getShort();
             columns[i] = new Column(this, i, type, offset);
-
-            ColumnType columnType = ColumnType.of(type);
-            log.info("index:{}, type:{}, offset:{}", i, columnType, offset);
         }
     }
 

@@ -1,12 +1,11 @@
-package ffxiv.housim.saintcoinach.ex.row.variant1;
+package ffxiv.housim.saintcoinach.ex.row;
 
-import ffxiv.housim.saintcoinach.ex.row.DataRowBase;
 import ffxiv.housim.saintcoinach.ex.sheet.IDataSheet;
 import lombok.Getter;
 
 import java.nio.ByteBuffer;
 
-public class DataRow extends DataRowBase {
+public class DataRow1 extends DataRowBase {
     final static int MetadataLength = 0x06;
 
     @Getter
@@ -14,7 +13,7 @@ public class DataRow extends DataRowBase {
     @Getter
     private int subRowCount;
 
-    public DataRow(IDataSheet sheet, int key, int offset) {
+    public DataRow1(IDataSheet sheet, int key, int offset) {
         super(sheet, key, offset + MetadataLength);
 
         ByteBuffer buffer = sheet.getBuffer();
