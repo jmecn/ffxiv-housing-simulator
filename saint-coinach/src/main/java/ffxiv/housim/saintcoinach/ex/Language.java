@@ -22,6 +22,10 @@ public enum Language {
         this.code = code;
     }
 
+    public String getCode() {
+        return code;
+    }
+
     public String getSuffix() {
         if (code.length() > 0) {
             return "_" + code;

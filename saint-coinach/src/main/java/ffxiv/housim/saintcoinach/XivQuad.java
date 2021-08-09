@@ -5,6 +5,7 @@ public class XivQuad {
     short y;
     short z;
     short w;
+
     public XivQuad(long value) {
         x = (short) value;
         y = (short)(value >> 16);

@@ -1,4 +1,75 @@
 package ffxiv.housim.saintcoinach.ex.relational.valueconverters;
 
-public class TomestoneOrItemReferenceConverter {
+import com.google.gson.JsonObject;
+import ffxiv.housim.saintcoinach.ex.ExCollection;
+import ffxiv.housim.saintcoinach.ex.IDataRow;
+import ffxiv.housim.saintcoinach.ex.IRow;
+import ffxiv.housim.saintcoinach.ex.ISheet;
+import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
+import ffxiv.housim.saintcoinach.ex.relational.IRelationalSheet;
+import ffxiv.housim.saintcoinach.ex.relational.IValueConverter;
+import ffxiv.housim.saintcoinach.ex.relational.definition.SheetDefinition;
+import ffxiv.housim.saintcoinach.xiv.Item;
+
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
+
+public class TomestoneOrItemReferenceConverter implements IValueConverter<IRelationalRow> {
+
+    static Map<Integer, Item> tomestoneKeyByRewardIndex;
+
+    @Override
+    public String getTargetTypeName() {
+        return "Item";
+    }
+
+    @Override
+    public Type getTargetType() {
+        return IRelationalRow.class;
+    }
+
+    @Override
+    public IRelationalRow convert(IDataRow row, Object rawValue) {
+        if (tomestoneKeyByRewardIndex == null) {
+            tomestoneKeyByRewardIndex = buildTomestoneRewardIndex(row.getSheet().getCollection());
+        }
+
+        int key = (int) rawValue;
+
+
+        Item item = tomestoneKeyByRewardIndex.get(key);
+        if (item != null) {
+            return item;
+        }
+
+        IRelationalSheet<?> items = (IRelationalSheet<?>)row.getSheet().getCollection().getSheet("Item");
+        return items.get(key);
+    }
+
+    private Map<Integer, Item> buildTomestoneRewardIndex(ExCollection coll) {
+        Map<Integer, Item> index = new HashMap<>();
+
+        ISheet<?> sheet = coll.getSheet("TomestonesItem");
+
+        // TODO sheet 实现迭代器
+
+        return index;
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("type", "tomestone");
+        return obj;
+    }
+
+    @Override
+    public void resolveReferences(SheetDefinition sheetDef) {
+
+    }
+
+    public static TomestoneOrItemReferenceConverter fromJson(JsonObject obj) {
+        return new TomestoneOrItemReferenceConverter();
+    }
 }
