@@ -1,10 +1,6 @@
-package ffxiv.housim.saintcoinach.ex.sheet;
+package ffxiv.housim.saintcoinach.ex;
 
 import ffxiv.housim.saintcoinach.Range;
-import ffxiv.housim.saintcoinach.ex.ExCollection;
-import ffxiv.housim.saintcoinach.ex.Header;
-import ffxiv.housim.saintcoinach.ex.Language;
-import ffxiv.housim.saintcoinach.ex.row.IDataRow;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;
 
@@ -15,7 +11,7 @@ import java.util.stream.Collectors;
 public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
 
     private boolean partialSheetsCreated = false;
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
     private final Map<Range, ISheet<T>> partialSheets = new HashMap<>();
     private final Map<Integer, ISheet<T>> rowToPartialSheetMap = new TreeMap<>();

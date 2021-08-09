@@ -10,9 +10,9 @@ public enum FileType {
     Model(3),
     Image(4),
     ;
-    private int value;
+    private final int value;
 
-    private FileType(int value) {
+    FileType(int value) {
         this.value = value;
     }
 

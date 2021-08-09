@@ -1,12 +1,11 @@
 package ffxiv.housim.saintcoinach.ex;
 
 import ffxiv.housim.saintcoinach.ex.datareaders.*;
-import ffxiv.housim.saintcoinach.ex.row.IDataRow;
 
 import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Base class used in reading data from EX data files.
@@ -15,7 +14,7 @@ public abstract class DataReader<T> {
     /**
      * Mappings of type identifiers used in EX headers to their corresponding {@link DataReader}.
      */
-    private static Map<Integer, DataReader> DataReaders;
+    private final static Map<Integer, DataReader> DataReaders = new ConcurrentHashMap<>();
 
     /**
      * Gets the name of the value type read.
@@ -38,7 +37,6 @@ public abstract class DataReader<T> {
     public abstract Type getType();
 
     static {
-        DataReaders = new HashMap<>();
         DataReaders.put(0x00, new XivStringReader());
         DataReaders.put(0x01, new BoolReader());
         DataReaders.put(0x02, new ByteReader());

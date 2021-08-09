@@ -1,8 +1,6 @@
 package ffxiv.housim.saintcoinach.ex;
 
 import ffxiv.housim.saintcoinach.SqPack;
-import ffxiv.housim.saintcoinach.ex.sheet.IDataSheet;
-import ffxiv.housim.saintcoinach.ex.sheet.ISheet;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;

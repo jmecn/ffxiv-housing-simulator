@@ -46,7 +46,7 @@ public class Index2 {
 
         build(reader);
     }
-    public Index2(PackIdentifier packId, ByteBuffer reader) throws IOException {
+    public Index2(PackIdentifier packId, ByteBuffer reader) {
         this.packId = packId;
 
         build(reader);

@@ -208,8 +208,7 @@ public final class Hash {
 
     public static int compute(String path) {
         byte[] bytes = path.getBytes(StandardCharsets.US_ASCII);
-        int hash1 = computeCRC(bytes, 0, bytes.length);
-        return hash1;
+        return computeCRC(bytes, 0, bytes.length);
     }
 
     //Created from MSDN's CRC tables and code as well as RozeDoyanawa's Java implementation

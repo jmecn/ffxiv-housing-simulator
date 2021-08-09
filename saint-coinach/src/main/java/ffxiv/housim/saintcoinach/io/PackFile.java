@@ -5,10 +5,8 @@ import com.jcraft.jzlib.JZlib;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
@@ -27,7 +25,7 @@ public abstract class PackFile {
     private String path;
 
     @Getter
-    private Pack pack;
+    private final Pack pack;
 
     @Getter
     protected FileCommonHeader commonHeader;
@@ -114,7 +112,7 @@ public abstract class PackFile {
         System.arraycopy(compressed, 0, gzipedData, 2, compressed.length);
 
         // Checksum
-        int checksum = adler32(compressed, 0, compressed.length);
+        int checksum = adler32(compressed);
         byte[] checksumByte = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(checksum).array();
         System.arraycopy(checksumByte, 0, gzipedData, 2 + compressed.length, 4);
 
@@ -147,7 +145,6 @@ public abstract class PackFile {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private static void CHECK_ERR(Inflater z, int err, String msg) {
         if (err != JZlib.Z_OK) {
             if (z.msg != null)
@@ -157,16 +154,16 @@ public abstract class PackFile {
         }
     }
 
-    private static int adler32(byte[] bytes, int offset, int size) {
+    private static int adler32(byte[] bytes) {
         final int a32mod = 65521;
         int s1 = 1, s2 = 0;
 
-        for (int i = offset; i < size; i++) {
+        for (int i = 0; i < bytes.length; i++) {
             int b = bytes[i];
 
             s1 = (s1 + b) % a32mod;
             s2 = (s2 + s1) % a32mod;
         }
-        return (int) ((s2 << 16) + s1);
+        return (s2 << 16) + s1;
     }
 }

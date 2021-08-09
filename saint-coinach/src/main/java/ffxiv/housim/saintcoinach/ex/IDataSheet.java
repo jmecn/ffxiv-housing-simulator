@@ -1,7 +1,4 @@
-package ffxiv.housim.saintcoinach.ex.sheet;
-
-import ffxiv.housim.saintcoinach.ex.Language;
-import ffxiv.housim.saintcoinach.ex.row.IDataRow;
+package ffxiv.housim.saintcoinach.ex;
 
 import java.nio.ByteBuffer;
 

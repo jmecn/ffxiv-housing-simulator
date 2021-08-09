@@ -1,7 +1,5 @@
-package ffxiv.housim.saintcoinach.ex.row;
+package ffxiv.housim.saintcoinach.ex;
 
-import ffxiv.housim.saintcoinach.ex.Language;
-import ffxiv.housim.saintcoinach.ex.sheet.IMultiSheet;
 import lombok.Getter;
 
 import java.util.List;

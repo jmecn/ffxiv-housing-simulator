@@ -18,7 +18,8 @@ public class HalfHelper {
      * @return floating point value of the half.
      */
     public static float unpack(short half){
-        switch ((int)half){
+        int value = half & 0xFFFF;
+        switch (value){
             case 0x0000:
                 return 0f;
             case 0x8000:

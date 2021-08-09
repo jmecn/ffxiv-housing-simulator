@@ -10,11 +10,12 @@ import java.util.Map;
 
 public class GraphicsFileTextureDefinition {
     @Getter
-    private Map<Short, GftdEntry> entries = new HashMap<>();
+    private final Map<Short, GftdEntry> entries = new HashMap<>();
     @Getter
-    private PackFile file;
+    private final PackFile file;
 
     public GraphicsFileTextureDefinition(PackFile file) {
+        this.file = file;
         byte[] data = file.getData();
 
         ByteBuffer buffer = ByteBuffer.wrap(data);

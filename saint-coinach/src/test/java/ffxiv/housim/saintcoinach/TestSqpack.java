@@ -4,8 +4,6 @@ import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import org.junit.Test;
 
-import java.io.IOException;
-
 public class TestSqpack {
 
     @Test

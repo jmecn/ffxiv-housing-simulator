@@ -16,7 +16,7 @@ public class VertexFormat {
         int offset = buffer.position();
 
         int o = offset;
-        while(buffer.get() != 0xFF) {
+        while((buffer.get() & 0xFF) != 0xFF) {
             buffer.position(o);
             elements.add(new VertexFormatElement(buffer));
             o = buffer.position();

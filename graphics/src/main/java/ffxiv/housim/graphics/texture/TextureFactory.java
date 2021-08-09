@@ -4,7 +4,6 @@ import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.jme3.texture.image.ColorSpace;
-import com.jme3.texture.plugins.DXTFlipper;
 import com.jme3.util.BufferUtils;
 import ffxiv.housim.saintcoinach.imaging.ImageFile;
 import ffxiv.housim.saintcoinach.imaging.ImageHeader;
@@ -85,8 +84,7 @@ public class TextureFactory {
 
         ByteBuffer buffer = BufferUtils.createByteBuffer(data);
         log.info("order:{}", buffer.order());
-        Image image = new Image(format, header.getWidth(), header.getHeight(), buffer, mipmapSizes, ColorSpace.sRGB);
 
-        return image;
+        return new Image(format, header.getWidth(), header.getHeight(), buffer, mipmapSizes, ColorSpace.sRGB);
     }
 }

@@ -26,9 +26,9 @@ public enum ImageFormat {
 
     ;
 
-    private int value;
+    private final int value;
 
-    private ImageFormat(int value) {
+    ImageFormat(int value) {
         this.value = value;
     }
 

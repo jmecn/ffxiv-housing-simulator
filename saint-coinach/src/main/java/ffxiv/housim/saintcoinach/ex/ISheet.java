@@ -1,8 +1,8 @@
-package ffxiv.housim.saintcoinach.ex.sheet;
+package ffxiv.housim.saintcoinach.ex;
 
 import ffxiv.housim.saintcoinach.ex.ExCollection;
 import ffxiv.housim.saintcoinach.ex.Header;
-import ffxiv.housim.saintcoinach.ex.row.IRow;
+import ffxiv.housim.saintcoinach.ex.IRow;
 
 import java.util.Collection;
 

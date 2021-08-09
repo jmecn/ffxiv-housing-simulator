@@ -13,15 +13,6 @@ import java.nio.channels.FileChannel;
 
 public class ImageFile extends PackFile {
 
-    class TexBlock {
-        int offset;
-        int blockSize;
-        int depressedDataSize;
-        int blockTableOffset;
-        int numSubBlocks;
-        int[] subBlockSize;
-    }
-
     private WeakReference<byte[]> bufferCache;
 
     @Getter

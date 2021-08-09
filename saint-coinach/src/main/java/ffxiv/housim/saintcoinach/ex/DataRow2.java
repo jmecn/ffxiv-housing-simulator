@@ -1,7 +1,5 @@
-package ffxiv.housim.saintcoinach.ex.row;
+package ffxiv.housim.saintcoinach.ex;
 
-import ffxiv.housim.saintcoinach.ex.Header;
-import ffxiv.housim.saintcoinach.ex.sheet.IDataSheet;
 import lombok.Getter;
 
 import java.nio.ByteBuffer;
@@ -12,12 +10,12 @@ public class DataRow2 extends DataRowBase {
     final static int MetadataLength = 0x06;
 
     private boolean isRead = false;
-    private Map<Integer, SubRow> subRows = new HashMap<>();
+    private final Map<Integer, SubRow> subRows = new HashMap<>();
 
     @Getter
-    private int length;
+    private final int length;
     @Getter
-    private int subRowCount;
+    private final int subRowCount;
 
     protected DataRow2(IDataSheet sheet, int key, int offset) {
         super(sheet, key, offset + MetadataLength);

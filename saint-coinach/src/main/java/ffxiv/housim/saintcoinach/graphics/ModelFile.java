@@ -18,10 +18,10 @@ public class ModelFile extends PackFile {
 
     final static int PartsCount = 0x0B;
 
-    private WeakReference<byte[]>[] partsCache = new WeakReference[PartsCount];
+    private final WeakReference<byte[]>[] partsCache = new WeakReference[PartsCount];
     private WeakReference<byte[]> combinedCache;
 
-    private ModelBlock modelBlock;
+    private final ModelBlock modelBlock;
 
     public ModelFile(Pack pack, FileCommonHeader commonHeader) {
         super(pack, commonHeader);
@@ -83,8 +83,6 @@ public class ModelFile extends PackFile {
             readBlock(channel, outStream);
         }
 
-        byte[] buffer = outStream.toByteArray();
-
-        return buffer;
+        return outStream.toByteArray();
     }
 }

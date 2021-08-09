@@ -15,7 +15,7 @@ public enum VertexDataType {// byte
     ;
 
     private byte value;
-    private VertexDataType(int value) {
+    VertexDataType(int value) {
         this.value = (byte) value;
     }
 

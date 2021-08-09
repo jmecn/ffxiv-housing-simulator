@@ -1,6 +1,4 @@
-package ffxiv.housim.saintcoinach.ex.row;
-
-import ffxiv.housim.saintcoinach.ex.sheet.IDataSheet;
+package ffxiv.housim.saintcoinach.ex;
 
 public interface IDataRow extends IRow {
 

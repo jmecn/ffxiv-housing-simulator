@@ -3,7 +3,7 @@ package ffxiv.housim.saintcoinach.ex.datareaders;
 import ffxiv.housim.saintcoinach.XivString;
 import ffxiv.housim.saintcoinach.ex.Column;
 import ffxiv.housim.saintcoinach.ex.DataReader;
-import ffxiv.housim.saintcoinach.ex.row.IDataRow;
+import ffxiv.housim.saintcoinach.ex.IDataRow;
 
 import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
@@ -48,8 +48,7 @@ public final class XivStringReader extends DataReader<String> {
         buffer.position(start);
         buffer.get(bytes);
 
-        String str = XivString.parseFFXIVString(bytes);
-        return str;
+        return XivString.parseFFXIVString(bytes);
     }
 
     @Override

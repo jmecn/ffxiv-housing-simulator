@@ -34,9 +34,7 @@ public class Range {
     }
 
     public static boolean contains(Collection<Range> ranges, final int value) {
-        return ranges.stream().anyMatch(it -> {
-            return it.contains(value);
-        });
+        return ranges.stream().anyMatch(it -> it.contains(value));
     }
 
     public static Range[] combine(List<Range> ranges) {
@@ -68,8 +66,8 @@ public class Range {
             combined.add(new Range(currentStart, currentEnd - currentStart));
         }
 
+        //
         return combined.stream()//
-                .sorted(Comparator.comparingInt(it -> it.start))//
-                .collect(Collectors.toList()).toArray(new Range[0]);
+                .sorted(Comparator.comparingInt(it -> it.start)).toArray(Range[]::new);
     }
 }

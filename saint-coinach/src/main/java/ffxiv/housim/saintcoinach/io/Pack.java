@@ -34,7 +34,7 @@ public class Pack {
     private final static String Index2FileFormat = "%02x%02x%02x.win32.index2";
     private final static String DatFileFormat = "%02x%02x%02x.win32.dat%d";
 
-    private Map<Pair<Thread, Integer>, WeakReference<FileChannel>> dataStreams = new HashMap<>();
+    private final Map<Pair<Thread, Integer>, WeakReference<FileChannel>> dataStreams = new HashMap<>();
 
     private PackIdentifier id;
     private PackCollection collection;
@@ -105,7 +105,7 @@ public class Pack {
 
         // cache
         synchronized (dataStreams) {
-            dataStreams.put(key, new WeakReference<FileChannel>(channel));
+            dataStreams.put(key, new WeakReference<>(channel));
         }
 
         return channel;

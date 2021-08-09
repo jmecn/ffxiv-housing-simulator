@@ -7,9 +7,9 @@ public final class VertexFormatElement {// 8 bytes
     public byte offset;
     public VertexDataType dataType;
     public VertexAttribute attribute;
-    public int unknown;             // Always 0 so far
+    public int unknown;             // it's always 0 so far
 
-    protected VertexFormatElement(ByteBuffer buffer) {
+    VertexFormatElement(ByteBuffer buffer) {
         sourcePart = buffer.get();
         offset = buffer.get();
         dataType = VertexDataType.of(buffer.get());

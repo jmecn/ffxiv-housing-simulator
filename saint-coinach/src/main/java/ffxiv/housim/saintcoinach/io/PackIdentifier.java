@@ -39,9 +39,7 @@ public class PackIdentifier {
         TypeToKeyMap.put("_debug", 0x13);
 
         KeyToTypeMap = new HashMap<>();
-        TypeToKeyMap.forEach((k, v) -> {
-            KeyToTypeMap.put(v, k);
-        });
+        TypeToKeyMap.forEach((k, v) -> KeyToTypeMap.put(v, k));
 
         ExpansionToKeyMap = new HashMap<>();
         ExpansionToKeyMap.put("ffxiv", 0x00);
@@ -50,9 +48,7 @@ public class PackIdentifier {
         ExpansionToKeyMap.put("ex3", 0x03);
 
         KeyToExpansionMap = new HashMap<>();
-        ExpansionToKeyMap.forEach((k, v) -> {
-            KeyToExpansionMap.put(v, k);
-        });
+        ExpansionToKeyMap.forEach((k, v) -> KeyToExpansionMap.put(v, k));
 
     }
 
@@ -122,11 +118,11 @@ public class PackIdentifier {
             expansion = fullPath.substring(typeSep + 1, expSep);
             int numberEnd = fullPath.indexOf('_', expSep);
             if (numberEnd - expSep == 3) {
+                String numStr = fullPath.substring(expSep + 1, numberEnd);
                 try {
-                    String numStr = fullPath.substring(expSep + 1, numberEnd);
                     number = Integer.parseInt(numStr);
                 } catch (Exception e) {
-                    number = 0;
+                    log.error("Parse int failed: {}", numStr, e);
                 }
             }
         }

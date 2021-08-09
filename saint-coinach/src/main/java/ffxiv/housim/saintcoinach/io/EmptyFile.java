@@ -1,7 +1,7 @@
 package ffxiv.housim.saintcoinach.io;
 
 /**
- * an placeholder
+ * a placeholder
  */
 public class EmptyFile extends PackFile {
     public EmptyFile(Pack pack, FileCommonHeader header) {

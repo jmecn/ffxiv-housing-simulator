@@ -15,31 +15,28 @@ import java.nio.channels.FileChannel;
 public class FileCommonHeader {
 
     @Getter
-    private ByteBuffer buffer;
+    private final ByteBuffer buffer;
 
     @Getter
-    private IIndexFile index;
+    private final IIndexFile index;
     @Getter
-    private int headerLength;
+    private final int headerLength;
     @Getter
-    private FileType fileType;
+    private final FileType fileType;
     @Getter
-    private int fileLength;// uncompressed file length
+    private final int fileLength;// uncompressed file length
     @Getter
-    private int blockSize;
+    private final int blockSize;
     @Getter
-    private int length;
+    private final int length;
     @Getter
-    private int blockCount;
+    private final int blockCount;
     @Getter
-    private long endOfHeader;
+    private final long endOfHeader;
 
     public FileCommonHeader(@NonNull IIndexFile index, @NonNull FileChannel channel) throws IOException {
         this.index = index;
-        read(channel);
-    }
 
-    private void read(FileChannel channel) throws IOException {
         ByteBuffer data = ByteBuffer.allocate(4);
         data.order(ByteOrder.LITTLE_ENDIAN);
 
@@ -70,4 +67,5 @@ public class FileCommonHeader {
         length = blockSize * PackFile.BlockPadding;
         log.info("headerLength:{}, fileType:{}, fileLength:{}, blockSize:{}, blockCount:{}", headerLength, fileType, fileLength, blockSize, blockCount);
     }
+
 }

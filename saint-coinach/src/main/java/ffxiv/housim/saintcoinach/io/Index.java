@@ -49,7 +49,7 @@ public class Index {
         build(reader);
     }
 
-    public Index(PackIdentifier packId, ByteBuffer reader) throws IOException {
+    public Index(PackIdentifier packId, ByteBuffer reader) {
         this.packId = packId;
 
         build(reader);

@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach.ex.row;
+package ffxiv.housim.saintcoinach.ex;
 
 public class SubRow extends DataRowBase {
 

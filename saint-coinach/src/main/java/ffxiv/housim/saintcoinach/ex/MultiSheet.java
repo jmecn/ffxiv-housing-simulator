@@ -1,18 +1,12 @@
-package ffxiv.housim.saintcoinach.ex.sheet;
+package ffxiv.housim.saintcoinach.ex;
 
-import ffxiv.housim.saintcoinach.ex.ExCollection;
-import ffxiv.housim.saintcoinach.ex.Header;
-import ffxiv.housim.saintcoinach.ex.Language;
-import ffxiv.housim.saintcoinach.ex.row.IDataRow;
-import ffxiv.housim.saintcoinach.ex.row.MultiRow;
 import lombok.Getter;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MultiSheet<TData extends IDataRow>
-        implements IMultiSheet<MultiRow, TData> {
+public class MultiSheet<TData extends IDataRow> implements IMultiSheet<MultiRow, TData> {
 
     private Class<TData> dataRowClazz;
 

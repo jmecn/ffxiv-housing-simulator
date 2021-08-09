@@ -2,7 +2,6 @@ package ffxiv.housim.saintcoinach.io;
 
 import lombok.Getter;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,12 +29,12 @@ public class Index2Source implements IPackSource {
         return index.getFiles().containsKey(hash);
     }
 
-    public PackFile getFile(String path) throws IOException {
+    public PackFile getFile(String path) {
         int hash = Hash.compute(path);
         return getFile(hash);
     }
 
-    public PackFile getFile(int hash) throws IOException {
+    public PackFile getFile(int hash) {
         WeakReference<PackFile> fileRef = files.get(hash);
         if (fileRef != null && fileRef.get() != null) {
             return fileRef.get();
@@ -43,7 +42,7 @@ public class Index2Source implements IPackSource {
 
         Index2File idxFile = index.getFiles().get(hash);
         PackFile file = FileFactory.get(pack, idxFile);
-        files.put(hash, new WeakReference<PackFile>(file));
+        files.put(hash, new WeakReference<>(file));
         return file;
     }
 
@@ -62,7 +61,7 @@ public class Index2Source implements IPackSource {
         Index2File idxFile = index.getFiles().get(hash);
         if (idxFile != null) {
             PackFile file = FileFactory.get(pack, idxFile);
-            files.put(hash, new WeakReference<PackFile>(file));
+            files.put(hash, new WeakReference<>(file));
         }
 
         return null;

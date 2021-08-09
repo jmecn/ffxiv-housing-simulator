@@ -72,7 +72,7 @@ public class PackDirectory implements IPackSource {
 
         PackFile file = FileFactory.get(pack, indexFile);
 
-        files.put(hash, new WeakReference<PackFile>(file));
+        files.put(hash, new WeakReference<>(file));
         return file;
     }
 }

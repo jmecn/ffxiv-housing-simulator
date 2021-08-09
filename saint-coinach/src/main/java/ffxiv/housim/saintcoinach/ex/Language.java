@@ -17,7 +17,7 @@ public enum Language {
     private int value;
     private String code;
 
-    private Language(int value, String code) {
+    Language(int value, String code) {
         this.value = value;
         this.code = code;
     }

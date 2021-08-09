@@ -1,11 +1,5 @@
 package ffxiv.housim.saintcoinach.ex;
 
-import ffxiv.housim.saintcoinach.ex.row.*;
-import ffxiv.housim.saintcoinach.ex.row.DataRow1;
-import ffxiv.housim.saintcoinach.ex.row.DataRow2;
-import ffxiv.housim.saintcoinach.ex.sheet.DataSheet;
-import ffxiv.housim.saintcoinach.ex.sheet.ISheet;
-import ffxiv.housim.saintcoinach.ex.sheet.MultiSheet;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;
@@ -20,12 +14,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class ExCollection {
-    private Map<Integer, String> sheetIdentifiers = new HashMap<>();
-    private Map<String, WeakReference<ISheet>> sheets = new ConcurrentHashMap<>();
-    private Set<String> availableSheetSet = new HashSet<>();
+    private final Map<Integer, String> sheetIdentifiers = new HashMap<>();
+    private final Map<String, WeakReference<ISheet>> sheets = new ConcurrentHashMap<>();
+    private final Set<String> availableSheetSet = new HashSet<>();
 
     @Getter
-    private PackCollection packCollection;
+    private final PackCollection packCollection;
     @Getter @Setter
     private Language activeLanguage;
     @Getter
@@ -96,8 +90,7 @@ public class ExCollection {
         PackFile exh = packCollection.tryGetFile(exhPath);
 
         Header header = createHeader(name, exh);
-        ISheet sheet = createSheet(header);
-        return sheet;
+        return createSheet(header);
     }
 
     protected Header createHeader(String name, PackFile file) {

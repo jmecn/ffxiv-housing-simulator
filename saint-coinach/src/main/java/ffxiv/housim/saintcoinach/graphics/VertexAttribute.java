@@ -18,7 +18,7 @@ public enum VertexAttribute {// byte
     ;
 
     private byte value;
-    private VertexAttribute(int value) {
+    VertexAttribute(int value) {
         this.value = (byte) value;
     }
 

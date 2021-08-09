@@ -19,21 +19,19 @@ public class ImageHeader {
     final static int MIPMAP_OFFSET = 0x1C;
 
     @Getter
-    private ByteBuffer buffer;
+    private final ByteBuffer buffer;
     @Getter
-    private ImageFormat format;
+    private final ImageFormat format;
     @Getter
-    private int width;
+    private final int width;
     @Getter
-    private int height;
+    private final int height;
     @Getter
-    private int depth;
+    private final int depth;
     @Getter
-    private int numMipmaps;
+    private final int numMipmaps;
     @Getter
-    private int[] mipmapOffsets;
-    @Getter
-    private long endOfHeader;
+    private final int[] mipmapOffsets;
 
     public ImageHeader(FileChannel channel) throws IOException {
         buffer = ByteBuffer.allocate(LENGTH);

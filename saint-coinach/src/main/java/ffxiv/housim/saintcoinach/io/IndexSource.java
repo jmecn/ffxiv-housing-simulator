@@ -2,18 +2,17 @@ package ffxiv.housim.saintcoinach.io;
 
 import lombok.Getter;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class IndexSource implements IPackSource {
 
-    private Map<Integer, PackDirectory> directories = new HashMap<>();
-    private Map<String, Integer> directoryPathMap = new HashMap<>();
+    private final Map<Integer, PackDirectory> directories = new HashMap<>();
+    private final Map<String, Integer> directoryPathMap = new HashMap<>();
     @Getter
-    private Pack pack;
+    private final Pack pack;
     @Getter
-    private Index index;
+    private final Index index;
 
     public IndexSource(Pack pack, Index index) {
         this.pack = pack;
@@ -103,7 +102,7 @@ public class IndexSource implements IPackSource {
         return null;
     }
 
-    public PackFile tryGetFile(int directoryKey, int fileKey) throws IOException {
+    public PackFile tryGetFile(int directoryKey, int fileKey) {
         PackDirectory dir = tryGetDirectory(directoryKey);
         if (dir != null) {
             return dir.tryGetFile(fileKey);

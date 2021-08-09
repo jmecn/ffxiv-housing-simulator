@@ -127,7 +127,7 @@ public class XivString {
 		switch (type)
 		{
 		case 223:
-			for (byte b : payload) System.out.print(String.format("0x%x ", b));
+			for (byte b : payload) System.out.printf("0x%x ", b);
 			System.out.print("\n");
 
 			break;

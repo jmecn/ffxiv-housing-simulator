@@ -26,7 +26,7 @@ public class Index2File implements IIndexFile {
 
     @Override
     public int hashCode() {
-        return (int)(((datFile << 24) | packId.hashCode()) ^ offset);
+        return ((datFile << 24) | packId.hashCode()) ^ offset;
     }
 
     @Override

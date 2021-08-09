@@ -10,12 +10,6 @@ import java.util.List;
 
 public class BinaryFile extends PackFile {
 
-    class BinaryBlock {
-        int offset;
-        short blockSize;
-        short depressedDataSize;
-    }
-
     private WeakReference<byte[]> bufferCache;
 
     private List<BinaryBlock> blockTable;
