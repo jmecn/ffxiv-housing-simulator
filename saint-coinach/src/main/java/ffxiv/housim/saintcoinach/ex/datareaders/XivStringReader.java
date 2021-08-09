@@ -8,7 +8,7 @@ import ffxiv.housim.saintcoinach.ex.IDataRow;
 import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 
-public final class XivStringReader extends DataReader<String> {
+public final class XivStringReader extends DataReader {
     @Override
     public String getName() {
         return "str";
@@ -25,7 +25,7 @@ public final class XivStringReader extends DataReader<String> {
     }
 
     @Override
-    public String read(ByteBuffer buffer, Column col, IDataRow row) {
+    public Object read(ByteBuffer buffer, Column col, IDataRow row) {
         int fieldOffset = getFieldOffset(col, row);
         int endOfFixed = row.getOffset() + row.getSheet().getHeader().getFixedSizeDataLength();
 
@@ -52,7 +52,7 @@ public final class XivStringReader extends DataReader<String> {
     }
 
     @Override
-    public String read(ByteBuffer buffer, int offset) {
+    public Object read(ByteBuffer buffer, int offset) {
         throw new UnsupportedOperationException();
     }
 }

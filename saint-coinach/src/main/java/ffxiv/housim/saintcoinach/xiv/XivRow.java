@@ -54,4 +54,8 @@ public class XivRow implements IXivRow {
     public Object getRaw(String columnName) {
         return sourceRow.getRaw(columnName);
     }
+
+    public <T> T as(Class<T> clazz) {
+        return null;
+    }
 }

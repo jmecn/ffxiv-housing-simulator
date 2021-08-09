@@ -8,7 +8,7 @@ import ffxiv.housim.saintcoinach.ex.IDataRow;
 import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 
-public class XivQuadReader extends DataReader<XivQuad> {
+public class XivQuadReader extends DataReader {
 
     @Override
     public String getName() {
@@ -26,14 +26,14 @@ public class XivQuadReader extends DataReader<XivQuad> {
     }
 
     @Override
-    public XivQuad read(ByteBuffer buffer, Column col, IDataRow row) {
+    public Object read(ByteBuffer buffer, Column col, IDataRow row) {
         int offset = getFieldOffset(col, row);
         buffer.position(offset);
         return new XivQuad(buffer.getLong());
     }
 
     @Override
-    public XivQuad read(ByteBuffer buffer, int offset) {
+    public Object read(ByteBuffer buffer, int offset) {
         buffer.position(offset);
         return new XivQuad(buffer.getLong());
     }

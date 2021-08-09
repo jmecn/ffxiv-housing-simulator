@@ -16,7 +16,7 @@ public class PartialDataSheet<T extends IDataRow> implements IDataSheet<T> {
     final static int EntriesOffset = 0x20;
     final static int EntryLength = 0x08;
 
-    private Class<T> clazz;
+    private final Class<T> clazz;
     private final Map<Integer, T> rows = new ConcurrentHashMap<>();
     private final Map<Integer, Integer> rowOffsets = new TreeMap<>();
 
@@ -80,6 +80,21 @@ public class PartialDataSheet<T extends IDataRow> implements IDataSheet<T> {
         return rowOffsets.containsKey(row);
     }
 
+    public Iterable<T> getAllRows() {
+        return rows.values();
+    }
+
+    protected T createRow(int row, int offset) {
+        T result = null;
+        try {
+            Constructor<T> constructor = clazz.getConstructor(IDataSheet.class, int.class, int.class);
+            result = constructor.newInstance(this, row, offset);
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     @Override
     public T get(int row) {
         T result = rows.get(row);
@@ -92,12 +107,7 @@ public class PartialDataSheet<T extends IDataRow> implements IDataSheet<T> {
             throw new IllegalArgumentException("Unknown row " + row);
         }
 
-        try {
-            Constructor<T> constructor = clazz.getConstructor(IDataSheet.class, int.class, int.class);
-            result = constructor.newInstance(this, row, offset);
-        } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
-        }
+        result = createRow(row, offset);
 
         if (result != null) {
             rows.put(row, result);
@@ -126,5 +136,20 @@ public class PartialDataSheet<T extends IDataRow> implements IDataSheet<T> {
             int offset = buffer.getInt();
             rowOffsets.put(key, offset);
         }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        Iterator<Integer> it = rowOffsets.keySet().iterator();
+        return new Iterator<T>() {
+            @Override
+            public boolean hasNext() {
+                return it.hasNext();
+            }
+            @Override
+            public T next() {
+                return get(it.next());
+            }
+        };
     }
 }

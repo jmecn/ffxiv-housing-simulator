@@ -3,6 +3,7 @@ package ffxiv.housim.saintcoinach.ex;
 import lombok.Getter;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -100,5 +101,21 @@ public class MultiSheet<TData extends IDataRow> implements IMultiSheet<MultiRow,
 
     protected ISheet<TData> createLocalisedSheet(Language language) {
         return new DataSheet<>(collection, header, language, dataRowClazz);
+    }
+
+    @Override
+    public Iterator<MultiRow> iterator() {
+        Iterator<Integer> it = getActiveSheet().getKeys().iterator();
+        return new Iterator<MultiRow>() {
+            @Override
+            public boolean hasNext() {
+                return it.hasNext();
+            }
+
+            @Override
+            public MultiRow next() {
+                return get(it.next());
+            }
+        };
     }
 }

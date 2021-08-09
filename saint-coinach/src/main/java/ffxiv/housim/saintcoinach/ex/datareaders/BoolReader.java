@@ -7,7 +7,7 @@ import ffxiv.housim.saintcoinach.ex.IDataRow;
 import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 
-public class BoolReader extends DataReader<Boolean> {
+public class BoolReader extends DataReader {
     @Override
     public String getName() {
         return "bool";
@@ -24,14 +24,14 @@ public class BoolReader extends DataReader<Boolean> {
     }
 
     @Override
-    public Boolean read(ByteBuffer buffer, Column col, IDataRow row) {
+    public Object read(ByteBuffer buffer, Column col, IDataRow row) {
         int offset = getFieldOffset(col, row);
         buffer.position(offset);
         return buffer.get() != 0;
     }
 
     @Override
-    public Boolean read(ByteBuffer buffer, int offset) {
+    public Object read(ByteBuffer buffer, int offset) {
         buffer.position(offset);
         return buffer.get() != 0;
     }

@@ -125,4 +125,18 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
         return get(row).get(column);
     }
 
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+            @Override
+            public boolean hasNext() {
+                return false;
+            }
+
+            @Override
+            public T next() {
+                return null;
+            }
+        };
+    }
 }

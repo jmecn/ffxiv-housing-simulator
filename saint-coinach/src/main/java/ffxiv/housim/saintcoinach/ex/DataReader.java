@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Base class used in reading data from EX data files.
  */
-public abstract class DataReader<T> {
+public abstract class DataReader {
     /**
      * Mappings of type identifiers used in EX headers to their corresponding {@link DataReader}.
      */
@@ -62,9 +62,9 @@ public abstract class DataReader<T> {
         return reader;
     }
 
-    public abstract T read(ByteBuffer buffer, Column col, IDataRow row);
+    public abstract Object read(ByteBuffer buffer, Column col, IDataRow row);
 
-    public abstract T read(ByteBuffer buffer, int offset);
+    public abstract Object read(ByteBuffer buffer, int offset);
 
     protected static int getFieldOffset(Column col, IDataRow row) {
         return row.getOffset() + col.getOffset();

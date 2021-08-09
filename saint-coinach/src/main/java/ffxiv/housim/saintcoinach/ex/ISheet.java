@@ -6,7 +6,7 @@ import ffxiv.housim.saintcoinach.ex.IRow;
 
 import java.util.Collection;
 
-public interface ISheet<R extends IRow> {
+public interface ISheet<R extends IRow> extends Iterable<R> {
 
     String getName();
 

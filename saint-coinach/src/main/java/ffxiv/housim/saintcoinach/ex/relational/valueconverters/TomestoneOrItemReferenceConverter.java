@@ -10,6 +10,7 @@ import ffxiv.housim.saintcoinach.ex.relational.IRelationalSheet;
 import ffxiv.housim.saintcoinach.ex.relational.IValueConverter;
 import ffxiv.housim.saintcoinach.ex.relational.definition.SheetDefinition;
 import ffxiv.housim.saintcoinach.xiv.Item;
+import ffxiv.housim.saintcoinach.xiv.XivRow;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -52,7 +53,13 @@ public class TomestoneOrItemReferenceConverter implements IValueConverter<IRelat
 
         ISheet<?> sheet = coll.getSheet("TomestonesItem");
 
-        // TODO sheet 实现迭代器
+        for (IRow r : sheet) {
+            XivRow row = (XivRow) r;
+            int rewardIndex = (int)row.getRaw(2);
+            if (rewardIndex > 0) {
+                index.put(rewardIndex, row.as(Item.class));
+            }
+        }
 
         return index;
     }

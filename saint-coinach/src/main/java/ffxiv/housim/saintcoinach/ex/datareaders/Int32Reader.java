@@ -7,7 +7,7 @@ import ffxiv.housim.saintcoinach.ex.IDataRow;
 import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 
-public class Int32Reader extends DataReader<Integer> {
+public class Int32Reader extends DataReader {
     @Override
     public String getName() {
         return "int32";
@@ -24,14 +24,14 @@ public class Int32Reader extends DataReader<Integer> {
     }
 
     @Override
-    public Integer read(ByteBuffer buffer, Column col, IDataRow row) {
+    public Object read(ByteBuffer buffer, Column col, IDataRow row) {
         int offset = getFieldOffset(col, row);
         buffer.position(offset);
         return buffer.getInt();
     }
 
     @Override
-    public Integer read(ByteBuffer buffer, int offset) {
+    public Object read(ByteBuffer buffer, int offset) {
         buffer.position(offset);
         return buffer.getInt();
     }
