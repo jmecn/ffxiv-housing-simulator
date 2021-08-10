@@ -1,10 +1,10 @@
 package ffxiv.housim.saintcoinach.ex.relational.definition;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import ffxiv.housim.saintcoinach.ex.IDataRow;
 import ffxiv.housim.saintcoinach.ex.relational.IValueConverter;
 import ffxiv.housim.saintcoinach.ex.relational.valueconverters.*;
+import ffxiv.housim.saintcoinach.io.Index;
 
 import java.lang.reflect.Type;
 
@@ -19,31 +19,43 @@ public class SingleDataDefinition implements IDataDefinition {
     }
 
     @Override
-    public SingleDataDefinition clone() {
-        SingleDataDefinition def = new SingleDataDefinition();
-        def.name = name;
-        def.converter = converter;
-        return def;
-    }
-
-    @Override
     public Object convert(IDataRow row, Object value, int index) {
-        return null;
+        if (index != 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        return converter != null ? converter.convert(row, value) : value;
     }
 
     @Override
     public String getName(int index) {
-        return null;
+        if (index != 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        return name;
     }
 
     @Override
     public String getValueTypeName(int index) {
-        return null;
+        if (index != 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        return converter != null ? converter.getTargetTypeName() : null;
     }
 
     @Override
     public Type getValueType(int index) {
-        return null;
+        if (index != 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        return converter != null ? converter.getTargetType() : null;
+    }
+
+    @Override
+    public IDataDefinition clone() {
+        SingleDataDefinition def = new SingleDataDefinition();
+        def.name = name;
+        def.converter = converter;
+        return def;
     }
 
     @Override
