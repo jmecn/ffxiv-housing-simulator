@@ -2,13 +2,13 @@ package ffxiv.housim.saintcoinach.ex.relational;
 
 import ffxiv.housim.saintcoinach.ex.Column;
 import ffxiv.housim.saintcoinach.ex.Header;
-import ffxiv.housim.saintcoinach.ex.relational.definition.PositionedDataDefintion;
+import ffxiv.housim.saintcoinach.ex.relational.definition.PositionedDataDefinition;
 import ffxiv.housim.saintcoinach.ex.relational.definition.SheetDefinition;
 
 public class RelationalColumn extends Column {
 
     private boolean hasDefinition;
-    private PositionedDataDefintion definition;
+    private PositionedDataDefinition definition;
 
     private final RelationalHeader header;
 
@@ -25,13 +25,13 @@ public class RelationalColumn extends Column {
         this.header = header;
     }
 
-    public PositionedDataDefintion getDefinition() {
+    public PositionedDataDefinition getDefinition() {
         if (hasDefinition) {
             return definition;
         }
 
         if (header.getSheetDefinition() != null) {
-            PositionedDataDefintion definition = header.getSheetDefinition().tryGetDefinition(index);
+            PositionedDataDefinition definition = header.getSheetDefinition().tryGetDefinition(index);
             if (definition != null) {
                 this.definition = definition;
             }

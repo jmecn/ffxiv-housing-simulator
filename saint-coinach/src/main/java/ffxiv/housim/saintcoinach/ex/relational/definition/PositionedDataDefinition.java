@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import java.lang.reflect.Type;
 
-public class PositionedDataDefintion implements Cloneable {
+public class PositionedDataDefinition implements Cloneable {
     @Getter
     @Setter
     public IDataDefinition innerDefinition;
@@ -19,8 +19,8 @@ public class PositionedDataDefintion implements Cloneable {
         return innerDefinition == null ? 0 : innerDefinition.getLength();
     }
 
-    public PositionedDataDefintion clone() {
-        PositionedDataDefintion clone = new PositionedDataDefintion();
+    public PositionedDataDefinition clone() {
+        PositionedDataDefinition clone = new PositionedDataDefinition();
         clone.index = index;
         clone.innerDefinition = innerDefinition.clone();
         return clone;
@@ -32,7 +32,7 @@ public class PositionedDataDefintion implements Cloneable {
             throw new IndexOutOfBoundsException("Index out of range " + index);
         }
 
-        return innerDefinition.convert(row, value, index);
+        return innerDefinition.convert(row, value, innerIndex);
     }
 
     public String getName(int index) {
@@ -41,7 +41,7 @@ public class PositionedDataDefintion implements Cloneable {
             throw new IndexOutOfBoundsException("Index out of range " + index);
         }
 
-        return innerDefinition.getName(index);
+        return innerDefinition.getName(innerIndex);
     }
 
     public String getValueTypeName(int index) {
@@ -50,7 +50,7 @@ public class PositionedDataDefintion implements Cloneable {
             throw new IndexOutOfBoundsException("Index out of range " + index);
         }
 
-        return innerDefinition.getValueTypeName(index);
+        return innerDefinition.getValueTypeName(innerIndex);
     }
 
     public Type getValueType(int index) {
@@ -59,7 +59,7 @@ public class PositionedDataDefintion implements Cloneable {
             throw new IndexOutOfBoundsException("Index out of range " + index);
         }
 
-        return innerDefinition.getValueType(index);
+        return innerDefinition.getValueType(innerIndex);
     }
 
     public JsonObject toJson() {
@@ -70,8 +70,8 @@ public class PositionedDataDefintion implements Cloneable {
         return obj;
     }
 
-    public static PositionedDataDefintion fromJson(JsonObject obj) {
-        PositionedDataDefintion def = new PositionedDataDefintion();
+    public static PositionedDataDefinition fromJson(JsonObject obj) {
+        PositionedDataDefinition def = new PositionedDataDefinition();
 
         if (obj.has("index")) {
             def.index = obj.get("index").getAsInt();

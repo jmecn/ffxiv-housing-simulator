@@ -13,13 +13,13 @@ import java.util.*;
 
 public class SheetDefinition {
 
-    private Map<Integer, PositionedDataDefintion> columnDefinitionMap;
+    private Map<Integer, PositionedDataDefinition> columnDefinitionMap;
     private Map<Integer, String> columnIndexToNameMap;
     private Map<String, Integer> columnNameToIndexMap;
     private Map<Integer, String> columnValueTypeNames;
     private Map<Integer, Type> columnValueTypes;
     @Getter
-    private List<PositionedDataDefintion> dataDefinitions = new ArrayList<>();
+    private List<PositionedDataDefinition> dataDefinitions = new ArrayList<>();
     private Integer defaultColumnIndex;
     private boolean isCompiled = false;
 
@@ -43,9 +43,9 @@ public class SheetDefinition {
         columnValueTypeNames = new HashMap<>();
         columnValueTypes = new HashMap<>();
 
-        dataDefinitions.sort(Comparator.comparingInt(PositionedDataDefintion::getIndex));
+        dataDefinitions.sort(Comparator.comparingInt(PositionedDataDefinition::getIndex));
 
-        for (PositionedDataDefintion def : dataDefinitions) {
+        for (PositionedDataDefinition def : dataDefinitions) {
             for (int i = 0; i < def.getLength(); ++i) {
                 int offset = def.getIndex() + i;
                 columnDefinitionMap.put(offset, def);
@@ -67,7 +67,7 @@ public class SheetDefinition {
         isCompiled = true;
     }
 
-    public PositionedDataDefintion tryGetDefinition(int index) {
+    public PositionedDataDefinition tryGetDefinition(int index) {
         if (isCompiled) {
             return columnDefinitionMap.get(index);
         }
@@ -95,7 +95,7 @@ public class SheetDefinition {
             return columnNameToIndexMap.get(columnName);
         }
 
-        for (PositionedDataDefintion def : dataDefinitions) {
+        for (PositionedDataDefinition def : dataDefinitions) {
             for (int i = 0; i < def.getLength(); i++) {
                 String n = def.getName(def.getIndex() + i);
                 if (columnName.equals(n)) {
@@ -113,7 +113,7 @@ public class SheetDefinition {
         }
 
         List<String> names = new ArrayList<>();
-        for (PositionedDataDefintion def : dataDefinitions) {
+        for (PositionedDataDefinition def : dataDefinitions) {
             for (int i = 0; i < def.getLength(); i++) {
                 String n = def.getName(def.getIndex() + i);
                 names.add(n);
@@ -129,7 +129,7 @@ public class SheetDefinition {
             return columnIndexToNameMap.get(index);
         }
 
-        PositionedDataDefintion def = tryGetDefinition(index);
+        PositionedDataDefinition def = tryGetDefinition(index);
         return def != null ? def.getName(index) : null;
     }
 
@@ -138,7 +138,7 @@ public class SheetDefinition {
             return columnValueTypeNames.get(index);
         }
 
-        PositionedDataDefintion def = tryGetDefinition(index);
+        PositionedDataDefinition def = tryGetDefinition(index);
         return def != null ? def.getValueTypeName(index) : null;
     }
 
@@ -147,12 +147,12 @@ public class SheetDefinition {
             return columnValueTypes.get(index);
         }
 
-        PositionedDataDefintion def = tryGetDefinition(index);
+        PositionedDataDefinition def = tryGetDefinition(index);
         return def != null ? def.getValueType(index) : null;
     }
 
     public Object convert(IDataRow row, Object value, int index) {
-        PositionedDataDefintion def = tryGetDefinition(index);
+        PositionedDataDefinition def = tryGetDefinition(index);
         return def != null ? def.convert(row, value, index) : value;
     }
 
@@ -167,7 +167,7 @@ public class SheetDefinition {
         }
 
         JsonArray definitions = new JsonArray();
-        for (PositionedDataDefintion def : dataDefinitions) {
+        for (PositionedDataDefinition def : dataDefinitions) {
             definitions.add(def.toJson());
         }
         obj.add("definitions", definitions);
@@ -178,7 +178,8 @@ public class SheetDefinition {
         SheetDefinition sheetDef = new SheetDefinition();
 
         sheetDef.name = obj.get("sheet").getAsString();
-        sheetDef.defaultColumn = obj.get("defaultColumn").getAsString();
+        JsonElement defaultColumn = obj.get("defaultColumn");
+        sheetDef.defaultColumn = defaultColumn != null ? defaultColumn.getAsString() : null;
         sheetDef.isGenericReferenceTarget = obj.has("isGenericReferenceTarget");
 
         JsonArray definitions = obj.getAsJsonArray("definitions");
@@ -186,11 +187,11 @@ public class SheetDefinition {
         for (JsonElement ele : definitions) {
             if (ele instanceof JsonObject) {
                 JsonObject json = (JsonObject) ele;
-                sheetDef.dataDefinitions.add(PositionedDataDefintion.fromJson(json));
+                sheetDef.dataDefinitions.add(PositionedDataDefinition.fromJson(json));
             }
         }
 
-        for (PositionedDataDefintion dataDef : sheetDef.dataDefinitions) {
+        for (PositionedDataDefinition dataDef : sheetDef.dataDefinitions) {
             dataDef.resolveReferences(sheetDef);
         }
 

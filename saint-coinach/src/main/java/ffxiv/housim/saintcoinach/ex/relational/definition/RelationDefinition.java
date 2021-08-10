@@ -20,10 +20,10 @@ public class RelationDefinition {
     private String version;
 
     public void compile() {
-        sheetDefinitions.forEach(it -> {
+        for (SheetDefinition it : sheetDefinitions) {
             sheetMap.put(it.getName(), it);
             it.compile();
-        });
+        }
         isCompiled = true;
     }
 

@@ -177,7 +177,7 @@ public class ARealmReversed {
             def.getSheetDefinitions().add(sheetDef);
 
             if (!gameData.sheetExists(sheetDef.getName())) {
-                log.warn("Defined sheet {} is missing.");
+                log.warn("Defined sheet {} is missing.", sheetDef.getName());
             }
         }
 

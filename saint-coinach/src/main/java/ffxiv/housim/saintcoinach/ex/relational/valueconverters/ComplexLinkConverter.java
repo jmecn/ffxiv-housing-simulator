@@ -8,7 +8,7 @@ import ffxiv.housim.saintcoinach.ex.IRow;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.ex.relational.IValueConverter;
 import ffxiv.housim.saintcoinach.ex.relational.complexlink.SheetLinkData;
-import ffxiv.housim.saintcoinach.ex.relational.definition.PositionedDataDefintion;
+import ffxiv.housim.saintcoinach.ex.relational.definition.PositionedDataDefinition;
 import ffxiv.housim.saintcoinach.ex.relational.definition.SheetDefinition;
 
 import java.lang.reflect.Type;
@@ -71,7 +71,7 @@ public class ComplexLinkConverter implements IValueConverter<Object> {
     public void resolveReferences(SheetDefinition sheetDef) {
         for (SheetLinkData link : links) {
             if (link.when != null) {
-                PositionedDataDefintion keyDefinition = sheetDef.getDataDefinitions().stream()//
+                PositionedDataDefinition keyDefinition = sheetDef.getDataDefinitions().stream()//
                         .filter(d -> Objects.equals(link.when.keyColumnName, d.innerDefinition.getName(0)))
                         .findFirst().orElse(null);
 

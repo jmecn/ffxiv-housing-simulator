@@ -12,10 +12,12 @@ import ffxiv.housim.saintcoinach.ex.relational.RelationalExCollection;
 import ffxiv.housim.saintcoinach.ex.relational.definition.SheetDefinition;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
+@Slf4j
 public class MultiReferenceConverter implements IValueConverter<IRelationalRow> {
 
     @Getter
@@ -78,7 +80,7 @@ public class MultiReferenceConverter implements IValueConverter<IRelationalRow> 
         int size = array.size();
         String[] targets = new String[size];
         for (int i = 0; i < size; i++) {
-            targets[i++] = array.get(i).getAsString();
+            targets[i] = array.get(i).getAsString();
         }
 
         MultiReferenceConverter converter = new MultiReferenceConverter();

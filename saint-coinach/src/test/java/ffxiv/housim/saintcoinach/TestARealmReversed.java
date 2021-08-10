@@ -13,10 +13,13 @@ public class TestARealmReversed {
     public void testConstructor() {
         String gameDir = System.getenv("FFXIV_HOME");
         assertNotNull(gameDir);
+        ARealmReversed aRealmReversed = null;
         try {
-            new ARealmReversed(gameDir, Language.ChineseSimplified);
+            aRealmReversed = new ARealmReversed(gameDir, Language.ChineseSimplified);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println(aRealmReversed);
     }
 }

@@ -121,6 +121,6 @@ public class Pack {
 
     @Override
     public String toString() {
-        return String.format("%s/%02d%02d%02d", id.getExpansion(), id.getTypeKey(), id.getExpansionKey(), id.getNumber());
+        return String.format("%s/%02x%02x%02x", id.getExpansion(), id.getTypeKey(), id.getExpansionKey(), id.getNumber());
     }
 }
