@@ -16,7 +16,7 @@ public class RelationalExCollection extends ExCollection {
 
     @Getter
     @Setter
-    private RelationDefinition definition = new RelationDefinition();
+    private RelationDefinition definition;
 
     public RelationalExCollection(PackCollection packCollection) {
         super(packCollection);

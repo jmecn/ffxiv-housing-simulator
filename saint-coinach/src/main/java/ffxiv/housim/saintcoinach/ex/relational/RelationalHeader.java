@@ -27,4 +27,8 @@ public class RelationalHeader extends Header {
         SheetDefinition def = collection.getDefinition().tryGetSheet(getName());
         return def;
     }
+
+    public RelationalColumn findColumn(String name) {
+        return null;
+    }
 }

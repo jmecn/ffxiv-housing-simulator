@@ -7,12 +7,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MultiSheet<TData extends IDataRow> implements IMultiSheet<MultiRow, TData> {
+public class MultiSheet<TMulti extends IMultiRow, TData extends IDataRow> implements IMultiSheet<TMulti, TData> {
 
-    private Class<TData> dataRowClazz;
+    protected Class<TData> dataRowClazz;
 
     private final Map<Language, ISheet<TData>> localisedSheets = new ConcurrentHashMap<>();
-    private final Map<Integer, MultiRow> rows = new ConcurrentHashMap<>();
+    private final Map<Integer, TMulti> rows = new ConcurrentHashMap<>();
 
     @Getter
     private final ExCollection collection;
@@ -52,8 +52,8 @@ public class MultiSheet<TData extends IDataRow> implements IMultiSheet<MultiRow,
     }
 
     @Override
-    public MultiRow get(int key) {
-        MultiRow row = rows.get(key);
+    public TMulti get(int key) {
+        TMulti row = rows.get(key);
         if (row != null) {
             return row;
         }
@@ -95,8 +95,9 @@ public class MultiSheet<TData extends IDataRow> implements IMultiSheet<MultiRow,
         return sheet;
     }
 
-    protected MultiRow createMultiRow(int row) {
-        return new MultiRow(this, row);
+    protected TMulti createMultiRow(int row) {
+        // TODO
+        return (TMulti) new MultiRow(this, row);
     }
 
     protected ISheet<TData> createLocalisedSheet(Language language) {
@@ -104,16 +105,16 @@ public class MultiSheet<TData extends IDataRow> implements IMultiSheet<MultiRow,
     }
 
     @Override
-    public Iterator<MultiRow> iterator() {
+    public Iterator<TMulti> iterator() {
         Iterator<Integer> it = getActiveSheet().getKeys().iterator();
-        return new Iterator<MultiRow>() {
+        return new Iterator<TMulti>() {
             @Override
             public boolean hasNext() {
                 return it.hasNext();
             }
 
             @Override
-            public MultiRow next() {
+            public TMulti next() {
                 return get(it.next());
             }
         };

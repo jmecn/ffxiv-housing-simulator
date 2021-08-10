@@ -1,12 +1,8 @@
 package ffxiv.housim.saintcoinach.ex;
 
-import ffxiv.housim.saintcoinach.ex.ExCollection;
-import ffxiv.housim.saintcoinach.ex.Header;
-import ffxiv.housim.saintcoinach.ex.IRow;
-
 import java.util.Collection;
 
-public interface ISheet<R extends IRow> extends Iterable<R> {
+public interface ISheet<T extends IRow> extends Iterable<T> {
 
     String getName();
 
@@ -16,7 +12,7 @@ public interface ISheet<R extends IRow> extends Iterable<R> {
 
     int getCount();
 
-    R get(int row);
+    T get(int row);
 
     Object get(int row, int column);
 
