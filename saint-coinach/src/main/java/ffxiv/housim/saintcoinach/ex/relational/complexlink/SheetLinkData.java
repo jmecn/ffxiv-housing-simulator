@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach.ex.relational.conplexlink;
+package ffxiv.housim.saintcoinach.ex.relational.complexlink;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
