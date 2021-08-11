@@ -26,6 +26,11 @@ public class Page {
         return value >= start && value < end;
     }
 
+    @Override
+    public int hashCode() {
+        return start;
+    }
+
     public boolean intersects(Page other) {
         return contains(other.start)
                 || contains(other.end - 1)

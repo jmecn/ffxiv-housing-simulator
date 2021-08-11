@@ -44,6 +44,6 @@ public class RelationalMultiRow extends MultiRow implements IRelationalMultiRow 
         RelationalColumn defCol = getSheet().getHeader().getDefaultColumn();
         return defCol == null
                 ? String.format("%s#%d", getSheet().getHeader().getName(), getKey())
-                : String.format("%d", get(defCol.getIndex()));
+                : String.format("%s", get(defCol.getIndex()));
     }
 }

@@ -101,6 +101,7 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
 
     @Override
     public Collection<Integer> getKeys() {
+        createAllPartialSheets();
         return rowToPartialSheetMap.keySet();
     }
 
@@ -127,15 +128,25 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
 
     @Override
     public Iterator<T> iterator() {
+        createAllPartialSheets();
+        Iterator<ISheet<T>> sheetItor = rowToPartialSheetMap.values().iterator();
         return new Iterator<T>() {
+
+            Iterator<T> rowItor = null;
             @Override
             public boolean hasNext() {
-                return false;
+                while (rowItor == null || !rowItor.hasNext()) {
+                    if (!sheetItor.hasNext()) {
+                        return false;
+                    }
+                    rowItor = sheetItor.next().iterator();
+                }
+                return true;
             }
 
             @Override
             public T next() {
-                return null;
+                return rowItor.next();
             }
         };
     }

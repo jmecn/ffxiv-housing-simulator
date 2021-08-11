@@ -115,7 +115,9 @@ public class MultiSheet<TMulti extends IMultiRow, TData extends IDataRow> implem
 
     @Override
     public Iterator<TMulti> iterator() {
-        Iterator<Integer> it = getActiveSheet().getKeys().iterator();
+        ISheet<TData> sheet = getActiveSheet();
+
+        Iterator<Integer> it = sheet.getKeys().iterator();
         return new Iterator<TMulti>() {
             @Override
             public boolean hasNext() {
