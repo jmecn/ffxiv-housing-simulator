@@ -81,7 +81,7 @@ public class DataRow2 extends DataRowBase {
     }
 
     @Override
-    public java.lang.Object getRaw(int columnIndex) {
+    public Object getRaw(int columnIndex) {
         throw new UnsupportedOperationException("Cannot get column on Variant 2 DataRow. Use getSubRow instead.");
     }
 }
