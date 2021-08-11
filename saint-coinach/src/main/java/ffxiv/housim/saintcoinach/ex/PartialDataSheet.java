@@ -1,6 +1,6 @@
 package ffxiv.housim.saintcoinach.ex;
 
-import ffxiv.housim.saintcoinach.Range;
+import ffxiv.housim.saintcoinach.Page;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;
 
@@ -23,13 +23,13 @@ public class PartialDataSheet<T extends IDataRow> implements IDataSheet<T> {
     @Getter
     private final IDataSheet<T> sourceSheet;
     @Getter
-    private final Range range;
+    private final Page page;
     @Getter
     private final PackFile file;
 
-    public PartialDataSheet(IDataSheet<T> sourceSheet, Range range, PackFile file, Class<T> clazz) {
+    public PartialDataSheet(IDataSheet<T> sourceSheet, Page page, PackFile file, Class<T> clazz) {
         this.sourceSheet = sourceSheet;
-        this.range = range;
+        this.page = page;
         this.file = file;
 
         this.clazz = clazz;
@@ -62,7 +62,7 @@ public class PartialDataSheet<T extends IDataRow> implements IDataSheet<T> {
 
     @Override
     public String getName() {
-        return sourceSheet.getName() + "_" + range.getStart();
+        return sourceSheet.getName() + "_" + page.getStart();
     }
 
     @Override

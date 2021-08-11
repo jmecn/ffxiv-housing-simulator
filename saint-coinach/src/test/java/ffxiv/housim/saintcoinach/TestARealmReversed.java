@@ -1,6 +1,9 @@
 package ffxiv.housim.saintcoinach;
 
+import com.google.gson.Gson;
 import ffxiv.housim.saintcoinach.ex.Language;
+import ffxiv.housim.saintcoinach.ex.relational.IRelationalSheet;
+import ffxiv.housim.saintcoinach.xiv.Item;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -20,6 +23,6 @@ public class TestARealmReversed {
             e.printStackTrace();
         }
 
-        System.out.println(aRealmReversed);
+        IRelationalSheet<?> sheet = aRealmReversed.getGameData().getSheet("Item");
     }
 }

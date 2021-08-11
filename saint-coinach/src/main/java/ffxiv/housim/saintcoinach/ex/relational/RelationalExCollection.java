@@ -69,7 +69,7 @@ public class RelationalExCollection extends ExCollection {
         for (SheetDefinition sheetDef : definitions) {
             IRelationalSheet<?> sheet = getSheet(sheetDef.getName());
 
-            if (Arrays.stream(sheet.getHeader().getDataFileRanges()).noneMatch(it -> it.contains(key))) {
+            if (Arrays.stream(sheet.getHeader().getPages()).noneMatch(it -> it.contains(key))) {
                 continue;
             }
 

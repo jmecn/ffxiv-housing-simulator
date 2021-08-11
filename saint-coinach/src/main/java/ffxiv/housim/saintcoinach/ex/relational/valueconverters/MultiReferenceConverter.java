@@ -1,17 +1,14 @@
 package ffxiv.housim.saintcoinach.ex.relational.valueconverters;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import ffxiv.housim.saintcoinach.ex.IDataRow;
-import ffxiv.housim.saintcoinach.ex.ISheet;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalSheet;
 import ffxiv.housim.saintcoinach.ex.relational.IValueConverter;
 import ffxiv.housim.saintcoinach.ex.relational.RelationalExCollection;
 import ffxiv.housim.saintcoinach.ex.relational.definition.SheetDefinition;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Type;
@@ -45,7 +42,7 @@ public class MultiReferenceConverter implements IValueConverter<IRelationalRow> 
 
         for (String target : targets) {
             IRelationalSheet<?> sheet = coll.getSheet(target);
-            if (Arrays.stream(sheet.getHeader().getDataFileRanges()).noneMatch(it -> it.contains(key))) {
+            if (Arrays.stream(sheet.getHeader().getPages()).noneMatch(it -> it.contains(key))) {
                 continue;
             }
 

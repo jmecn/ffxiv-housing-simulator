@@ -31,7 +31,7 @@ public class MultiSheetLinkData extends SheetLinkData {
     public IRow getRow(int key, ExCollection collection) {
         for (String sheetName : sheetNames) {
             IRelationalSheet sheet = (IRelationalSheet) collection.getSheet(sheetName);
-            if (Arrays.stream(sheet.getHeader().getDataFileRanges()).noneMatch(r -> r.contains(key))) {
+            if (Arrays.stream(sheet.getHeader().getPages()).noneMatch(r -> r.contains(key))) {
                 continue;
             }
 

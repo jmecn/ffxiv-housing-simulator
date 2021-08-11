@@ -11,6 +11,7 @@ import ffxiv.housim.saintcoinach.ex.relational.definition.RelationDefinition;
 import ffxiv.housim.saintcoinach.ex.relational.definition.SheetDefinition;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.xiv.XivCollection;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -58,16 +59,19 @@ public class ARealmReversed {
     /**
      * Game data collection for the data files.
      */
+    @Getter
     private XivCollection gameData;
 
     /**
      * Root directory of the game installation.
      */
+    @Getter
     private File gameDirectory;
 
     /**
      * Version of the game data.
      */
+    @Getter
     private String gameVersion;
 
     /**

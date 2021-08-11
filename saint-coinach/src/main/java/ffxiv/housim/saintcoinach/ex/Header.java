@@ -1,7 +1,7 @@
 package ffxiv.housim.saintcoinach.ex;
 
 import ffxiv.housim.saintcoinach.io.PackFile;
-import ffxiv.housim.saintcoinach.Range;
+import ffxiv.housim.saintcoinach.Page;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,12 +13,12 @@ public class Header {
 
     @Getter
     private int columnCount;
-    private int rangeCount;
+    private int pageCount;
     private int languageCount;
     @Getter
     private Column[] columns;
     @Getter
-    private Range[] dataFileRanges;
+    private Page[] pages;
     @Getter
     private Language[] availableLanguages;
 
@@ -61,7 +61,7 @@ public class Header {
         buffer.getShort();// skip 2 bytes;
         fixedSizeDataLength = buffer.getShort();
         columnCount = buffer.getShort();
-        rangeCount = buffer.getShort();
+        pageCount = buffer.getShort();
         languageCount = buffer.getShort();
 
         buffer.position(0x10);
@@ -72,8 +72,8 @@ public class Header {
 
         buffer.position(0x20);
         readColumns(buffer);
-        readPartialFiles(buffer);
-        readSuffixes(buffer);
+        readPages(buffer);
+        readLocales(buffer);
     }
 
     private void readColumns(ByteBuffer buffer) {
@@ -86,17 +86,17 @@ public class Header {
         }
     }
 
-    private void readPartialFiles(ByteBuffer buffer) {
-        dataFileRanges = new Range[rangeCount];
-        for (int i = 0; i < rangeCount; i++) {
+    private void readPages(ByteBuffer buffer) {
+        pages = new Page[pageCount];
+        for (int i = 0; i < pageCount; i++) {
             int min = buffer.getInt();
             int len = buffer.getInt();
-            dataFileRanges[i] = new Range(min, len);
+            pages[i] = new Page(min, len);
             log.info("page:{}, start:{}, length:{}", i, min, len);
         }
     }
 
-    private void readSuffixes(ByteBuffer buffer) {
+    private void readLocales(ByteBuffer buffer) {
 
         // ScreenImage and CutScreenImage reference localized image files,
         // however their available languages are only None.  Perhaps there

@@ -1,6 +1,6 @@
 package ffxiv.housim.saintcoinach.ex;
 
-import ffxiv.housim.saintcoinach.Range;
+import ffxiv.housim.saintcoinach.Page;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;
 
@@ -13,7 +13,7 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
     private boolean partialSheetsCreated = false;
     private final Class<T> clazz;
 
-    private final Map<Range, ISheet<T>> partialSheets = new HashMap<>();
+    private final Map<Page, ISheet<T>> partialSheets = new HashMap<>();
     private final Map<Integer, ISheet<T>> rowToPartialSheetMap = new TreeMap<>();
     private final Object partialSheetsLock = new Object();
 
@@ -31,12 +31,12 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
         this.clazz = clazz;
     }
 
-    protected ISheet<T> createPartialSheet(Range range, PackFile file) {
-        return new PartialDataSheet<>(this, range, file, clazz);
+    protected ISheet<T> createPartialSheet(Page page, PackFile file) {
+        return new PartialDataSheet<>(this, page, file, clazz);
     }
 
-    protected PackFile getPartialFile(Range range) {
-        String partialFileName = String.format("exd/%s_%d%s.exd", header.getName().toLowerCase(), range.getStart(), language.getSuffix());
+    protected PackFile getPartialFile(Page page) {
+        String partialFileName = String.format("exd/%s_%d%s.exd", header.getName().toLowerCase(), page.getStart(), language.getSuffix());
         return collection.getPackCollection().tryGetFile(partialFileName);
     }
 
@@ -44,16 +44,16 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
         if (rowToPartialSheetMap.containsKey(row))
             return rowToPartialSheetMap.get(row);
 
-        List<Range> ranges = Arrays.stream(header.getDataFileRanges()).filter(it -> it.contains(row)).collect(Collectors.toList());
-        if (ranges.size() == 0) {
+        List<Page> pages = Arrays.stream(header.getPages()).filter(it -> it.contains(row)).collect(Collectors.toList());
+        if (pages.size() == 0) {
             throw new IndexOutOfBoundsException("Index out of range: " + row);
         }
         synchronized (partialSheetsLock) {
-            Range range = ranges.get(0);
+            Page page = pages.get(0);
 
-            ISheet<T> partial = partialSheets.get(range);
+            ISheet<T> partial = partialSheets.get(page);
             if (partial == null) {
-                partial = createPartialSheet(range);
+                partial = createPartialSheet(page);
             }
             return partial;
         }
@@ -65,22 +65,22 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
                 return;
             }
 
-            for (Range range : header.getDataFileRanges()) {
-                if (partialSheets.containsKey(range)) {
+            for (Page page : header.getPages()) {
+                if (partialSheets.containsKey(page)) {
                     continue;
                 }
-                createPartialSheet(range);
+                createPartialSheet(page);
             }
 
             partialSheetsCreated = true;
         }
     }
 
-    private ISheet<T> createPartialSheet(Range range) {
-        PackFile file = getPartialFile(range);
+    private ISheet<T> createPartialSheet(Page page) {
+        PackFile file = getPartialFile(page);
 
-        ISheet<T> partial = createPartialSheet(range, file);
-        partialSheets.put(range, partial);
+        ISheet<T> partial = createPartialSheet(page, file);
+        partialSheets.put(page, partial);
         for (Integer key :  partial.getKeys()) {
             rowToPartialSheetMap.put(key, partial);
         }
