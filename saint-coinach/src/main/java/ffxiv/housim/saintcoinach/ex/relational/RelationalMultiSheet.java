@@ -12,8 +12,8 @@ public class RelationalMultiSheet<TMulti extends IRelationalMultiRow, TData exte
     @Getter
     private RelationalHeader header;
 
-    public RelationalMultiSheet(RelationalExCollection collection, RelationalHeader header, Class<TData> dataRowClass) {
-        super(collection, header, dataRowClass);
+    public RelationalMultiSheet(RelationalExCollection collection, RelationalHeader header, Class<TMulti> multiRowClass, Class<TData> dataRowClass) {
+        super(collection, header, multiRowClass, dataRowClass);
         this.collection = collection;
         this.header = header;
     }
@@ -30,7 +30,7 @@ public class RelationalMultiSheet<TMulti extends IRelationalMultiRow, TData exte
 
     @Override
     protected ISheet<TData> createLocalisedSheet(Language language) {
-        return new RelationalDataSheet<>(collection, header, language, dataRowClazz);
+        return new RelationalDataSheet<>(collection, header, language, dataRowClass);
     }
 
     @Override

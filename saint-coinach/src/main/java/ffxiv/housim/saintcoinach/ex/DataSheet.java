@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
 
     private boolean partialSheetsCreated = false;
-    private final Class<T> clazz;
+    protected final Class<T> dataRowClass;
 
     private final Map<Page, ISheet<T>> partialSheets = new HashMap<>();
     private final Map<Integer, ISheet<T>> rowToPartialSheetMap = new TreeMap<>();
@@ -24,15 +24,15 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
     @Getter
     private final Language language;
 
-    public DataSheet(ExCollection collection, Header header, Language language, Class<T> clazz) {
+    public DataSheet(ExCollection collection, Header header, Language language, Class<T> dataRowClass) {
         this.collection = collection;
         this.header = header;
         this.language = language;
-        this.clazz = clazz;
+        this.dataRowClass = dataRowClass;
     }
 
     protected ISheet<T> createPartialSheet(Page page, PackFile file) {
-        return new PartialDataSheet<>(this, page, file, clazz);
+        return new PartialDataSheet<>(this, page, file, dataRowClass);
     }
 
     protected PackFile getPartialFile(Page page) {

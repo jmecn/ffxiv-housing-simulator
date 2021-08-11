@@ -107,7 +107,7 @@ public class ExCollection {
 
     protected ISheet<?> createSheet(Header header, Class<? extends IDataRow> clazz) {
         if (header.getAvailableLanguages().length >= 1) {
-            return new MultiSheet<>(this, header, clazz);
+            return new MultiSheet<>(this, header, MultiRow.class, clazz);
         } else {
             return new DataSheet<>(this, header, header.getAvailableLanguages()[0], clazz);
         }

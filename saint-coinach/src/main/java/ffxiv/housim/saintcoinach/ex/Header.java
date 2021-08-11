@@ -79,11 +79,15 @@ public class Header {
     private void readColumns(ByteBuffer buffer) {
         columns = new Column[columnCount];
         for (int i = 0; i < columnCount; i++) {
-            // 4 bytes
-            int type = buffer.getShort();
-            int offset = buffer.getShort();
-            columns[i] = new Column(this, i, type, offset);
+            columns[i] = createColumn(i, buffer);
         }
+    }
+
+    protected Column createColumn(int index, ByteBuffer buffer) {
+        // 4 bytes
+        int type = buffer.getShort();
+        int offset = buffer.getShort();
+        return new Column(this, index, type, offset);
     }
 
     private void readPages(ByteBuffer buffer) {

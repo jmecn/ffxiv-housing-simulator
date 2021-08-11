@@ -2,8 +2,11 @@ package ffxiv.housim.saintcoinach.ex.relational;
 
 import ffxiv.housim.saintcoinach.ex.Column;
 import ffxiv.housim.saintcoinach.ex.Header;
+import ffxiv.housim.saintcoinach.ex.IDataRow;
 import ffxiv.housim.saintcoinach.ex.relational.definition.PositionedDataDefinition;
 import ffxiv.housim.saintcoinach.ex.relational.definition.SheetDefinition;
+
+import java.nio.ByteBuffer;
 
 public class RelationalColumn extends Column {
 
@@ -59,5 +62,23 @@ public class RelationalColumn extends Column {
         String t = def.getValueTypeName(index);
 
         return t == null ? super.getValueType() : t;
+    }
+
+    @Override
+    public Object read(ByteBuffer buffer, IDataRow row) {
+        Object baseVal = super.read(buffer, row);
+        return definition != null ? definition.convert(row, baseVal, index) : baseVal;
+    }
+
+    @Override
+    public Object read(ByteBuffer buffer, IDataRow row, int offset) {
+        Object baseVal = super.read(buffer, row, offset);
+        return definition != null ? definition.convert(row, baseVal, index) : baseVal;
+    }
+
+    @Override
+    public String toString() {
+        String name = getName();
+        return name != null ? name : String.valueOf(index);
     }
 }

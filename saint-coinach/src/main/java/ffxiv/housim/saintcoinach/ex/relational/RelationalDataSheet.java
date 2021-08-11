@@ -1,6 +1,8 @@
 package ffxiv.housim.saintcoinach.ex.relational;
 
+import ffxiv.housim.saintcoinach.Page;
 import ffxiv.housim.saintcoinach.ex.*;
+import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;
 
 import java.util.Map;
@@ -20,6 +22,11 @@ public class RelationalDataSheet<T extends IRelationalDataRow> extends DataSheet
         super(collection, header, language, clazz);
         this.collection = collection;
         this.header = header;
+    }
+
+    @Override
+    protected ISheet<T> createPartialSheet(Page page, PackFile file) {
+        return new RelationalPartialDataSheet<T>(this, page, file, dataRowClass);
     }
 
     @Override

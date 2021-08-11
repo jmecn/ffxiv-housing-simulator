@@ -16,7 +16,7 @@ public class PartialDataSheet<T extends IDataRow> implements IDataSheet<T> {
     final static int EntriesOffset = 0x20;
     final static int EntryLength = 0x08;
 
-    private final Class<T> clazz;
+    private final Class<T> dataRowClass;
     private final Map<Integer, T> rows = new ConcurrentHashMap<>();
     private final Map<Integer, Integer> rowOffsets = new TreeMap<>();
 
@@ -27,12 +27,12 @@ public class PartialDataSheet<T extends IDataRow> implements IDataSheet<T> {
     @Getter
     private final PackFile file;
 
-    public PartialDataSheet(IDataSheet<T> sourceSheet, Page page, PackFile file, Class<T> clazz) {
+    public PartialDataSheet(IDataSheet<T> sourceSheet, Page page, PackFile file, Class<T> dataRowClass) {
         this.sourceSheet = sourceSheet;
         this.page = page;
         this.file = file;
 
-        this.clazz = clazz;
+        this.dataRowClass = dataRowClass;
 
         build();
     }
@@ -87,7 +87,7 @@ public class PartialDataSheet<T extends IDataRow> implements IDataSheet<T> {
     protected T createRow(int row, int offset) {
         T result = null;
         try {
-            Constructor<T> constructor = clazz.getConstructor(IDataSheet.class, int.class, int.class);
+            Constructor<T> constructor = dataRowClass.getConstructor(IDataSheet.class, int.class, int.class);
             result = constructor.newInstance(this, row, offset);
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();

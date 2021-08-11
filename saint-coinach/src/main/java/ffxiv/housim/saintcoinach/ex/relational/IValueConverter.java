@@ -13,7 +13,7 @@ public interface IValueConverter<T> {
 
     T convert(IDataRow row, Object rawValue);
 
-    JsonObject toJson();//
+    JsonObject toJson();
 
     void resolveReferences(SheetDefinition sheetDef);
 }

@@ -2,6 +2,7 @@ package ffxiv.housim.saintcoinach.ex;
 
 import lombok.Getter;
 
+import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -9,7 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MultiSheet<TMulti extends IMultiRow, TData extends IDataRow> implements IMultiSheet<TMulti, TData> {
 
-    protected Class<TData> dataRowClazz;
+    protected Class<TMulti> multiRowClass;
+    protected Class<TData> dataRowClass;
 
     private final Map<Language, ISheet<TData>> localisedSheets = new ConcurrentHashMap<>();
     private final Map<Integer, TMulti> rows = new ConcurrentHashMap<>();
@@ -19,11 +21,12 @@ public class MultiSheet<TMulti extends IMultiRow, TData extends IDataRow> implem
     @Getter
     private final Header header;
 
-    public MultiSheet(ExCollection collection, Header header, Class<TData> dataRowClass) {
+    public MultiSheet(ExCollection collection, Header header, Class<TMulti> multiRowClass, Class<TData> dataRowClass) {
         this.collection = collection;
         this.header = header;
 
-        this.dataRowClazz = dataRowClass;
+        this.multiRowClass = multiRowClass;
+        this.dataRowClass = dataRowClass;
     }
 
     @Override
@@ -96,12 +99,18 @@ public class MultiSheet<TMulti extends IMultiRow, TData extends IDataRow> implem
     }
 
     protected TMulti createMultiRow(int row) {
-        // TODO
-        return (TMulti) new MultiRow(this, row);
+        TMulti result = null;
+        try {
+            Constructor<TMulti> constructor = multiRowClass.getConstructor(IMultiSheet.class, int.class);
+            result = constructor.newInstance(this, row);
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     protected ISheet<TData> createLocalisedSheet(Language language) {
-        return new DataSheet<>(collection, header, language, dataRowClazz);
+        return new DataSheet<>(collection, header, language, dataRowClass);
     }
 
     @Override
