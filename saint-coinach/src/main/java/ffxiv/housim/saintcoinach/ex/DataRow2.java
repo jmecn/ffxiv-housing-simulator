@@ -3,14 +3,16 @@ package ffxiv.housim.saintcoinach.ex;
 import lombok.Getter;
 
 import java.nio.ByteBuffer;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class DataRow2 extends DataRowBase {
     final static int MetadataLength = 0x06;
 
     private boolean isRead = false;
-    private final Map<Integer, SubRow> subRows = new HashMap<>();
+    private final Map<Integer, SubRow> subRows = new TreeMap<>();
 
     @Getter
     private final int length;
@@ -30,11 +32,25 @@ public class DataRow2 extends DataRowBase {
         subRowCount = buffer.getShort();
     }
 
-    public SubRow getSubRow(int key) {
+    public Collection<Integer> getSubRowKeys() {
         if (!isRead) {
             read();
         }
 
+        return subRows.keySet();
+    }
+
+    public Collection<SubRow> getSubRows() {
+        if (!isRead) {
+            read();
+        }
+        return subRows.values();
+    }
+
+    public SubRow getSubRow(int key) {
+        if (!isRead) {
+            read();
+        }
         return subRows.get(key);
     }
 
@@ -43,19 +59,29 @@ public class DataRow2 extends DataRowBase {
 
         Header h = sheet.getHeader();
         ByteBuffer b = sheet.getBuffer();
-        int o = offset;
+        int offset = this.offset;
 
-        b.position(o);
+        b.position(offset);
         for(int i = 0; i < subRowCount; ++i) {
             int key = b.getShort();
-            o += 2;
+            offset += 2;
 
-            SubRow r = new SubRow(this, key, o);
+            SubRow r = new SubRow(this, key, offset);
             subRows.put(key, r);
 
-            o += h.getFixedSizeDataLength();
+            offset += h.getFixedSizeDataLength();
         }
 
         isRead = true;
+    }
+
+    @Override
+    public Object get(int columnIndex) {
+        throw new UnsupportedOperationException("Cannot get column on Variant 2 DataRow. Use getSubRow instead.");
+    }
+
+    @Override
+    public java.lang.Object getRaw(int columnIndex) {
+        throw new UnsupportedOperationException("Cannot get column on Variant 2 DataRow. Use getSubRow instead.");
     }
 }
