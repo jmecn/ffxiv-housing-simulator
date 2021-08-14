@@ -3,9 +3,11 @@ package ffxiv.housim.saintcoinach.ex;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalDataRow;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalDataSheet;
 import ffxiv.housim.saintcoinach.ex.relational.RelationalColumn;
+import lombok.Getter;
 
 public class SubRow extends DataRowBase implements IRelationalDataRow {
 
+    @Getter
     private IDataRow parentRow;
 
     public SubRow(IDataRow parent, int key, int offset) {

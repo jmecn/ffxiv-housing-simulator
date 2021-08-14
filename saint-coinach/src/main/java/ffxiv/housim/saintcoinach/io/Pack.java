@@ -1,5 +1,6 @@
 package ffxiv.housim.saintcoinach.io;
 
+import ffxiv.housim.saintcoinach.Pair;
 import lombok.NonNull;
 
 import java.io.FileInputStream;
@@ -14,21 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Pack {
-
-    private class Pair<K, V> {
-        K key;
-        V val;
-
-        private Pair(K k, V v) {
-            key = k;
-            val = v;
-        }
-
-        @Override
-        public int hashCode() {
-            return key.hashCode() * 13 + val.hashCode();
-        }
-    }
 
     private final static String IndexFileFormat = "%02x%02x%02x.win32.index";
     private final static String Index2FileFormat = "%02x%02x%02x.win32.index2";
