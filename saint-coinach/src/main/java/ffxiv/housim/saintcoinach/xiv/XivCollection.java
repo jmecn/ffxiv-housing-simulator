@@ -47,7 +47,7 @@ public class XivCollection extends RelationalExCollection {
 
     protected ISheet<?> createSheet(Header header) {
         IRelationalSheet baseSheet = (IRelationalSheet) super.createSheet(header);
-        String name = baseSheet.getName();
+        String name = baseSheet.getHeader().getName();
         if ("Item".equals(name)) {
             return new InventoryItemSheet(this, baseSheet);
         } else if ("ItemAction".equals(name)) {
