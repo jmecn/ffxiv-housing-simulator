@@ -115,7 +115,6 @@ public class XivSheet<T extends IXivRow> implements IXivSheet<T> {
             @Override
             public T next() {
                 IRelationalRow sourceRow = itor.next();
-                System.out.println(sourceRow);
                 int key = sourceRow.getKey();
                 T t = rows.get(key);
                 if (t == null) {
