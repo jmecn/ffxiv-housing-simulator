@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -106,7 +107,7 @@ public class ExCollection {
     }
 
     protected ISheet<?> createSheet(Header header, Class<? extends IDataRow> clazz) {
-        if (header.getAvailableLanguages().length >= 1) {
+        if (header.getAvailableLanguages().length > 1) {
             return new MultiSheet<>(this, header, MultiRow.class, clazz);
         } else {
             return new DataSheet<>(this, header, header.getAvailableLanguages()[0], clazz);

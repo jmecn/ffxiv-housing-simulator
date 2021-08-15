@@ -41,7 +41,7 @@ public class RelationalExCollection extends ExCollection {
     protected ISheet<?> createSheet(Header header, Class<? extends IDataRow> clazz) {
         RelationalHeader relHeader = (RelationalHeader) header;
         Class<? extends IRelationalDataRow> klass = (Class<? extends IRelationalDataRow>) clazz;
-        if (header.getAvailableLanguages().length >= 1) {
+        if (header.getAvailableLanguages().length > 1) {
             return new RelationalMultiSheet<>(this, relHeader, RelationalMultiRow.class, klass);
         } else {
             return new RelationalDataSheet<>(this, relHeader, header.getAvailableLanguages()[0], klass);

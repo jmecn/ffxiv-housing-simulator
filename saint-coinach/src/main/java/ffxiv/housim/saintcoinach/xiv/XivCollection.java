@@ -1,18 +1,27 @@
 package ffxiv.housim.saintcoinach.xiv;
 
-import ffxiv.housim.saintcoinach.ex.relational.RelationalExCollection;
+import com.google.common.reflect.ClassPath;
+import ffxiv.housim.saintcoinach.ex.*;
+import ffxiv.housim.saintcoinach.ex.relational.*;
 import ffxiv.housim.saintcoinach.io.PackCollection;
+import ffxiv.housim.saintcoinach.xiv.sheets.InventoryItemSheet;
+import ffxiv.housim.saintcoinach.xiv.sheets.ItemActionSheet;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.lang.reflect.Type;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class XivCollection extends RelationalExCollection {
+    private final static String PACKAGE_NAME = "ffxiv.housim.saintcoinach.xiv";
 
-    private Map<String, Type> sheetNameToTypeMap = new ConcurrentHashMap<>();
+    private Map<String, Class<IXivRow>> sheetNameToTypeMap;
 
     public XivCollection(PackCollection packCollection) {
         this(packCollection, null);
@@ -34,5 +43,101 @@ public class XivCollection extends RelationalExCollection {
 
     public <T extends IXivRow> IXivSheet<T> getSheet(String name, Class<T> t) {
         return (IXivSheet<T>) getSheet(name);
+    }
+
+    protected ISheet<?> createSheet(Header header) {
+        IRelationalSheet baseSheet = (IRelationalSheet) super.createSheet(header);
+        String name = baseSheet.getName();
+        if ("Item".equals(name)) {
+            return new InventoryItemSheet(this, baseSheet);
+        } else if ("ItemAction".equals(name)) {
+            return new ItemActionSheet(this, baseSheet);
+        }
+
+        Class<IXivRow> match = getXivRowType(name);
+        if (match != null) {
+            Class genericType = baseSheet.getHeader().getVariant() == 2 ? XivSheet2.class : XivSheet.class;
+
+            Constructor<ISheet<?>> constructor = null;
+            try {
+                Constructor[] constructors = genericType.getConstructors();
+                for (Constructor c : constructors) {
+                    Class[] parameters = c.getParameterTypes();
+                    if (parameters.length != 3) {
+                        continue;
+                    }
+                    log.info("parameters:{}", Arrays.toString(parameters));
+                    if (parameters[0].equals(XivCollection.class)
+                            && parameters[1].equals(IRelationalSheet.class)
+                            && parameters[2].equals(Class.class) ) {
+                        constructor = c;
+                        return constructor.newInstance(this, baseSheet, match);
+                    }
+                }
+                constructor = genericType.getConstructor(XivCollection.class, IRelationalRow.class, match);
+                return constructor.newInstance(this, baseSheet, match);
+            } catch (ReflectiveOperationException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        if (header.getVariant() == 2) {
+            return new XivSheet2<>(this, baseSheet, XivSubRow.class);
+        } else {
+            return new XivSheet<>(this, baseSheet, XivRow.class);
+        }
+    }
+
+    private Class<IXivRow> getXivRowType(String name) {
+        if (sheetNameToTypeMap == null) {
+            buildSheetToTypeMap();
+        }
+
+        return sheetNameToTypeMap.get(name);
+    }
+
+    private void buildSheetToTypeMap() {
+        sheetNameToTypeMap = new ConcurrentHashMap<>();
+
+        ClassPath classPath = null;
+        try {
+            classPath = ClassPath.from(getClass().getClassLoader());
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("Failed to scan sheet type");
+            return;
+        }
+
+        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(PACKAGE_NAME)) {
+            Class clazz = classInfo.load();
+
+            if (!IXivRow.class.isAssignableFrom(clazz)) {
+                continue;
+            }
+            if (clazz.isInterface()) {
+                continue;
+            }
+            if (Modifier.isAbstract(clazz.getModifiers())) {
+                continue;
+            }
+            XivSheetName attr = (XivSheetName) clazz.getAnnotation(XivSheetName.class);
+            String sheetName = attr == null ? classInfo.getSimpleName() : attr.value();
+
+            log.info("{}, attr:{}", classInfo.getName(), sheetName);
+
+            sheetNameToTypeMap.put(sheetName, (Class<IXivRow>) clazz);
+        }
+    }
+
+    @Override
+    protected ISheet<?> createSheet(Header header, Class<? extends IDataRow> clazz) {
+        RelationalHeader relHeader = (RelationalHeader) header;
+        Class<? extends IRelationalDataRow> klass = (Class<? extends IRelationalDataRow>) clazz;
+        if (header.getAvailableLanguages().length > 1) {
+            return new RelationalMultiSheet<>(this, relHeader, RelationalMultiRow.class, klass);
+        } else {
+            return new RelationalDataSheet<>(this, relHeader, header.getAvailableLanguages()[0], klass);
+        }
     }
 }

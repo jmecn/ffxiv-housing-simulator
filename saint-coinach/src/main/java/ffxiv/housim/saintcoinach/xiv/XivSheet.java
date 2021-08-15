@@ -28,7 +28,7 @@ public class XivSheet<T extends IXivRow> implements IXivSheet<T> {
 
     public Constructor<T> getConstructor() throws NoSuchMethodException {
         if (rowConstructor == null) {
-            rowConstructor = rowClass.getConstructor(getClass(), IRelationalRow.class);
+            rowConstructor = rowClass.getConstructor(IXivSheet.class, IRelationalRow.class);
         }
         return rowConstructor;
     }
@@ -114,7 +114,8 @@ public class XivSheet<T extends IXivRow> implements IXivSheet<T> {
 
             @Override
             public T next() {
-                T sourceRow = itor.next();
+                IRelationalRow sourceRow = itor.next();
+                System.out.println(sourceRow);
                 int key = sourceRow.getKey();
                 T t = rows.get(key);
                 if (t == null) {

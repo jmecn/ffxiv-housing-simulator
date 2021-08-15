@@ -1,13 +1,11 @@
 package ffxiv.housim.saintcoinach;
 
-import com.google.gson.Gson;
-import ffxiv.housim.saintcoinach.ex.IDataRow;
 import ffxiv.housim.saintcoinach.ex.Language;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalMultiRow;
-import ffxiv.housim.saintcoinach.ex.relational.IRelationalMultiSheet;
-import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalSheet;
-import ffxiv.housim.saintcoinach.xiv.Item;
+import ffxiv.housim.saintcoinach.xiv.IXivSheet;
+import ffxiv.housim.saintcoinach.xiv.XivSheet;
+import ffxiv.housim.saintcoinach.xiv.entity.Item;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -28,11 +26,11 @@ public class TestARealmReversed {
             e.printStackTrace();
         }
 
-        IRelationalSheet<?> sheet = aRealmReversed.getGameData().getSheet("Item");
-        Iterator<?> it = sheet.iterator();
+        IXivSheet<Item> sheet = aRealmReversed.getGameData().getSheet(Item.class);
+        Iterator<Item> it = sheet.iterator();
         int i = 0;
         while(it.hasNext()) {
-            IRelationalMultiRow e = (IRelationalMultiRow) it.next();
+            Item e = it.next();
             System.out.printf("#%d: %s, %s\n%s\n", e.getKey(), e, e.get(10), e.get(8));
         }
     }

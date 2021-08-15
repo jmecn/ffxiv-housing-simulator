@@ -1,6 +1,8 @@
-package ffxiv.housim.saintcoinach.xiv;
+package ffxiv.housim.saintcoinach.xiv.entity;
 
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
+import ffxiv.housim.saintcoinach.xiv.IXivSheet;
+import ffxiv.housim.saintcoinach.xiv.XivRow;
 
 public abstract class ItemBase extends XivRow {
 

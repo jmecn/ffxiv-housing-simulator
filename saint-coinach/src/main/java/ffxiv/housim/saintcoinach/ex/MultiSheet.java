@@ -3,6 +3,7 @@ package ffxiv.housim.saintcoinach.ex;
 import lombok.Getter;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -89,7 +90,7 @@ public class MultiSheet<TMulti extends IMultiRow, TData extends IDataRow> implem
         }
 
         if (!containsLanguage) {
-            throw new IllegalArgumentException("Unsupported language " + language);
+            throw new IllegalArgumentException("Unsupported language " + language + ", languages: " + Arrays.toString(languages));
         }
 
         sheet = createLocalisedSheet(language);

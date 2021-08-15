@@ -172,24 +172,48 @@ public class XivRow implements IXivRow {
         return (boolean) get(buildColumnName(column, indices));
     }
 
+    public short asInt16(String column) {
+        return (short) get(column);
+    }
+
     public short asInt16(String column, int ... indices) {
         return (short) get(buildColumnName(column, indices));
+    }
+
+    public int asInt32(String column) {
+        return (int) get(column);
     }
 
     public int asInt32(String column, int ... indices) {
         return (int) get(buildColumnName(column, indices));
     }
 
+    public long asInt64(String column) {
+        return (long) get(column);
+    }
+
     public long asInt64(String column, int ... indices) {
         return (long) get(buildColumnName(column, indices));
+    }
+
+    public float asSingle(String column) {
+        return (float) get(column);
     }
 
     public float asSingle(String column, int ... indices) {
         return (float) get(buildColumnName(column, indices));
     }
 
+    public double asDouble(String column) {
+        return (double) get(column);
+    }
+
     public double asDouble(String column, int ... indices) {
         return (double) get(buildColumnName(column, indices));
+    }
+
+    public XivQuad asQuad(String column) {
+        return (XivQuad) get(column);
     }
 
     public XivQuad asQuad(String column, int ... indices) {

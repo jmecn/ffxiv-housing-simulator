@@ -9,7 +9,7 @@ import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalSheet;
 import ffxiv.housim.saintcoinach.ex.relational.IValueConverter;
 import ffxiv.housim.saintcoinach.ex.relational.definition.SheetDefinition;
-import ffxiv.housim.saintcoinach.xiv.Item;
+import ffxiv.housim.saintcoinach.xiv.entity.Item;
 import ffxiv.housim.saintcoinach.xiv.XivRow;
 
 import java.lang.reflect.Type;
