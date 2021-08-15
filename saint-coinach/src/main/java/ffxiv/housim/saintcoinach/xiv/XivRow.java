@@ -4,10 +4,12 @@ import ffxiv.housim.saintcoinach.XivQuad;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.imaging.ImageFile;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
+@Slf4j
 public class XivRow implements IXivRow {
 
     // The IXivSheet the current row is in.
@@ -95,7 +97,13 @@ public class XivRow implements IXivRow {
      * @return The value of the field in the column with the same name as the name of type <code>T</code>.
      */
     public <T> T as(Class<T> type) {
-        return (T) get(type.getSimpleName());
+        Object val = get(type.getSimpleName());
+        try {
+            return type.cast(val);
+        } catch (Exception e) {
+            log.error("", e);
+            return null;
+        }
     }
 
     /**

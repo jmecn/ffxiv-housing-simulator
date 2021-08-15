@@ -60,21 +60,7 @@ public class XivCollection extends RelationalExCollection {
 
             Constructor<ISheet<?>> constructor = null;
             try {
-                Constructor[] constructors = genericType.getConstructors();
-                for (Constructor c : constructors) {
-                    Class[] parameters = c.getParameterTypes();
-                    if (parameters.length != 3) {
-                        continue;
-                    }
-                    log.info("parameters:{}", Arrays.toString(parameters));
-                    if (parameters[0].equals(XivCollection.class)
-                            && parameters[1].equals(IRelationalSheet.class)
-                            && parameters[2].equals(Class.class) ) {
-                        constructor = c;
-                        return constructor.newInstance(this, baseSheet, match);
-                    }
-                }
-                constructor = genericType.getConstructor(XivCollection.class, IRelationalRow.class, match);
+                constructor = genericType.getConstructor(XivCollection.class, IRelationalSheet.class, Class.class);
                 return constructor.newInstance(this, baseSheet, match);
             } catch (ReflectiveOperationException e) {
                 e.printStackTrace();

@@ -27,12 +27,12 @@ public class UInt16Reader extends DataReader {
     public Object read(ByteBuffer buffer, Column col, IDataRow row) {
         int offset = getFieldOffset(col, row);
         buffer.position(offset);
-        return buffer.getShort() & 0xFFFF;
+        return buffer.getShort();
     }
 
     @Override
     public Object read(ByteBuffer buffer, int offset) {
         buffer.position(offset);
-        return buffer.getShort() & 0xFFFF;
+        return buffer.getShort();
     }
 }

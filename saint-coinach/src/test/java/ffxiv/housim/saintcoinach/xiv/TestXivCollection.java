@@ -40,7 +40,7 @@ public class TestXivCollection {
         coll.setActiveLanguage(Language.ChineseSimplified);
         IXivSheet<HousingFurniture> items = coll.getSheet(HousingFurniture.class);
         for (HousingFurniture row : items) {
-            System.out.println(row.getSgbPath());
+            System.out.println(row.getItem());
         }
     }
 }
