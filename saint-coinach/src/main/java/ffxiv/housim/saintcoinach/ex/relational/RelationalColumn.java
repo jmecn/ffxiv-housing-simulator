@@ -67,13 +67,25 @@ public class RelationalColumn extends Column {
     @Override
     public Object read(ByteBuffer buffer, IDataRow row) {
         Object baseVal = super.read(buffer, row);
-        return definition != null ? definition.convert(row, baseVal, index) : baseVal;
+        return getDefinition() != null ? getDefinition().convert(row, baseVal, index) : baseVal;
     }
 
     @Override
     public Object read(ByteBuffer buffer, IDataRow row, int offset) {
         Object baseVal = super.read(buffer, row, offset);
-        return definition != null ? definition.convert(row, baseVal, index) : baseVal;
+        return getDefinition() != null ? getDefinition().convert(row, baseVal, index) : baseVal;
+    }
+
+    @Override
+    public Object readRaw(ByteBuffer buffer, IDataRow row) {
+        Object baseVal = super.readRaw(buffer, row);
+        return getDefinition() != null ? getDefinition().convert(row, baseVal, index) : baseVal;
+    }
+
+    @Override
+    public Object readRaw(ByteBuffer buffer, IDataRow row, int offset) {
+        Object baseVal = super.readRaw(buffer, row, offset);
+        return getDefinition() != null ? getDefinition().convert(row, baseVal, index) : baseVal;
     }
 
     @Override

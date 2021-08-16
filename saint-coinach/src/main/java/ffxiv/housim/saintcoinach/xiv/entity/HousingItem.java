@@ -13,7 +13,7 @@ public abstract class HousingItem extends XivRow {
         return asInt32("ModelKey");
     }
 
-    public Item getItem() {
-        return as(Item.class);
+    public int getItem() {
+        return asInt32("Item");
     }
 }

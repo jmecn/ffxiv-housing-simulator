@@ -61,11 +61,11 @@ public class Column {
      * @return Returns the column's value in <code>row</code>.
      */
     public Object read(ByteBuffer buffer, IDataRow row) {
-        return readRaw(buffer, row);
+        return reader.read(buffer, this, row);
     }
 
     public Object read(ByteBuffer buffer, IDataRow row, int offset) {
-        return readRaw(buffer, row, offset);
+        return reader.read(buffer, offset);
     }
 
     /**

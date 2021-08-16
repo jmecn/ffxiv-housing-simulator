@@ -1,0 +1,20 @@
+package ffxiv.housim.saintcoinach.xiv.entity;
+
+import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
+import ffxiv.housim.saintcoinach.xiv.IXivSheet;
+import ffxiv.housim.saintcoinach.xiv.XivRow;
+
+public class HousingYardObject extends HousingItem {
+    public final static String SgbPathFormat = "bgcommon/hou/outdoor/general/%04d/asset/gar_b0_m%04d.sgb";
+
+    public HousingYardObject(IXivSheet sheet, IRelationalRow sourceRow) {
+        super(sheet, sourceRow);
+    }
+
+    public String getSgbPath() {
+        int modelKey = getModelKey();
+        return String.format(SgbPathFormat, modelKey, modelKey);
+    }
+
+    // TODO GetScene
+}

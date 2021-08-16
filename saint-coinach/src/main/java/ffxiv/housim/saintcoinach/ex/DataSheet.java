@@ -95,7 +95,6 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
     @Override
     public int getCount() {
         createAllPartialSheets();
-        // TODO maybe not need stream
         return partialSheets.values().stream().mapToInt(ISheet::getCount).sum();
     }
 
