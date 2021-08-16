@@ -1,11 +1,11 @@
 package ffxiv.housim.saintcoinach.ex;
 
-import ffxiv.housim.saintcoinach.SqPack;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import static org.junit.Assert.assertNotNull;
@@ -17,10 +17,7 @@ public class TestExCollection {
     public void getGameDir() {
         String gameDir = System.getenv("FFXIV_HOME");
         assertNotNull(gameDir);
-
-        SqPack sqPack = new SqPack(gameDir);
-        String dataDir = sqPack.getPackDir();
-        collection = new PackCollection(dataDir);
+        collection = new PackCollection(gameDir + "/game/sqpack");
     }
 
     @Test

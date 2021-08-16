@@ -6,6 +6,7 @@ import ffxiv.housim.saintcoinach.ex.relational.IRelationalSheet;
 import ffxiv.housim.saintcoinach.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.xiv.XivSheet;
 import ffxiv.housim.saintcoinach.xiv.entity.Item;
+import ffxiv.housim.saintcoinach.xiv.entity.PlaceName;
 import org.junit.Test;
 
 import java.io.IOException;

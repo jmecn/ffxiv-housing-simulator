@@ -1,16 +1,8 @@
 package ffxiv.housim.saintcoinach.xiv;
 
 import ffxiv.housim.saintcoinach.ARealmReversed;
-import ffxiv.housim.saintcoinach.SqPack;
 import ffxiv.housim.saintcoinach.ex.Language;
-import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
-import ffxiv.housim.saintcoinach.ex.relational.IRelationalSheet;
-import ffxiv.housim.saintcoinach.io.Pack;
-import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.xiv.entity.HousingFurniture;
-import ffxiv.housim.saintcoinach.xiv.entity.HousingItem;
-import ffxiv.housim.saintcoinach.xiv.entity.Item;
-import lombok.var;
 import org.junit.Before;
 import org.junit.Test;
 

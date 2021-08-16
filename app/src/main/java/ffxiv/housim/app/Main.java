@@ -12,18 +12,19 @@ import com.jme3.scene.shape.Quad;
 import com.jme3.system.AppSettings;
 import com.jme3.texture.Texture;
 import ffxiv.housim.graphics.texture.TextureFactory;
-import ffxiv.housim.saintcoinach.SqPack;
+import ffxiv.housim.saintcoinach.ARealmReversed;
+import ffxiv.housim.saintcoinach.ex.Language;
 import ffxiv.housim.saintcoinach.imaging.ImageFile;
 import ffxiv.housim.saintcoinach.io.PackCollection;
+
+import java.io.IOException;
 
 public class Main extends SimpleApplication {
 
     PackCollection collection;
     private void initGameDir() {
         String gameDir = System.getenv("FFXIV_HOME");
-        SqPack sqPack = new SqPack(gameDir);
-        String dataDir = sqPack.getPackDir();
-        collection = new PackCollection(dataDir);
+        collection = new PackCollection(gameDir + "/game/sqpack");
     }
 
     public void simpleInitApp() {
