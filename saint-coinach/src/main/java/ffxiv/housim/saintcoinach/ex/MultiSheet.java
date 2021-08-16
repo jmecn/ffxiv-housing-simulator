@@ -1,6 +1,7 @@
 package ffxiv.housim.saintcoinach.ex;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -9,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public class MultiSheet<TMulti extends IMultiRow, TData extends IDataRow> implements IMultiSheet<TMulti, TData> {
 
     protected Class<TMulti> multiRowClass;
@@ -28,6 +30,7 @@ public class MultiSheet<TMulti extends IMultiRow, TData extends IDataRow> implem
 
         this.multiRowClass = multiRowClass;
         this.dataRowClass = dataRowClass;
+        log.debug("instanced: {}", header.getName());
     }
 
     @Override

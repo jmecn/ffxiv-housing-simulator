@@ -34,7 +34,7 @@ public abstract class DataRowBase implements IDataRow {
         }
 
         Column column = sheet.getHeader().getColumn(columnIndex);
-        Object value = column.readRaw(sheet.getBuffer(), this);
+        Object value = column.read(sheet.getBuffer(), this);
 
         valueReferences.put(columnIndex, new WeakReference<>(value));
 

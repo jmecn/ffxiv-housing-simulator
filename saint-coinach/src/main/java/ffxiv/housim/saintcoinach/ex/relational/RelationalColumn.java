@@ -77,18 +77,6 @@ public class RelationalColumn extends Column {
     }
 
     @Override
-    public Object readRaw(ByteBuffer buffer, IDataRow row) {
-        Object baseVal = super.readRaw(buffer, row);
-        return getDefinition() != null ? getDefinition().convert(row, baseVal, index) : baseVal;
-    }
-
-    @Override
-    public Object readRaw(ByteBuffer buffer, IDataRow row, int offset) {
-        Object baseVal = super.readRaw(buffer, row, offset);
-        return getDefinition() != null ? getDefinition().convert(row, baseVal, index) : baseVal;
-    }
-
-    @Override
     public String toString() {
         String name = getName();
         return name != null ? name : String.valueOf(index);

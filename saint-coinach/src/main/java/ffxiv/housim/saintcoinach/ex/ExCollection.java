@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -91,7 +90,10 @@ public class ExCollection {
         PackFile exh = packCollection.tryGetFile(exhPath);
 
         Header header = createHeader(name, exh);
-        return createSheet(header);
+        ISheet sheet = createSheet(header);
+
+        sheets.put(lowerName, new WeakReference<>(sheet));
+        return sheet;
     }
 
     protected Header createHeader(String name, PackFile file) {

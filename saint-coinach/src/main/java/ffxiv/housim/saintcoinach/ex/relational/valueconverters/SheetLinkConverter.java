@@ -9,9 +9,11 @@ import ffxiv.housim.saintcoinach.ex.relational.IValueConverter;
 import ffxiv.housim.saintcoinach.ex.relational.RelationalExCollection;
 import ffxiv.housim.saintcoinach.ex.relational.definition.SheetDefinition;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Type;
 
+@Slf4j
 public class SheetLinkConverter implements IValueConverter<IRelationalRow> {
 
     @Getter
@@ -36,9 +38,14 @@ public class SheetLinkConverter implements IValueConverter<IRelationalRow> {
         }
 
         IRelationalSheet<?> sheet = coll.getSheet(targetSheet);
-        int key = (int) rawValue;
+        if (rawValue instanceof Integer) {
+            int key = (int) rawValue;
 
-        return sheet.get(key);
+            return sheet.get(key);
+        } else {
+            log.warn("rawValue expected as int, actually {}", rawValue.getClass());
+            return null;
+        }
     }
 
     @Override

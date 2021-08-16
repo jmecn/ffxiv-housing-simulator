@@ -3,11 +3,13 @@ package ffxiv.housim.saintcoinach.ex;
 import ffxiv.housim.saintcoinach.Page;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
 
     private boolean partialSheetsCreated = false;
@@ -29,6 +31,7 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
         this.header = header;
         this.language = language;
         this.dataRowClass = dataRowClass;
+        log.debug("instanced: {}, {}", header.getName(), language);
     }
 
     protected ISheet<T> createPartialSheet(Page page, PackFile file) {
@@ -46,7 +49,9 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
 
         List<Page> pages = Arrays.stream(header.getPages()).filter(it -> it.contains(row)).collect(Collectors.toList());
         if (pages.size() == 0) {
-            throw new IndexOutOfBoundsException("Index out of range: " + row);
+            log.warn("Page not found, row:{}, sheet:{}", row, header.getName());
+            return null;
+            //throw new IndexOutOfBoundsException("Index out of range: " + row);
         }
         synchronized (partialSheetsLock) {
             Page page = pages.get(0);
@@ -117,12 +122,14 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
 
     @Override
     public T get(int row) {
-        return getPartialSheet(row).get(row);
+        ISheet<T> sheet = getPartialSheet(row);
+        return sheet == null ? null : sheet.get(row);
     }
 
     @Override
     public Object get(int row, int column) {
-        return get(row).get(column);
+        T t = get(row);
+        return t == null ? null : t.get(column);
     }
 
     @Override

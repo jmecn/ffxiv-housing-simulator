@@ -66,12 +66,12 @@ public class TestExCollection {
 
         Collection<Integer> keys = sheet.getKeys();
         for (Integer key : keys) {
-            System.out.print(key + ": ");
+            //System.out.print(key + ": ");
             for (int i=0; i<columnCount; i++) {
                 Object val = sheet.get(key, i);
-                System.out.print(val + ",");
+                //System.out.print(val + ",");
             }
-            System.out.println();
+            //System.out.println();
         }
     }
 }

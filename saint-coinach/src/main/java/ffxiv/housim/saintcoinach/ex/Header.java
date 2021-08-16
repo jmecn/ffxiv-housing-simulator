@@ -96,7 +96,6 @@ public class Header {
             int min = buffer.getInt();
             int len = buffer.getInt();
             pages[i] = new Page(min, len);
-            log.info("page:{}, start:{}, length:{}", i, min, len);
         }
     }
 

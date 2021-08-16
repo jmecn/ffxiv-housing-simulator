@@ -3,6 +3,7 @@ package ffxiv.housim.saintcoinach.ex;
 import ffxiv.housim.saintcoinach.Page;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Constructor;
 import java.nio.ByteBuffer;
@@ -10,6 +11,7 @@ import java.nio.ByteOrder;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public class PartialDataSheet<T extends IDataRow> implements IDataSheet<T> {
     final static int HeaderLengthOffset = 0x08;
 
@@ -35,6 +37,8 @@ public class PartialDataSheet<T extends IDataRow> implements IDataSheet<T> {
         this.dataRowClass = dataRowClass;
 
         build();
+
+        log.debug("instanced: {}, {}", sourceSheet.getHeader().getName(), page);
     }
 
     @Override

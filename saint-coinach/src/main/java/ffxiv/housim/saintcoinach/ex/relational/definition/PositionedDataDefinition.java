@@ -4,9 +4,11 @@ import com.google.gson.JsonObject;
 import ffxiv.housim.saintcoinach.ex.IDataRow;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Type;
 
+@Slf4j
 public class PositionedDataDefinition implements Cloneable {
     @Getter
     @Setter
@@ -26,7 +28,7 @@ public class PositionedDataDefinition implements Cloneable {
         return clone;
     }
 
-    public Object convert(IDataRow row, Object value,int index) {
+    public Object convert(IDataRow row, Object value, int index) {
         int innerIndex = index - getIndex();
         if (innerIndex < 0 || innerIndex >= getLength()) {
             throw new IndexOutOfBoundsException("Index out of range " + index);

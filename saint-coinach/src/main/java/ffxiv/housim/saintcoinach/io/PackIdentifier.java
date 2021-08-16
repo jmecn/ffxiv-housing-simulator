@@ -89,8 +89,17 @@ public class PackIdentifier {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PackIdentifier that = (PackIdentifier) o;
+        return typeKey == that.typeKey && expansionKey == that.expansionKey && number == that.number;
+    }
+
+    @Override
     public int hashCode() {
-        return (typeKey << 16 | expansionKey << 8 | number);
+        int hash = (typeKey << 16 | expansionKey << 8 | number);
+        return hash;
     }
 
     @Override

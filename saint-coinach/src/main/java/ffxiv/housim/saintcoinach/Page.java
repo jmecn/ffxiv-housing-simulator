@@ -1,5 +1,6 @@
 package ffxiv.housim.saintcoinach;
 
+import com.google.common.base.Objects;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -27,8 +28,24 @@ public class Page {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Page page = (Page) o;
+        return start == page.start && length == page.length;
+    }
+
+    @Override
     public int hashCode() {
-        return start;
+        return Objects.hashCode(start, length);
+    }
+
+    @Override
+    public String toString() {
+        return "Page{" +
+                "start=" + start +
+                ", length=" + length +
+                '}';
     }
 
     public boolean intersects(Page other) {
