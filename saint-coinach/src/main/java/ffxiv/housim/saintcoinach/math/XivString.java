@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach;
+package ffxiv.housim.saintcoinach.math;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

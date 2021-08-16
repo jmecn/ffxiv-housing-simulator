@@ -1,12 +1,11 @@
 package ffxiv.housim.saintcoinach.xiv;
 
-import ffxiv.housim.saintcoinach.XivQuad;
+import ffxiv.housim.saintcoinach.math.Quad;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.imaging.ImageFile;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 @Slf4j
@@ -220,12 +219,12 @@ public class XivRow implements IXivRow {
         return (double) get(buildColumnName(column, indices));
     }
 
-    public XivQuad asQuad(String column) {
-        return (XivQuad) get(column);
+    public Quad asQuad(String column) {
+        return (Quad) get(column);
     }
 
-    public XivQuad asQuad(String column, int ... indices) {
-        return (XivQuad) get(buildColumnName(column, indices));
+    public Quad asQuad(String column, int ... indices) {
+        return (Quad) get(buildColumnName(column, indices));
     }
 
     public int[] asIntArray(String column) {

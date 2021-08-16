@@ -1,12 +1,12 @@
-package ffxiv.housim.saintcoinach;
+package ffxiv.housim.saintcoinach.math;
 
-public class XivQuad {
+public class Quad {
     short x;
     short y;
     short z;
     short w;
 
-    public XivQuad(long value) {
+    public Quad(long value) {
         x = (short) value;
         y = (short)(value >> 16);
         z = (short)(value >> 32);

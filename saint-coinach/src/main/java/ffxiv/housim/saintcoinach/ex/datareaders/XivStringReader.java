@@ -1,6 +1,6 @@
 package ffxiv.housim.saintcoinach.ex.datareaders;
 
-import ffxiv.housim.saintcoinach.XivString;
+import ffxiv.housim.saintcoinach.math.XivString;
 import ffxiv.housim.saintcoinach.ex.Column;
 import ffxiv.housim.saintcoinach.ex.DataReader;
 import ffxiv.housim.saintcoinach.ex.IDataRow;

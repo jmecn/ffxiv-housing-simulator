@@ -67,6 +67,7 @@ public class TestXivCollection {
 
         XivCollection coll = aRealmReversed.getGameData();
         IXivSheet<Stain> items = coll.getSheet(Stain.class);
+        log.info("start iterator");
         for (Stain it : items) {
             log.info("{}, {}, {}, {}, {}, {}, {}", it.getKey(), it.getColor(), it.getShade(), it.getSubOrder(), it.getName(), it.get4(), it.get5());
         }

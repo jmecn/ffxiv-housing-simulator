@@ -4,10 +4,10 @@ import com.google.gson.JsonObject;
 import ffxiv.housim.saintcoinach.ex.IDataRow;
 import ffxiv.housim.saintcoinach.ex.relational.IValueConverter;
 import ffxiv.housim.saintcoinach.ex.relational.definition.SheetDefinition;
+import ffxiv.housim.saintcoinach.math.Color;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.awt.Color;
 import java.lang.reflect.Type;
 
 public class ColorConverer implements IValueConverter<Color> {

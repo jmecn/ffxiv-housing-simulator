@@ -1,6 +1,6 @@
 package ffxiv.housim.saintcoinach.ex.datareaders;
 
-import ffxiv.housim.saintcoinach.XivQuad;
+import ffxiv.housim.saintcoinach.math.Quad;
 import ffxiv.housim.saintcoinach.ex.Column;
 import ffxiv.housim.saintcoinach.ex.DataReader;
 import ffxiv.housim.saintcoinach.ex.IDataRow;
@@ -22,19 +22,19 @@ public class XivQuadReader extends DataReader {
 
     @Override
     public Type getType() {
-        return XivQuad.class;
+        return Quad.class;
     }
 
     @Override
     public Object read(ByteBuffer buffer, Column col, IDataRow row) {
         int offset = getFieldOffset(col, row);
         buffer.position(offset);
-        return new XivQuad(buffer.getLong());
+        return new Quad(buffer.getLong());
     }
 
     @Override
     public Object read(ByteBuffer buffer, int offset) {
         buffer.position(offset);
-        return new XivQuad(buffer.getLong());
+        return new Quad(buffer.getLong());
     }
 }
