@@ -141,7 +141,7 @@ public class PackIdentifier {
         }
 
         value = new PackIdentifier(type, expansion, number);
-        log.info("{} <-- {}", value, fullPath);
+        log.debug("{} <-- {}", value, fullPath);
         return value;
     }
 

@@ -37,7 +37,6 @@ public class XivCollection extends RelationalExCollection {
 
     public <T extends IXivRow> IXivSheet<T> getSheet(Class<T> t) {
         String name = t.getSimpleName();
-        log.info("get sheet:{}", name);
         return getSheet(name, t);
     }
 
@@ -110,7 +109,7 @@ public class XivCollection extends RelationalExCollection {
             XivSheetName attr = (XivSheetName) clazz.getAnnotation(XivSheetName.class);
             String sheetName = attr == null ? classInfo.getSimpleName() : attr.value();
 
-            log.info("{}, attr:{}", classInfo.getName(), sheetName);
+            log.debug("{} -> {}", sheetName, classInfo.getName());
 
             sheetNameToTypeMap.put(sheetName, (Class<IXivRow>) clazz);
         }

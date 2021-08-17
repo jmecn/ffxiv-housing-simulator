@@ -65,7 +65,7 @@ public class FileCommonHeader {
         endOfHeader = channel.position();// 0x18
 
         length = blockSize * PackFile.BlockPadding;
-        log.info("headerLength:{}, fileType:{}, fileLength:{}, blockSize:{}, blockCount:{}", headerLength, fileType, fileLength, blockSize, blockCount);
+        log.debug("headerLength:{}, fileType:{}, fileLength:{}, blockSize:{}, blockCount:{}", headerLength, fileType, fileLength, blockSize, blockCount);
     }
 
 }

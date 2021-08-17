@@ -26,7 +26,7 @@ public class RepeatDataDefinition implements IDataDefinition {
             throw new IndexOutOfBoundsException();
         }
 
-        int innerIndex = index * repeatedDefinition.getLength();
+        int innerIndex = index % repeatedDefinition.getLength();
 
         return repeatedDefinition.convert(row, value, innerIndex);
     }

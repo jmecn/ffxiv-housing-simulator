@@ -135,24 +135,18 @@ public class DataSheet<T extends IDataRow> implements IDataSheet<T> {
     @Override
     public Iterator<T> iterator() {
         createAllPartialSheets();
-        Iterator<ISheet<T>> sheetItor = rowToPartialSheetMap.values().iterator();
+        Iterator<Integer> rowItor = rowToPartialSheetMap.keySet().iterator();
         return new Iterator<T>() {
 
-            Iterator<T> rowItor = null;
             @Override
             public boolean hasNext() {
-                while (rowItor == null || !rowItor.hasNext()) {
-                    if (!sheetItor.hasNext()) {
-                        return false;
-                    }
-                    rowItor = sheetItor.next().iterator();
-                }
-                return true;
+                return rowItor.hasNext();
             }
 
             @Override
             public T next() {
-                return rowItor.next();
+                Integer key = rowItor.next();
+                return rowToPartialSheetMap.get(key).get(key);
             }
         };
     }

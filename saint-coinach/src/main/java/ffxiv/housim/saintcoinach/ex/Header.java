@@ -109,8 +109,8 @@ public class Header {
         for (int i = 0; i < languageCount; i++) {
             int lang = buffer.get();
             availableLanguages[i] = Language.of(lang);
-            log.info("lang:{}", availableLanguages[i]);
         }
+        log.debug("availableLanguages: {}", availableLanguages);
     }
 
     public Column getColumn(int columnIndex) {

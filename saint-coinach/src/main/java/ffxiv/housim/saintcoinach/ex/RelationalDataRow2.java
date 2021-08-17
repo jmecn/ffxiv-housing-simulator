@@ -7,7 +7,7 @@ import ffxiv.housim.saintcoinach.ex.relational.RelationalColumn;
 import java.lang.ref.WeakReference;
 
 public class RelationalDataRow2 extends DataRow2 implements IRelationalDataRow {
-    protected RelationalDataRow2(IDataSheet sheet, int key, int offset) {
+    public RelationalDataRow2(IDataSheet sheet, int key, int offset) {
         super(sheet, key, offset);
     }
 

@@ -3,6 +3,7 @@ package ffxiv.housim.saintcoinach.xiv;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalSheet;
 import ffxiv.housim.saintcoinach.ex.relational.RelationalHeader;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Constructor;
 import java.util.Collection;
@@ -10,6 +11,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public class XivSheet<T extends IXivRow> implements IXivSheet<T> {
 
     protected Map<Integer, T> rows = new ConcurrentHashMap<>();
@@ -70,7 +72,9 @@ public class XivSheet<T extends IXivRow> implements IXivSheet<T> {
         }
 
         if (!source.containsRow(row)) {
-            throw new IllegalArgumentException("No such row:" + row);
+            log.warn("No such row:{}, sheet:{}", row, source.getName());
+            // throw new IllegalArgumentException("No such row:" + row);
+            return null;
         }
 
         try {
