@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach.xiv.entity;
+package ffxiv.housim.saintcoinach.xiv.entity.housing;
 
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.xiv.IXivSheet;

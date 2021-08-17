@@ -17,26 +17,23 @@ public class XivSheet<T extends IXivRow> implements IXivSheet<T> {
     protected Map<Integer, T> rows = new ConcurrentHashMap<>();
     protected IRelationalSheet<T> source;
 
-    private XivCollection collection;
+    private final XivCollection collection;
 
-    private Class<T> rowClass;
     private Constructor<T> rowConstructor;
 
     public XivSheet(XivCollection collection, IRelationalSheet<T> source, Class<T> rowClass) {
         this.collection = collection;
         this.source = source;
-        this.rowClass = rowClass;
-    }
-
-    public Constructor<T> getConstructor() throws NoSuchMethodException {
-        if (rowConstructor == null) {
-            rowConstructor = rowClass.getConstructor(IXivSheet.class, IRelationalRow.class);
+        try {
+            this.rowConstructor = rowClass.getConstructor(IXivSheet.class, IRelationalRow.class);
+        } catch (NoSuchMethodException e) {
+            // This should not happen.
+            e.printStackTrace();
         }
-        return rowConstructor;
     }
 
     protected T createRow(IRelationalRow sourceRow) throws ReflectiveOperationException{
-        return getConstructor().newInstance(this, sourceRow);
+        return rowConstructor.newInstance(this, sourceRow);
     }
 
     @Override
@@ -72,8 +69,7 @@ public class XivSheet<T extends IXivRow> implements IXivSheet<T> {
         }
 
         if (!source.containsRow(row)) {
-            log.warn("No such row:{}, sheet:{}", row, source.getName());
-            // throw new IllegalArgumentException("No such row:" + row);
+            log.warn("No such row: {}#{}", source.getName(), row);
             return null;
         }
 

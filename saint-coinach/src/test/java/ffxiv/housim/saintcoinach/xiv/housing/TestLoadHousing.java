@@ -7,7 +7,8 @@ import ffxiv.housim.saintcoinach.ex.relational.RelationalHeader;
 import ffxiv.housim.saintcoinach.xiv.IXivRow;
 import ffxiv.housim.saintcoinach.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.xiv.XivSubRow;
-import ffxiv.housim.saintcoinach.xiv.entity.*;
+import ffxiv.housim.saintcoinach.xiv.entity.XivMap;
+import ffxiv.housim.saintcoinach.xiv.entity.housing.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,6 +53,11 @@ public class TestLoadHousing {
     }
 
     @Test
+    public void testXivMap() {
+        foreach(XivMap.class);
+    }
+
+    @Test
     public void testHousingAethernet() {
         foreach(HousingAethernet.class);
     }
@@ -93,6 +99,10 @@ public class TestLoadHousing {
 
     @Test
     public void testHousingLandSet() {
+        IXivSheet<HousingLandSet> sheet = aRealmReversed.getGameData().getSheet(HousingLandSet.class);
+
+        HousingLandSet set = sheet.get(1);
+        log.info("PlotSize:{}, InitialPrice:{}, MinPrice:{}", set.getPlotSize(0), set.getInitialPrice(0), set.getMinPrice(0));
         foreach(HousingLandSet.class);
     }
 
@@ -110,7 +120,6 @@ public class TestLoadHousing {
     public <T extends IXivRow> void foreach(Class<T> clazz) {
         IXivSheet<T> sheet = aRealmReversed.getGameData().getSheet(clazz);
 
-        String name = sheet.getName();
         RelationalHeader header = sheet.getHeader();
         RelationalColumn[] columns = header.getColumns();
         String[] types = new String[columns.length];
@@ -127,7 +136,7 @@ public class TestLoadHousing {
 
             if (t instanceof XivSubRow) {
                 log.info("#{}: {}", ((XivSubRow)t).getFullKey(), values);
-            } else if (t instanceof IXivRow) {
+            } else if (t != null) {
                 log.info("#{}: {}", t.getKey(), values);
             }
         }

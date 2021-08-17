@@ -1,8 +1,7 @@
-package ffxiv.housim.saintcoinach.xiv.entity;
+package ffxiv.housim.saintcoinach.xiv.entity.housing;
 
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.xiv.IXivSheet;
-import ffxiv.housim.saintcoinach.xiv.XivRow;
 
 public class HousingYardObject extends HousingItem {
     public final static String SgbPathFormat = "bgcommon/hou/outdoor/general/%04d/asset/gar_b0_m%04d.sgb";

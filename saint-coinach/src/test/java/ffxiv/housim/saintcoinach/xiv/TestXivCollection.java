@@ -4,7 +4,7 @@ import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.ex.Language;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalSheet;
-import ffxiv.housim.saintcoinach.xiv.entity.HousingFurniture;
+import ffxiv.housim.saintcoinach.xiv.entity.housing.HousingFurniture;
 import ffxiv.housim.saintcoinach.xiv.entity.Stain;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;

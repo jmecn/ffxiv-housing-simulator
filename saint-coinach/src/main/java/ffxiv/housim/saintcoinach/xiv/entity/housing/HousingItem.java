@@ -1,8 +1,9 @@
-package ffxiv.housim.saintcoinach.xiv.entity;
+package ffxiv.housim.saintcoinach.xiv.entity.housing;
 
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.xiv.XivRow;
+import ffxiv.housim.saintcoinach.xiv.entity.Item;
 
 public abstract class HousingItem extends XivRow {
     public HousingItem(IXivSheet sheet, IRelationalRow sourceRow) {
@@ -13,7 +14,7 @@ public abstract class HousingItem extends XivRow {
         return asInt32("ModelKey");
     }
 
-    public int getItem() {
-        return asInt32("Item");
+    public Item getItem() {
+        return as(Item.class, "Item");
     }
 }

@@ -96,7 +96,9 @@ public class XivRow implements IXivRow {
      * @return The value of the field in the column with the same name as the name of type <code>T</code>.
      */
     public <T> T as(Class<T> type) {
-        Object val = get(type.getSimpleName());
+        XivSheetName attr = type.getAnnotation(XivSheetName.class);
+        String columnName = attr != null ? attr.value() : type.getSimpleName();
+        Object val = get(columnName);
         try {
             return type.cast(val);
         } catch (Exception e) {
@@ -114,7 +116,9 @@ public class XivRow implements IXivRow {
      * @return The value of the field in the column with the same base name as the name of type <code>T</code> and <code>indices</code>.
      */
     public <T> T as(Class<T> type, int ... indices) {
-        return (T) get(buildColumnName(type.getSimpleName(), indices));
+        XivSheetName attr = type.getAnnotation(XivSheetName.class);
+        String columnName = attr != null ? attr.value() : type.getSimpleName();
+        return (T) get(buildColumnName(columnName, indices));
     }
 
     /**
@@ -177,6 +181,14 @@ public class XivRow implements IXivRow {
 
     public Boolean asBoolean(String column, int ... indices) {
         return (boolean) get(buildColumnName(column, indices));
+    }
+
+    public byte asByte(String column) {
+        return (byte) get(column);
+    }
+
+    public byte asByte(String column, int ... indices) {
+        return (byte) get(buildColumnName(column, indices));
     }
 
     public short asInt16(String column) {

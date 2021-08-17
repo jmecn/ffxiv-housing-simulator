@@ -31,20 +31,20 @@ public class RelationalExCollection extends ExCollection {
     protected ISheet<?> createSheet(Header header) {
         RelationalHeader relHeader = (RelationalHeader) header;
         if (relHeader.getVariant() == 1) {
-            return createSheet(relHeader, RelationalDataRow1.class);
+            return createSheet(relHeader, RelationalDataRowV1.class);
         } else {
-            return createSheet(relHeader, RelationalDataRow2.class);
+            return createSheet(relHeader, RelationalDataRowV2.class);
         }
     }
 
     @Override
     protected ISheet<?> createSheet(Header header, Class<? extends IDataRow> clazz) {
         RelationalHeader relHeader = (RelationalHeader) header;
-        Class<? extends IRelationalDataRow> klass = (Class<? extends IRelationalDataRow>) clazz;
+        Class<? extends IRelationalDataRow> relRowClass = (Class<? extends IRelationalDataRow>) clazz;
         if (header.getAvailableLanguages().length > 1) {
-            return new RelationalMultiSheet<>(this, relHeader, RelationalMultiRow.class, klass);
+            return new RelationalMultiSheet<>(this, relHeader, RelationalMultiRow.class, relRowClass);
         } else {
-            return new RelationalDataSheet<>(this, relHeader, header.getAvailableLanguages()[0], klass);
+            return new RelationalDataSheet<>(this, relHeader, header.getAvailableLanguages()[0], relRowClass);
         }
     }
 

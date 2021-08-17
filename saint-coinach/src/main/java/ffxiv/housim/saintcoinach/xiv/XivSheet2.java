@@ -1,8 +1,7 @@
 package ffxiv.housim.saintcoinach.xiv;
 
 import ffxiv.housim.saintcoinach.Pair;
-import ffxiv.housim.saintcoinach.ex.DataRow2;
-import ffxiv.housim.saintcoinach.ex.IDataRow;
+import ffxiv.housim.saintcoinach.ex.DataRowV2;
 import ffxiv.housim.saintcoinach.ex.SubRow;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalSheet;
@@ -25,7 +24,7 @@ public class XivSheet2<T extends IXivSubRow> extends XivSheet<T> {
 
         return new Iterator<T>() {
             Iterator<SubRow> sourceSubItr;
-            DataRow2 currentParent;
+            DataRowV2 currentParent;
             @Override
             public boolean hasNext() {
                 if (sourceSubItr != null && sourceSubItr.hasNext()) {
@@ -36,7 +35,7 @@ public class XivSheet2<T extends IXivSubRow> extends XivSheet<T> {
                     return false;
                 }
 
-                currentParent = (DataRow2) sourceParentItr.next();
+                currentParent = (DataRowV2) sourceParentItr.next();
 
                 sourceSubItr = currentParent.getSubRows().iterator();
                 return sourceSubItr.hasNext();// should always be true

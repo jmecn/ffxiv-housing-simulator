@@ -1,11 +1,11 @@
-package ffxiv.housim.saintcoinach.xiv.entity;
+package ffxiv.housim.saintcoinach.xiv.entity.housing;
 
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.xiv.XivRow;
 
-public class HousingLandSet extends XivRow {
-    public HousingLandSet(IXivSheet sheet, IRelationalRow sourceRow) {
+public class HousingEmploymentNpcRace extends XivRow {
+    public HousingEmploymentNpcRace(IXivSheet sheet, IRelationalRow sourceRow) {
         super(sheet, sourceRow);
     }
 }

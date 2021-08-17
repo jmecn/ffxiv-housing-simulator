@@ -102,9 +102,9 @@ public class ExCollection {
 
     protected ISheet<?> createSheet(Header header) {
         if (header.getVariant() == 1) {
-            return createSheet(header, DataRow1.class);
+            return createSheet(header, DataRowV1.class);
         } else {
-            return createSheet(header, DataRow2.class);
+            return createSheet(header, DataRowV2.class);
         }
     }
 

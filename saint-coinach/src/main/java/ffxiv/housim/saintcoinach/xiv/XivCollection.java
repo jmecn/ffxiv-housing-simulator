@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class XivCollection extends RelationalExCollection {
-    private final static String PACKAGE_NAME = "ffxiv.housim.saintcoinach.xiv";
+    private final static String PACKAGE_NAME = "ffxiv.housim.saintcoinach.xiv.entity";
 
     private Map<String, Class<IXivRow>> sheetNameToTypeMap;
 
@@ -36,7 +36,8 @@ public class XivCollection extends RelationalExCollection {
     }
 
     public <T extends IXivRow> IXivSheet<T> getSheet(Class<T> t) {
-        String name = t.getSimpleName();
+        XivSheetName attr = t.getAnnotation(XivSheetName.class);
+        String name = attr != null ? attr.value() : t.getSimpleName();
         return getSheet(name, t);
     }
 

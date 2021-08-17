@@ -4,7 +4,7 @@ import lombok.Getter;
 
 import java.nio.ByteBuffer;
 
-public class DataRow1 extends DataRowBase {
+public class DataRowV1 extends DataRowBase {
     final static int MetadataLength = 0x06;
 
     @Getter
@@ -12,7 +12,7 @@ public class DataRow1 extends DataRowBase {
     @Getter
     private final int subRowCount;
 
-    public DataRow1(IDataSheet sheet, int key, int offset) {
+    public DataRowV1(IDataSheet sheet, int key, int offset) {
         super(sheet, key, offset + MetadataLength);
 
         ByteBuffer buffer = sheet.getBuffer();

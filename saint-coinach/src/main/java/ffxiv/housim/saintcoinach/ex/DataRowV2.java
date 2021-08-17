@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class DataRow2 extends DataRowBase {
+public class DataRowV2 extends DataRowBase {
     final static int MetadataLength = 0x06;
 
     private boolean isRead = false;
@@ -19,7 +19,7 @@ public class DataRow2 extends DataRowBase {
     @Getter
     private final int subRowCount;
 
-    protected DataRow2(IDataSheet sheet, int key, int offset) {
+    protected DataRowV2(IDataSheet sheet, int key, int offset) {
         super(sheet, key, offset + MetadataLength);
 
         ByteBuffer buffer = sheet.getBuffer();

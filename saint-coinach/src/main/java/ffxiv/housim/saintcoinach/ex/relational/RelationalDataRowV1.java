@@ -1,19 +1,17 @@
-package ffxiv.housim.saintcoinach.ex;
+package ffxiv.housim.saintcoinach.ex.relational;
 
-import ffxiv.housim.saintcoinach.ex.relational.IRelationalDataRow;
-import ffxiv.housim.saintcoinach.ex.relational.IRelationalDataSheet;
-import ffxiv.housim.saintcoinach.ex.relational.RelationalColumn;
+import ffxiv.housim.saintcoinach.ex.DataRowV1;
+import ffxiv.housim.saintcoinach.ex.IDataSheet;
 
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class RelationalDataRow1 extends DataRow1 implements IRelationalDataRow {
+public class RelationalDataRowV1 extends DataRowV1 implements IRelationalDataRow {
 
     private Map<String, WeakReference<Object>> valueReferences = new ConcurrentHashMap<>();
 
-    public RelationalDataRow1(IDataSheet sheet, int key, int offset) {
+    public RelationalDataRowV1(IDataSheet sheet, int key, int offset) {
         super(sheet, key, offset);
     }
 

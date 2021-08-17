@@ -13,8 +13,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class MultiSheet<TMulti extends IMultiRow, TData extends IDataRow> implements IMultiSheet<TMulti, TData> {
 
-    protected Class<TMulti> multiRowClass;
-    protected Class<TData> dataRowClass;
+    protected Constructor<TMulti> multiRowConstructor;
+
+    protected final Class<TData> dataRowClass;
 
     private final Map<Language, ISheet<TData>> localisedSheets = new ConcurrentHashMap<>();
     private final Map<Integer, TMulti> rows = new ConcurrentHashMap<>();
@@ -28,8 +29,13 @@ public class MultiSheet<TMulti extends IMultiRow, TData extends IDataRow> implem
         this.collection = collection;
         this.header = header;
 
-        this.multiRowClass = multiRowClass;
         this.dataRowClass = dataRowClass;
+
+        try {
+            multiRowConstructor = multiRowClass.getConstructor(IMultiSheet.class, int.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
         log.debug("instanced: {}", header.getName());
     }
 
@@ -103,14 +109,12 @@ public class MultiSheet<TMulti extends IMultiRow, TData extends IDataRow> implem
     }
 
     protected TMulti createMultiRow(int row) {
-        TMulti result = null;
         try {
-            Constructor<TMulti> constructor = multiRowClass.getConstructor(IMultiSheet.class, int.class);
-            result = constructor.newInstance(this, row);
+            return multiRowConstructor.newInstance(this, row);
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
+            return null;
         }
-        return result;
     }
 
     protected ISheet<TData> createLocalisedSheet(Language language) {

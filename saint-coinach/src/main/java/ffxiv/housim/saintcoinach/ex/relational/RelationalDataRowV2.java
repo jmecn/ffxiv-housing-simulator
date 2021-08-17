@@ -1,13 +1,10 @@
-package ffxiv.housim.saintcoinach.ex;
+package ffxiv.housim.saintcoinach.ex.relational;
 
-import ffxiv.housim.saintcoinach.ex.relational.IRelationalDataRow;
-import ffxiv.housim.saintcoinach.ex.relational.IRelationalDataSheet;
-import ffxiv.housim.saintcoinach.ex.relational.RelationalColumn;
+import ffxiv.housim.saintcoinach.ex.DataRowV2;
+import ffxiv.housim.saintcoinach.ex.IDataSheet;
 
-import java.lang.ref.WeakReference;
-
-public class RelationalDataRow2 extends DataRow2 implements IRelationalDataRow {
-    public RelationalDataRow2(IDataSheet sheet, int key, int offset) {
+public class RelationalDataRowV2 extends DataRowV2 implements IRelationalDataRow {
+    public RelationalDataRowV2(IDataSheet sheet, int key, int offset) {
         super(sheet, key, offset);
     }
 
