@@ -6,7 +6,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-public class XivString {
+public final class XivString {
 
 	final static Charset UTF_8 = StandardCharsets.UTF_8;
 

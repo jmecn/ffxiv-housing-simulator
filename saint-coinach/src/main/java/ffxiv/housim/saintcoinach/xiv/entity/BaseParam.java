@@ -3,12 +3,12 @@ package ffxiv.housim.saintcoinach.xiv.entity;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.xiv.XivRow;
-import ffxiv.housim.saintcoinach.xiv.XivSheetName;
+import ffxiv.housim.saintcoinach.xiv.XivName;
 
 /**
  * Class representing parameters from the game data.
  */
-@XivSheetName("BaseParam")
+@XivName("BaseParam")
 public class BaseParam extends XivRow {
 
     public BaseParam(IXivSheet sheet, IRelationalRow sourceRow) {

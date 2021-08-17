@@ -2,7 +2,7 @@ package ffxiv.housim.saintcoinach.ex.relational.complexlink;
 
 import com.google.gson.JsonElement;
 import ffxiv.housim.saintcoinach.ex.IDataRow;
-import ffxiv.housim.saintcoinach.math.Color;
+import ffxiv.housim.saintcoinach.math.XicColor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
@@ -34,9 +34,9 @@ public class LinkCondition {
                 value = e.getAsFloat();
             } else if (rowValue instanceof Double) {
                 value = e.getAsDouble();
-            } else if (rowValue instanceof Color) {
+            } else if (rowValue instanceof XicColor) {
                 int val = e.getAsInt();
-                value = new Color(val);
+                value = new XicColor(val);
             } else {
                 log.warn("Unknown row value type:{}, index:{}, name:{}", rowValue.getClass(), keyColumnIndex, keyColumnName);
             }

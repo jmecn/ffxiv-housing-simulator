@@ -1,17 +1,20 @@
 package ffxiv.housim.saintcoinach.math;
 
-public class Color {
+import ffxiv.housim.saintcoinach.xiv.XivName;
+
+@XivName("Color")
+public final class XicColor {
     int value;
 
-    public Color() {
+    public XicColor() {
         value = 0xff000000;
     }
 
-    public Color(int rgb) {
+    public XicColor(int rgb) {
         value = 0xff000000 | rgb;
     }
 
-    public Color(int argb, boolean hasAlpha) {
+    public XicColor(int argb, boolean hasAlpha) {
         if (hasAlpha) {
             value = argb;
         } else {

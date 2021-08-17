@@ -12,8 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Parameter;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -36,7 +34,7 @@ public class XivCollection extends RelationalExCollection {
     }
 
     public <T extends IXivRow> IXivSheet<T> getSheet(Class<T> t) {
-        XivSheetName attr = t.getAnnotation(XivSheetName.class);
+        XivName attr = t.getAnnotation(XivName.class);
         String name = attr != null ? attr.value() : t.getSimpleName();
         return getSheet(name, t);
     }
@@ -107,7 +105,7 @@ public class XivCollection extends RelationalExCollection {
             if (Modifier.isAbstract(clazz.getModifiers())) {
                 continue;
             }
-            XivSheetName attr = (XivSheetName) clazz.getAnnotation(XivSheetName.class);
+            XivName attr = (XivName) clazz.getAnnotation(XivName.class);
             String sheetName = attr == null ? classInfo.getSimpleName() : attr.value();
 
             log.debug("{} -> {}", sheetName, classInfo.getName());

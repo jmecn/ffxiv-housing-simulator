@@ -1,6 +1,6 @@
 package ffxiv.housim.saintcoinach.xiv;
 
-import ffxiv.housim.saintcoinach.math.Quad;
+import ffxiv.housim.saintcoinach.math.XivQuad;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.imaging.ImageFile;
 import lombok.Getter;
@@ -96,7 +96,7 @@ public class XivRow implements IXivRow {
      * @return The value of the field in the column with the same name as the name of type <code>T</code>.
      */
     public <T> T as(Class<T> type) {
-        XivSheetName attr = type.getAnnotation(XivSheetName.class);
+        XivName attr = type.getAnnotation(XivName.class);
         String columnName = attr != null ? attr.value() : type.getSimpleName();
         Object val = get(columnName);
         try {
@@ -116,7 +116,7 @@ public class XivRow implements IXivRow {
      * @return The value of the field in the column with the same base name as the name of type <code>T</code> and <code>indices</code>.
      */
     public <T> T as(Class<T> type, int ... indices) {
-        XivSheetName attr = type.getAnnotation(XivSheetName.class);
+        XivName attr = type.getAnnotation(XivName.class);
         String columnName = attr != null ? attr.value() : type.getSimpleName();
         return (T) get(buildColumnName(columnName, indices));
     }
@@ -231,12 +231,12 @@ public class XivRow implements IXivRow {
         return (double) get(buildColumnName(column, indices));
     }
 
-    public Quad asQuad(String column) {
-        return (Quad) get(column);
+    public XivQuad asQuad(String column) {
+        return (XivQuad) get(column);
     }
 
-    public Quad asQuad(String column, int ... indices) {
-        return (Quad) get(buildColumnName(column, indices));
+    public XivQuad asQuad(String column, int ... indices) {
+        return (XivQuad) get(buildColumnName(column, indices));
     }
 
     public int[] asIntArray(String column) {

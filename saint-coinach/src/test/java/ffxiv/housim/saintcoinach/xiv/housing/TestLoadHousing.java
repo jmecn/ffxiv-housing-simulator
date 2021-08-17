@@ -99,10 +99,6 @@ public class TestLoadHousing {
 
     @Test
     public void testHousingLandSet() {
-        IXivSheet<HousingLandSet> sheet = aRealmReversed.getGameData().getSheet(HousingLandSet.class);
-
-        HousingLandSet set = sheet.get(1);
-        log.info("PlotSize:{}, InitialPrice:{}, MinPrice:{}", set.getPlotSize(0), set.getInitialPrice(0), set.getMinPrice(0));
         foreach(HousingLandSet.class);
     }
 
@@ -128,16 +124,16 @@ public class TestLoadHousing {
         }
         log.info("{}: {}", sheet.getName(), types);
 
-        for (T t : sheet) {
+        for (T xivRow : sheet) {
             Object[] values = new Object[columns.length];
             for (int i = 0; i < columns.length; i++) {
-                values[i] = t.get(columns[i].getIndex());
+                values[i] = xivRow.get(columns[i].getIndex());
             }
 
-            if (t instanceof XivSubRow) {
-                log.info("#{}: {}", ((XivSubRow)t).getFullKey(), values);
-            } else if (t != null) {
-                log.info("#{}: {}", t.getKey(), values);
+            if (xivRow instanceof XivSubRow xivSubRow) {
+                log.info("#{}: {}", xivSubRow.getFullKey(), values);
+            } else if (xivRow != null) {
+                log.info("#{}: {}", xivRow.getKey(), values);
             }
         }
 

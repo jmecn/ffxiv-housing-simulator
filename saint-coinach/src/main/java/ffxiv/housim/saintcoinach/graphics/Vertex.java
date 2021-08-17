@@ -1,5 +1,8 @@
 package ffxiv.housim.saintcoinach.graphics;
 
+import ffxiv.housim.saintcoinach.math.Vector3;
+import ffxiv.housim.saintcoinach.math.Vector4;
+
 public final class Vertex {
     public Vector4 position;
     public Vector4 blendWeights;

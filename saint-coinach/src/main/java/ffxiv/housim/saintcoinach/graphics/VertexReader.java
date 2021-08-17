@@ -1,6 +1,9 @@
 package ffxiv.housim.saintcoinach.graphics;
 
 import ffxiv.housim.saintcoinach.HalfHelper;
+import ffxiv.housim.saintcoinach.math.Vector2;
+import ffxiv.housim.saintcoinach.math.Vector3;
+import ffxiv.housim.saintcoinach.math.Vector4;
 import lombok.NonNull;
 
 import java.nio.ByteBuffer;

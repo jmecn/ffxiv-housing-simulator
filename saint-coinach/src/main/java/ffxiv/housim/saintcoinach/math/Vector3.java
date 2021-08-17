@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach.graphics;
+package ffxiv.housim.saintcoinach.math;
 
 public final class Vector3 {
     public final static Vector3 ZERO = new Vector3(0, 0, 0);

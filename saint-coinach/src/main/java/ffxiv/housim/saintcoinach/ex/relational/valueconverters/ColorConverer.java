@@ -4,13 +4,13 @@ import com.google.gson.JsonObject;
 import ffxiv.housim.saintcoinach.ex.IDataRow;
 import ffxiv.housim.saintcoinach.ex.relational.IValueConverter;
 import ffxiv.housim.saintcoinach.ex.relational.definition.SheetDefinition;
-import ffxiv.housim.saintcoinach.math.Color;
+import ffxiv.housim.saintcoinach.math.XicColor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.lang.reflect.Type;
 
-public class ColorConverer implements IValueConverter<Color> {
+public class ColorConverer implements IValueConverter<XicColor> {
 
     @Getter
     @Setter
@@ -22,18 +22,18 @@ public class ColorConverer implements IValueConverter<Color> {
 
     @Override
     public String getTargetTypeName() {
-        return "Color";
+        return "XicColor";
     }
 
     @Override
     public Type getTargetType() {
-        return Color.class;
+        return XicColor.class;
     }
 
     @Override
-    public Color convert(IDataRow row, Object rawValue) {
+    public XicColor convert(IDataRow row, Object rawValue) {
         int value = (int) rawValue;
-        return new Color(value, includesAlpha);
+        return new XicColor(value, includesAlpha);
     }
 
     @Override

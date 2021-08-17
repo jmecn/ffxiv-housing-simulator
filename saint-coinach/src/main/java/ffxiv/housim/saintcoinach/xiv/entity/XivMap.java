@@ -3,10 +3,10 @@ package ffxiv.housim.saintcoinach.xiv.entity;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.xiv.XivRow;
-import ffxiv.housim.saintcoinach.xiv.XivSheetName;
+import ffxiv.housim.saintcoinach.xiv.XivName;
 
 // TODO need implements
-@XivSheetName("Map")
+@XivName("Map")
 public class XivMap extends XivRow {
     public XivMap(IXivSheet sheet, IRelationalRow sourceRow) {
         super(sheet, sourceRow);
