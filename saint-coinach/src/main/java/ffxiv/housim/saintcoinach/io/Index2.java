@@ -31,7 +31,8 @@ public class Index2 {
         reader.order(ByteOrder.LITTLE_ENDIAN);
 
         FileChannel channel = fileInputStream.getChannel();
-        channel.write(reader);
+        channel.read(reader);
+        reader.flip();
 
         build(reader);
     }
@@ -42,7 +43,8 @@ public class Index2 {
         reader.order(ByteOrder.LITTLE_ENDIAN);
 
         FileChannel channel = fileInputStream.getChannel();
-        channel.write(reader);
+        channel.read(reader);
+        reader.flip();
 
         build(reader);
     }
@@ -54,7 +56,7 @@ public class Index2 {
 
 
     private void build(ByteBuffer reader) {
-        long MAGIC = 0x53715061636B0000L;// SqPack
+        long MAGIC = 0x00006B6361507153L;// SqPack
         long magic = reader.getLong();
 
         if (magic != MAGIC) {

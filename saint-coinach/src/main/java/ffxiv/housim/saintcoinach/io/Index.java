@@ -30,7 +30,8 @@ public class Index {
         reader.order(ByteOrder.LITTLE_ENDIAN);
 
         FileChannel channel = fileInputStream.getChannel();
-        channel.write(reader);
+        channel.read(reader);
+        reader.flip();
 
         build(reader);
     }

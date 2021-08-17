@@ -178,11 +178,11 @@ public class XivRow implements IXivRow {
         return (String) get(buildColumnName(column, indices));
     }
 
-    public Boolean asBoolean(String column) {
+    public boolean asBoolean(String column) {
         return (boolean) get(column);
     }
 
-    public Boolean asBoolean(String column, int ... indices) {
+    public boolean asBoolean(String column, int ... indices) {
         return (boolean) get(buildColumnName(column, indices));
     }
 

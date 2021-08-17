@@ -2,6 +2,7 @@ package ffxiv.housim.saintcoinach.io;
 
 import ffxiv.housim.saintcoinach.Pair;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class Pack {
 
     private final static String IndexFileFormat = "%02x%02x%02x.win32.index";
@@ -26,6 +28,7 @@ public class Pack {
     private PackCollection collection;
     private String dataDirectory;
     private IPackSource source;
+    private IPackSource source2;
 
     // Serialize only
     public Pack() {
@@ -49,10 +52,11 @@ public class Pack {
 
         if (Files.exists(indexPath)) {
             source = new IndexSource(this, new Index(id, new FileInputStream(indexPath.toFile())));
-        } else if (Files.exists(index2Path)) {
+        } else
+        if (Files.exists(index2Path)) {
             source = new Index2Source(this, new Index2(id, new FileInputStream(index2Path.toFile())));
         } else {
-            throw new FileNotFoundException();
+            log.warn("Index not found: {}", id);
         }
 
     }
