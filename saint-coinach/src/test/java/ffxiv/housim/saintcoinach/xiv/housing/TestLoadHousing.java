@@ -32,16 +32,6 @@ public class TestLoadHousing {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testHousingLayoutLimit() {
-        foreach(HousingLayoutLimit.class);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testHousingItemCategory() {
-        foreach(HousingItemCategory.class);
-    }
-
     @Test
     public void testHousingPileLimit() {
         foreach(HousingPileLimit.class);
