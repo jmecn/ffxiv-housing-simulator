@@ -20,8 +20,6 @@ public class ScdAdpcmEntry extends ScdEntry {
     final static int WaveHeaderSize = 0x10;
 
     private void decode(int chunksOffset, int dataOffset) {
-
-
         var wavHeaderOffset = dataOffset;
         var finalDataOffset = chunksOffset + header.samplesOffset;
 
