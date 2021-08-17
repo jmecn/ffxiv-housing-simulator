@@ -38,6 +38,7 @@ public class RelationalExCollection extends ExCollection {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected ISheet<?> createSheet(Header header, Class<? extends IDataRow> clazz) {
         RelationalHeader relHeader = (RelationalHeader) header;
         Class<? extends IRelationalDataRow> relRowClass = (Class<? extends IRelationalDataRow>) clazz;

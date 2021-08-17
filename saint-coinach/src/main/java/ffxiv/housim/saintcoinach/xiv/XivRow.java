@@ -13,11 +13,11 @@ public class XivRow implements IXivRow {
 
     // The IXivSheet the current row is in.
     @Getter
-    private IXivSheet sheet;
+    private final IXivSheet sheet;
 
     // the current row reads data from.
     @Getter
-    private IRelationalRow sourceRow;
+    private final IRelationalRow sourceRow;
 
     public XivRow(IXivSheet sheet, IRelationalRow sourceRow) {
         this.sheet = sheet;
@@ -115,6 +115,7 @@ public class XivRow implements IXivRow {
      * @param <T> The type that should be returned and also the name of the column.
      * @return The value of the field in the column with the same base name as the name of type <code>T</code> and <code>indices</code>.
      */
+    @SuppressWarnings("unchecked")
     public <T> T as(Class<T> type, int ... indices) {
         XivName attr = type.getAnnotation(XivName.class);
         String columnName = attr != null ? attr.value() : type.getSimpleName();
@@ -129,6 +130,7 @@ public class XivRow implements IXivRow {
      * @param <T> The type that should be returned.
      * @return The value of the field in <code>column</code>.
      */
+    @SuppressWarnings("unchecked")
     public <T> T as(Class<T> type, String column) {
         return (T) get(column);
     }
@@ -142,6 +144,7 @@ public class XivRow implements IXivRow {
      * @param <T> The type that should be returned.
      * @return The value of the field in <code>column</code> at <code>indices</code>.
      */
+    @SuppressWarnings("unchecked")
     public <T> T as(Class<T> type, String column, int ... indices) {
         return (T) get(buildColumnName(column, indices));
     }

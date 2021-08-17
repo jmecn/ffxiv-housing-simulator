@@ -29,7 +29,7 @@ public class XivCollection extends RelationalExCollection {
         super(packCollection);
 
         if (libraDatabase != null && libraDatabase.exists()) {
-
+            // TODO add support for libra
         }
     }
 
@@ -39,10 +39,12 @@ public class XivCollection extends RelationalExCollection {
         return getSheet(name, t);
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends IXivRow> IXivSheet<T> getSheet(String name, Class<T> t) {
         return (IXivSheet<T>) getSheet(name);
     }
 
+    @SuppressWarnings("unchecked")
     protected ISheet<?> createSheet(Header header) {
         IRelationalSheet baseSheet = (IRelationalSheet) super.createSheet(header);
         String name = baseSheet.getHeader().getName();
@@ -56,7 +58,7 @@ public class XivCollection extends RelationalExCollection {
         if (match != null) {
             Class genericType = baseSheet.getHeader().getVariant() == 2 ? XivSheet2.class : XivSheet.class;
 
-            Constructor<ISheet<?>> constructor = null;
+            Constructor<ISheet<?>> constructor;
             try {
                 constructor = genericType.getConstructor(XivCollection.class, IRelationalSheet.class, Class.class);
                 return constructor.newInstance(this, baseSheet, match);
@@ -81,10 +83,11 @@ public class XivCollection extends RelationalExCollection {
         return sheetNameToTypeMap.get(name);
     }
 
+    @SuppressWarnings("unchecked")
     private void buildSheetToTypeMap() {
         sheetNameToTypeMap = new ConcurrentHashMap<>();
 
-        ClassPath classPath = null;
+        ClassPath classPath;
         try {
             classPath = ClassPath.from(getClass().getClassLoader());
         } catch (IOException e) {
@@ -94,7 +97,7 @@ public class XivCollection extends RelationalExCollection {
         }
 
         for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(PACKAGE_NAME)) {
-            Class clazz = classInfo.load();
+            Class<?> clazz = classInfo.load();
 
             if (!IXivRow.class.isAssignableFrom(clazz)) {
                 continue;
@@ -105,8 +108,8 @@ public class XivCollection extends RelationalExCollection {
             if (Modifier.isAbstract(clazz.getModifiers())) {
                 continue;
             }
-            XivName attr = (XivName) clazz.getAnnotation(XivName.class);
-            String sheetName = attr == null ? classInfo.getSimpleName() : attr.value();
+            XivName attr = clazz.getAnnotation(XivName.class);
+            String sheetName = attr != null ? attr.value() : classInfo.getSimpleName();
 
             log.debug("{} -> {}", sheetName, classInfo.getName());
 
@@ -115,6 +118,7 @@ public class XivCollection extends RelationalExCollection {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected ISheet<?> createSheet(Header header, Class<? extends IDataRow> clazz) {
         RelationalHeader relHeader = (RelationalHeader) header;
         Class<? extends IRelationalDataRow> klass = (Class<? extends IRelationalDataRow>) clazz;

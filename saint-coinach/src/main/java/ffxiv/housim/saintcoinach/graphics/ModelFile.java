@@ -18,6 +18,7 @@ public class ModelFile extends PackFile {
 
     final static int PartsCount = 0x0B;
 
+    @SuppressWarnings("unchecked")
     private final WeakReference<byte[]>[] partsCache = new WeakReference[PartsCount];
     private WeakReference<byte[]> combinedCache;
 
