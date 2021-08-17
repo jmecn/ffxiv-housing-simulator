@@ -7,7 +7,6 @@ import ffxiv.housim.saintcoinach.ex.relational.IValueConverter;
 import ffxiv.housim.saintcoinach.ex.relational.RelationalExCollection;
 import ffxiv.housim.saintcoinach.ex.relational.definition.SheetDefinition;
 
-import javax.management.relation.Relation;
 import java.lang.reflect.Type;
 
 public class GenericReferenceConverter implements IValueConverter<IRelationalRow> {
