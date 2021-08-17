@@ -34,13 +34,12 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 

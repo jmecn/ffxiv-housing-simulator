@@ -40,7 +40,6 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-            <version>4.13.2</version>
         </dependency>
     </dependencies>
 
@@ -66,9 +65,16 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.16</version>
+                            <version>1.18.20</version>
                         </path>
                     </annotationProcessorPaths>
+                    <compilerArgs>
+                        <arg>--add-exports=jdk.compiler/com.sun.tools.javac.processing==ALL-UNNAMED</arg>
+                        <arg>--add-exports=javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED</arg>
+                        <arg>--add-exports=javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED</arg>
+                        <arg>--add-exports=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED</arg>
+                        <arg>--add-exports=javafx.controls/com.sun.javafx.scene.control.skin.resources=ALL-UNNAMED</arg>
+                    </compilerArgs>
                 </configuration>
 
             </plugin>

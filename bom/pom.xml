@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <lombok.version>1.18.16</lombok.version>
+        <lombok.version>1.18.20</lombok.version>
         <guava.version>27.0.1-jre</guava.version>
         <protobuf.version>3.9.0</protobuf.version>
         <zxing.version>3.4.0</zxing.version>
@@ -25,6 +25,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- javafx -->
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-controls</artifactId>
+                <version>11</version>
+            </dependency>
+
             <!-- jmonkeyengine -->
             <dependency>
                 <groupId>org.jmonkeyengine</groupId>
@@ -162,6 +169,13 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>1.2.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.13.2</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
