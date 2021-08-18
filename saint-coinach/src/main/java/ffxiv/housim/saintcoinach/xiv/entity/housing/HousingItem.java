@@ -11,7 +11,7 @@ public abstract class HousingItem extends XivRow {
     }
 
     public int getModelKey() {
-        return asInt32("ModelKey");
+        return asInt16("ModelKey");
     }
 
     public Item getItem() {
