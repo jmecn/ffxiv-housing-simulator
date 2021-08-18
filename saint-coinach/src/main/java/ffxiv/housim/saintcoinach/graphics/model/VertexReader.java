@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach.graphics;
+package ffxiv.housim.saintcoinach.graphics.model;
 
 import ffxiv.housim.saintcoinach.HalfHelper;
 import ffxiv.housim.saintcoinach.math.Vector2;

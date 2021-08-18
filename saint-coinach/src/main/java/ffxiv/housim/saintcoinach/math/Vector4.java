@@ -1,5 +1,7 @@
 package ffxiv.housim.saintcoinach.math;
 
+import java.nio.ByteBuffer;
+
 public final class Vector4 {
     public final static Vector4 ZERO = new Vector4(0, 0, 0, 0);
     public final static Vector4 ONE = new Vector4(1, 1, 1, 1);
@@ -16,4 +18,10 @@ public final class Vector4 {
         this.w = w;
     }
 
+    public Vector4(ByteBuffer buffer) {
+        x = buffer.getFloat();
+        y = buffer.getFloat();
+        z = buffer.getFloat();
+        w = buffer.getFloat();
+    }
 }

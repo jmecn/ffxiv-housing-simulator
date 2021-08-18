@@ -1,7 +1,7 @@
 package ffxiv.housim.saintcoinach.xiv.entity;
 
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;
-import ffxiv.housim.saintcoinach.math.XicColor;
+import ffxiv.housim.saintcoinach.math.XivColor;
 import ffxiv.housim.saintcoinach.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.xiv.XivRow;
 
@@ -10,8 +10,8 @@ public class Stain extends XivRow {
         super(sheet, sourceRow);
     }
 
-    public XicColor getColor() {
-        return as(XicColor.class);
+    public XivColor getColor() {
+        return as(XivColor.class);
     }
 
     public short getShade() {
