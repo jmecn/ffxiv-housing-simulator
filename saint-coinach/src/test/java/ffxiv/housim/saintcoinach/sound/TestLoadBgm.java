@@ -40,11 +40,39 @@ public class TestLoadBgm {
     }
 
     @Test
-    public void testScdFile() {
+    public void testScd() {
+        IXivSheet<BGM> sheet = aRealmReversed.getGameData().getSheet(BGM.class);
+        for (BGM bgm : sheet) {
+            if (bgm.getFile() != null && bgm.getFile().isBlank()) {
+                log.info("No file in BGM#{}: {}", bgm.getKey(), bgm.getFile());
+                continue;
+            }
+            PackFile file = aRealmReversed.getGameData().getPackCollection().tryGetFile(bgm.getFile().toLowerCase());
+            if (file == null) {
+                log.warn("No pack file found: BGM#{}, file:{}", bgm.getKey(), bgm.getFile());
+                continue;
+            }
+            ScdFile scd = new ScdFile(file);
+            if (scd.getHeader().entryCount <= 0) {
+                log.info("No entrys: BGM#{}, file:{}", bgm.getKey(), bgm.getFile());
+            }
+        }
+    }
+
+    @Test
+    public void testFfxivScdFile() {
         PackFile file = aRealmReversed.getGameData().getPackCollection().tryGetFile("music/ffxiv/bgm_con_bahamut_bigboss0.scd");
         assertNotNull(file);
         ScdFile scd = new ScdFile(file);
     }
+
+    @Test
+    public void testEx1ScdFile() {
+        PackFile file = aRealmReversed.getGameData().getPackCollection().tryGetFile("music/ex1/bgm_ex1_dungeon_xelphatol.scd");
+        assertNotNull(file);
+        ScdFile scd = new ScdFile(file);
+    }
+
     public <T extends IXivRow> void foreach(Class<T> clazz) {
         IXivSheet<T> sheet = aRealmReversed.getGameData().getSheet(clazz);
 

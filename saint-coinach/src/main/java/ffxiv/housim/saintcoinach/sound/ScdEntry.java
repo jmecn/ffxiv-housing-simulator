@@ -11,4 +11,9 @@ public abstract class ScdEntry {
     }
 
     public abstract byte[] getDecoded();
+
+    @Override
+    public String toString() {
+        return String.format("%s, size:%d bytes", header.codec, getDecoded().length);
+    }
 }

@@ -1,6 +1,5 @@
 package ffxiv.housim.saintcoinach.sound;
 
-import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 

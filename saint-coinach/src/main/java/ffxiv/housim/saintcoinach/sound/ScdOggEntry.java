@@ -1,10 +1,6 @@
 package ffxiv.housim.saintcoinach.sound;
 
-import ffxiv.housim.saintcoinach.ex.Header;
-
-import java.io.File;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 public class ScdOggEntry extends ScdEntry {
     private final static int[] XOR_TABLE = {//
@@ -54,39 +50,40 @@ public class ScdOggEntry extends ScdEntry {
         return decoded;
     }
 
-    final static int CryptTypeOffset = 0x00;
-    final static int XorValueOffset = 0x02;
-    final static int SeekTableSizeOffset = 0x10;
-    final static int VorbisHeaderSizeOffset = 0x14;
     private void decode(int dataOffset) {
 
         ByteBuffer buffer = file.buffer;
 
-        var cryptType = ScdOggCryptType.of(buffer.getShort(dataOffset + CryptTypeOffset));
+        buffer.position(dataOffset);
 
-        if (cryptType != ScdOggCryptType.NONE && cryptType != ScdOggCryptType.FULL_XOR_USING_TABLE && cryptType != ScdOggCryptType.VARBIS_HEADER_XOR)
+        short crypt = buffer.getShort();
+
+        ScdOggCryptType cryptType = ScdOggCryptType.of(crypt);
+
+        if (cryptType == null) {
             throw new UnsupportedOperationException();
-
-        int seekTableSize = buffer.getInt(dataOffset + SeekTableSizeOffset);
-        int vorbisHeaderSize = buffer.getInt(dataOffset + VorbisHeaderSizeOffset);
-
-        int vorbisHeaderOffset = dataOffset + 0x20 + seekTableSize;
-        int soundDataOffset = vorbisHeaderOffset + vorbisHeaderSize;
-
-        var vorbisHeader = new byte[vorbisHeaderSize];
-        System.arraycopy(buffer.array(), vorbisHeaderOffset, vorbisHeader, 0, vorbisHeaderSize);
-
-        if (cryptType == ScdOggCryptType.VARBIS_HEADER_XOR) {
-            byte xorVal = buffer.get(dataOffset + XorValueOffset);
-            if (xorVal != 0) {
-                for (var i = 0; i < vorbisHeader.length; ++i)
-                    vorbisHeader[i] ^= xorVal;
-            }
         }
 
-        decoded = new byte[vorbisHeader.length + header.dataSize];
-        System.arraycopy(vorbisHeader, 0, decoded, 0, vorbisHeader.length);
-        System.arraycopy(buffer.array(), soundDataOffset, decoded, vorbisHeader.length, header.dataSize);
+        byte xorVal = buffer.get();
+
+        buffer.position(dataOffset + 0x10);
+
+        int seekTableSize = buffer.getInt();
+        int vorbisHeaderSize = buffer.getInt();
+
+        // alloc space
+        decoded = new byte[vorbisHeaderSize + header.dataSize];
+
+        int vorbisHeaderOffset = dataOffset + 0x20 + seekTableSize;
+        System.arraycopy(file.data, vorbisHeaderOffset, decoded, 0, decoded.length);
+
+        if (cryptType == ScdOggCryptType.VARBIS_HEADER_XOR) {
+            if (xorVal != 0) {
+                for (var i = 0; i < vorbisHeaderSize; i++) {
+                    decoded[i] ^= xorVal;
+                }
+            }
+        }
 
         if (cryptType == ScdOggCryptType.FULL_XOR_USING_TABLE) {
             XorUsingTable();

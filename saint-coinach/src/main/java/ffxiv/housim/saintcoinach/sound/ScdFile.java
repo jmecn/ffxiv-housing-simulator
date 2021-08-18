@@ -15,7 +15,7 @@ public class ScdFile {
     @Getter
     private final PackFile sourceFile;
     @Getter
-    private ScdHeader scdHeader;
+    private ScdHeader header;
     @Getter
     private ScdEntryHeader[] entryHeaders;
     @Getter
@@ -36,17 +36,20 @@ public class ScdFile {
 
         readScdHeader(fileHeaderSize);
 
-        var entryHeaders = new ScdEntryHeader[scdHeader.entryCount];
-        var entryTable = new int[scdHeader.entryCount];
-        var entryChunkOffsets = new int[scdHeader.entryCount];
-        var entryDataOffsets = new int[scdHeader.entryCount];
+        if (header.entryCount == 0) {
+            log.warn("entry count:{}", 0);
+        }
+        var entryHeaders = new ScdEntryHeader[header.entryCount];
+        var entryTable = new int[header.entryCount];
+        var entryChunkOffsets = new int[header.entryCount];
+        var entryDataOffsets = new int[header.entryCount];
 
-        buffer.position(scdHeader.entryTableOffset);
-        for (var i = 0; i < scdHeader.entryCount; i++) {
+        buffer.position(header.entryTableOffset);
+        for (var i = 0; i < header.entryCount; i++) {
             entryTable[i] = buffer.getInt();
         }
 
-        for (int i = 0; i < scdHeader.entryCount; i++) {
+        for (int i = 0; i < header.entryCount; i++) {
             var headerOffset = entryTable[i];
             entryHeaders[i] = readEntryHeader(headerOffset);
 
@@ -58,8 +61,10 @@ public class ScdFile {
                 entryDataOffsets[i] += dataOffset;
             }
         }
-        this.entries = new ScdEntry[scdHeader.entryCount];
-        for (var i = 0; i < scdHeader.entryCount; i++) {
+        this.entryHeaders = entryHeaders;
+
+        this.entries = new ScdEntry[header.entryCount];
+        for (var i = 0; i < header.entryCount; i++) {
             this.entries[i] = createEntry(entryHeaders[i], entryChunkOffsets[i], entryDataOffsets[i]);
         }
 
@@ -107,7 +112,7 @@ public class ScdFile {
         h.unknown2 = buffer.getInt();
         h.unknownOffset1 = buffer.getInt();
 
-        this.scdHeader = h;
+        this.header = h;
     }
 
     private ScdEntryHeader readEntryHeader(int offset) {
