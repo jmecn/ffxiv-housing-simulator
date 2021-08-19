@@ -83,7 +83,13 @@ public class ModelDefinition {
     public Model getModel(ModelQuality quality) {
         int v = quality.value;
         if (models[v] == null) {
-            models[v] = new Model(this, quality);
+            try {
+                models[v] = new Model(this, quality);
+            } catch (IOException e) {
+                e.printStackTrace();
+                log.error("Failed load model, quality:{}", quality, e);
+                return null;
+            }
         }
         return models[v];
     }

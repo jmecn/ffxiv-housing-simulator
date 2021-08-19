@@ -82,6 +82,9 @@ public class ModelFile extends PackFile {
         return data;
     }
 
+    final static int MinimumBlockOffset = 0x9C;
+    final static int BlockCountOffset = 0xB2;
+
     private byte[] readPart(int part) throws IOException {
 
         int blockStart = modelBlock.chunkStartBlockIndex[part];
