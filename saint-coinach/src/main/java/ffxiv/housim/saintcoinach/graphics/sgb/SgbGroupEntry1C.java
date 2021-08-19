@@ -1,6 +1,6 @@
 package ffxiv.housim.saintcoinach.graphics.sgb;
 
-import ffxiv.housim.saintcoinach.graphics.ModelFile;
+import ffxiv.housim.saintcoinach.graphics.model.ModelFile;
 import ffxiv.housim.saintcoinach.graphics.model.Model;
 import ffxiv.housim.saintcoinach.graphics.model.ModelQuality;
 import ffxiv.housim.saintcoinach.io.PackCollection;

@@ -9,4 +9,7 @@ public class Model {
     private ModelQuality quality;
     @Getter
     private ModelHeader header;
+
+    public Model(ModelDefinition modelDefinition, ModelQuality quality) {
+    }
 }

@@ -1,5 +1,7 @@
 package ffxiv.housim.saintcoinach.math;
 
+import java.nio.ByteBuffer;
+
 public class BoundingBox {
     public Vector4 pointA;
     public Vector4 pointB;
@@ -7,6 +9,11 @@ public class BoundingBox {
     public BoundingBox(Vector4 pointA, Vector4 pointB) {
         this.pointA = pointA;
         this.pointB = pointB;
+    }
+
+    public BoundingBox(ByteBuffer buffer) {
+        pointA = new Vector4(buffer);
+        pointB = new Vector4(buffer);
     }
 
     public BoundingBox scale(float factor) {

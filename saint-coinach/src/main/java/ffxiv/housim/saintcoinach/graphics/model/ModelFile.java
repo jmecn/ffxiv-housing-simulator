@@ -1,6 +1,5 @@
-package ffxiv.housim.saintcoinach.graphics;
+package ffxiv.housim.saintcoinach.graphics.model;
 
-import ffxiv.housim.saintcoinach.graphics.model.ModelDefinition;
 import ffxiv.housim.saintcoinach.io.FileCommonHeader;
 import ffxiv.housim.saintcoinach.io.Pack;
 import ffxiv.housim.saintcoinach.io.PackFile;
@@ -39,8 +38,6 @@ public class ModelFile extends PackFile {
 
         ModelDefinition def = new ModelDefinition(this);
         defCache = new WeakReference<>(def);
-
-        defCache.get();
 
         return def;
     }

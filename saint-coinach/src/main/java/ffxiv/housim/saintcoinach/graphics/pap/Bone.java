@@ -18,7 +18,7 @@ public class Bone {
     @Getter
     private Vector4 unknown2;
 
-    Bone(ModelDefinition definition, int index, ByteBuffer buffer) {
+    public Bone(ModelDefinition definition, int index, ByteBuffer buffer) {
         this.definition = definition;
         this.index = index;
         this.name = definition.getBoneNames()[index];

@@ -2,10 +2,19 @@ package ffxiv.housim.saintcoinach.graphics.model;
 
 import ffxiv.housim.saintcoinach.math.BoundingBox;
 
+import java.nio.ByteBuffer;
+
 public class ModelBoundingBoxes { // 9 in hsl
     // TODO: Purpose of having 4 boxes (or 8 vectors) is unknown.
-    public BoundingBox Value1;
-    public BoundingBox Value2;
-    public BoundingBox Value3;
-    public BoundingBox Value4;
+    public BoundingBox value1;
+    public BoundingBox value2;
+    public BoundingBox value3;
+    public BoundingBox value4;
+
+    public ModelBoundingBoxes(ByteBuffer buffer) {
+        value1 = new BoundingBox(buffer);
+        value2 = new BoundingBox(buffer);
+        value3 = new BoundingBox(buffer);
+        value4 = new BoundingBox(buffer);
+    }
 }
