@@ -1,6 +1,6 @@
 package ffxiv.housim.saintcoinach.graphics.model;
 
-import ffxiv.housim.saintcoinach.HalfHelper;
+import ffxiv.housim.saintcoinach.utils.HalfHelper;
 import ffxiv.housim.saintcoinach.math.Vector2;
 import ffxiv.housim.saintcoinach.math.Vector3;
 import ffxiv.housim.saintcoinach.math.Vector4;
@@ -30,10 +30,10 @@ public final class VertexReader {
                 vertex.blendIndices = (int) data;
                 break;
             case BlendWeights:
-                vertex.blendWeights = (Vector4)data;
+                vertex.blendWeights = (Vector4) data;
                 break;
             case Color:
-                vertex.color = (Vector4)data;
+                vertex.color = (Vector4) data;
                 break;
             case Normal:
                 vertex.normal = forceToVector3(data);
@@ -42,10 +42,10 @@ public final class VertexReader {
                 vertex.position = forceToVector4(data);
                 break;
             case Tangent2:
-                vertex.tangent2 = (Vector4)data;
+                vertex.tangent2 = (Vector4) data;
                 break;
             case Tangent1:
-                vertex.tangent1 = (Vector4)data;
+                vertex.tangent1 = (Vector4) data;
                 break;
             case UV:
                 vertex.uv = forceToVector4(data);
@@ -56,28 +56,24 @@ public final class VertexReader {
     }
 
     static Vector3 forceToVector3(Object value) {
-        if (value instanceof Vector3)
-        return (Vector3)value;
-        if (value instanceof Vector4) {
-            Vector4 v4 = (Vector4)value;
-            return new Vector3 (
-                v4.x, v4.y, v4.z
-            );
+        if (value instanceof Vector3 v3) {
+            return v3;
+        }
+        if (value instanceof Vector4 v4) {
+            return new Vector3(v4);
         }
         throw new IllegalArgumentException();
     }
 
     static Vector4 forceToVector4(Object value) {
-        if (value instanceof Vector4)
-            return (Vector4)value;
-        if (value instanceof Vector2) {
-            Vector2 v2 = (Vector2)value;
-            return new Vector4 (v2.x, v2.y, 0, 0);
+        if (value instanceof Vector4 v4) {
+            return v4;
         }
-        if (value instanceof Vector3) {
-            Vector3 v3 = (Vector3)value;
-            return new Vector4 (v3.x, v3.y, v3.z, 1
-            );
+        if (value instanceof Vector2 v2) {
+            return new Vector4(v2, new Vector2(0));
+        }
+        if (value instanceof Vector3 v3) {
+            return new Vector4(v3, 1);
         }
         throw new IllegalArgumentException();
     }
@@ -107,18 +103,9 @@ public final class VertexReader {
                     buffer.get() / 255f
                 );
             case Single3:
-                return new Vector3(
-                        buffer.getFloat(),
-                        buffer.getFloat(),
-                        buffer.getFloat()
-                );
+                return new Vector3(buffer);
             case Single4:
-                return new Vector4(
-                        buffer.getFloat(),
-                        buffer.getFloat(),
-                        buffer.getFloat(),
-                        buffer.getFloat()
-                );
+                return new Vector4(buffer);
             default:
                 throw new IllegalArgumentException();
         }

@@ -1,5 +1,6 @@
-package ffxiv.housim.saintcoinach.graphics.model;
+package ffxiv.housim.saintcoinach.graphics.pap;
 
+import ffxiv.housim.saintcoinach.graphics.model.ModelDefinition;
 import ffxiv.housim.saintcoinach.math.Vector4;
 import lombok.Getter;
 

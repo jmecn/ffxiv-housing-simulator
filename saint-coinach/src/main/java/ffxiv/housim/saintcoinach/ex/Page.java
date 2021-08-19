@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach;
+package ffxiv.housim.saintcoinach.ex;
 
 import com.google.common.base.Objects;
 import lombok.Getter;

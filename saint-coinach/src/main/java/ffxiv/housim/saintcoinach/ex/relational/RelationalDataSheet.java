@@ -1,6 +1,6 @@
 package ffxiv.housim.saintcoinach.ex.relational;
 
-import ffxiv.housim.saintcoinach.Page;
+import ffxiv.housim.saintcoinach.ex.Page;
 import ffxiv.housim.saintcoinach.ex.*;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;

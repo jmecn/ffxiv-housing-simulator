@@ -1,6 +1,6 @@
 package ffxiv.housim.saintcoinach.xiv;
 
-import ffxiv.housim.saintcoinach.Pair;
+import ffxiv.housim.saintcoinach.utils.Pair;
 import ffxiv.housim.saintcoinach.ex.DataRowV2;
 import ffxiv.housim.saintcoinach.ex.SubRow;
 import ffxiv.housim.saintcoinach.ex.relational.IRelationalRow;

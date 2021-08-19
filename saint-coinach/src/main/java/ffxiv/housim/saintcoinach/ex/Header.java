@@ -1,7 +1,6 @@
 package ffxiv.housim.saintcoinach.ex;
 
 import ffxiv.housim.saintcoinach.io.PackFile;
-import ffxiv.housim.saintcoinach.Page;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 

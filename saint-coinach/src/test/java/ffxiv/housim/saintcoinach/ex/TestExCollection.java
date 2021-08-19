@@ -2,7 +2,9 @@ package ffxiv.housim.saintcoinach.ex;
 
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.ex.relational.RelationalExCollection;
+import ffxiv.housim.saintcoinach.graphics.sgb.SgbFile;
 import ffxiv.housim.saintcoinach.io.PackCollection;
+import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,5 +75,12 @@ public class TestExCollection {
             }
             //System.out.println();
         }
+    }
+
+    @Test
+    public void testSgb() {
+        PackFile file = collection.tryGetFile("bgcommon/hou/indoor/general/0280/asset/fun_b0_m0280.sgb");
+        SgbFile sgbFile = new SgbFile(file);
+        log.info("{}", sgbFile);
     }
 }

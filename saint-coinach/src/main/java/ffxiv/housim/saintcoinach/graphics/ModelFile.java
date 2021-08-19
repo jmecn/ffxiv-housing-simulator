@@ -1,5 +1,6 @@
 package ffxiv.housim.saintcoinach.graphics;
 
+import ffxiv.housim.saintcoinach.graphics.model.ModelDefinition;
 import ffxiv.housim.saintcoinach.io.FileCommonHeader;
 import ffxiv.housim.saintcoinach.io.Pack;
 import ffxiv.housim.saintcoinach.io.PackFile;
@@ -21,6 +22,7 @@ public class ModelFile extends PackFile {
     @SuppressWarnings("unchecked")
     private final WeakReference<byte[]>[] partsCache = new WeakReference[PartsCount];
     private WeakReference<byte[]> combinedCache;
+    private WeakReference<ModelDefinition> defCache;
 
     private final ModelBlock modelBlock;
 
@@ -28,6 +30,19 @@ public class ModelFile extends PackFile {
         super(pack, commonHeader);
 
         modelBlock = new ModelBlock(commonHeader.getBuffer());
+    }
+
+    public ModelDefinition getModelDefinition() {
+        if (defCache != null && defCache.get() != null) {
+            return defCache.get();
+        }
+
+        ModelDefinition def = new ModelDefinition(this);
+        defCache = new WeakReference<>(def);
+
+        defCache.get();
+
+        return def;
     }
 
     @Override

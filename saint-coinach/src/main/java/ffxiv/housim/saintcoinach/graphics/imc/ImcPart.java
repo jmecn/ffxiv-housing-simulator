@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach.graphics;
+package ffxiv.housim.saintcoinach.graphics.imc;
 
 import lombok.Getter;
 

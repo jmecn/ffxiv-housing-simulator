@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach;
+package ffxiv.housim.saintcoinach.utils;
 
 /**
  * Converts a single precision (32 bit) floating point value

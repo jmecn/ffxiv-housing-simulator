@@ -61,8 +61,8 @@ public class ModelBlock {
             offset += blockSizes[i];
         }
 
-        log.info("chunkDecompressedSize:{}\nchunkSizes:{}\nchunkOffsets:{}\nchunkStartBlockIndex:{}\nchunkNumBlocks:{}\nblockSizes:{}\nblockOffsets:{}", chunkDecompressedSizes, chunkSizes, chunkOffsets, chunkStartBlockIndex, chunkNumBlocks, blockSizes, blockOffsets);
-        log.info("numMeshes:{}, numMaterials:{}, numBlocks:{}, y1:{}, y2:{}", numMeshes, numMaterials, numBlocks, y1, y2);
+        log.debug("chunkDecompressedSize:{}\nchunkSizes:{}\nchunkOffsets:{}\nchunkStartBlockIndex:{}\nchunkNumBlocks:{}\nblockSizes:{}\nblockOffsets:{}", chunkDecompressedSizes, chunkSizes, chunkOffsets, chunkStartBlockIndex, chunkNumBlocks, blockSizes, blockOffsets);
+        log.debug("numMeshes:{}, numMaterials:{}, numBlocks:{}, y1:{}, y2:{}", numMeshes, numMaterials, numBlocks, y1, y2);
     }
 
 }

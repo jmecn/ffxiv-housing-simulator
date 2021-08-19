@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach;
+package ffxiv.housim.saintcoinach.utils;
 
 public class Pair<K, V> {
     K key;

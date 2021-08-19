@@ -1,11 +1,11 @@
 package ffxiv.housim.saintcoinach.io;
 
-import ffxiv.housim.saintcoinach.Pair;
+import ffxiv.housim.saintcoinach.utils.Pair;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.nio.channels.FileChannel;
@@ -25,10 +25,10 @@ public class Pack {
     private final Map<Pair<Thread, Integer>, WeakReference<FileChannel>> dataStreams = new HashMap<>();
 
     private PackIdentifier id;
+    @Getter
     private PackCollection collection;
     private String dataDirectory;
     private IPackSource source;
-    private IPackSource source2;
 
     // Serialize only
     public Pack() {
