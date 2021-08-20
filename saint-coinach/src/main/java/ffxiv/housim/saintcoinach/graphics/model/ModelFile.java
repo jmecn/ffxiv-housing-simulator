@@ -89,9 +89,9 @@ public class ModelFile extends PackFile {
 
         int blockStart = modelBlock.chunkStartBlockIndex[part];
         int blockCount = modelBlock.chunkNumBlocks[part];
+        log.debug("read part:{}, blockStart:{}, blockCount:{}", part, blockStart, blockCount);
 
         FileChannel channel = getSourceStream();
-
         ByteArrayOutputStream outStream = new ByteArrayOutputStream(0x80);
 
         for (int i = 0; i < blockCount; i++) {

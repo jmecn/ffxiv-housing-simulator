@@ -128,7 +128,7 @@ public class SgbGroup implements ISgbData {
         for (int i = 0; i < count; i++) {
             entryOffsets[i] = buffer.getInt();
         }
-        log.info("headerSize:{}, entryCount:{}, entryTableSize:{}, ptr:{}", entriesOffset, count, count * 4, buffer.position());
+        log.debug("headerSize:{}, entryCount:{}, entryTableSize:{}, ptr:{}", entriesOffset, count, count * 4, buffer.position());
 
         for (int i = 0; i < count; i++) {
             int size = -1;
@@ -140,7 +140,7 @@ public class SgbGroup implements ISgbData {
                 int entryType = buffer.getInt(entryOffset);
                 SgbGroupEntryType type = SgbGroupEntryType.of(entryType);
 
-                log.info("entry#{}, offset:{}, entryOffset:{}, type:{}, entrySize={}", i, entryOffsets[i], entryOffset, type, size);
+                log.debug("entry#{}, offset:{}, entryOffset:{}, type:{}, entrySize={}", i, entryOffsets[i], entryOffset, type, size);
                 switch (type) {
                     case Model:
                         entries[i] = new SgbGroupEntryModel(coll, buffer, entryOffset);
@@ -191,13 +191,13 @@ public class SgbGroup implements ISgbData {
         count = offset1CHeader.entryCount;
         entries = new ISgbGroupEntry[count];
 
-        log.info("headerSize:{}, entryCount:{}, entrySize:{}, ptr:{}", entriesOffset - offset, count, count * 24, entriesOffset);
+        log.debug("headerSize:{}, entryCount:{}, entrySize:{}, ptr:{}", entriesOffset - offset, count, count * 24, entriesOffset);
 
         for (var i = 0; i < count; i++) {
             try {
                 var entryOffset = entriesOffset + (i * 24);
                 entries[i] = new SgbGroupEntry1C(coll, buffer, entryOffset);
-                // break;
+                break;
             } catch (Exception e) {
                 log.error("", e);
             }

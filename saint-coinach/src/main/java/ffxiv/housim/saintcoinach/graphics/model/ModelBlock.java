@@ -18,7 +18,7 @@ public class ModelBlock {
     short[] blockSizes;// numBlocks * 2 bytes; Size of each data block below
 
     int numBlocks;// SUM(chunkNumBlocks)
-    short[] blockOffsets;
+    int[] blockOffsets;
 
     public ModelBlock(ByteBuffer buffer) {
         buffer.position(0x18);
@@ -52,8 +52,8 @@ public class ModelBlock {
         // numBlocks * 2 bytes
         blockSizes = new short[numBlocks];
 
-        short offset = 0;
-        blockOffsets = new short[numBlocks];
+        int offset = 0;
+        blockOffsets = new int[numBlocks];
         for (int i = 0; i < numBlocks; i++) {
             blockSizes[i] = buffer.getShort();
 

@@ -26,13 +26,13 @@ public class PcbFile {
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
-        int magic = buffer.getInt();
-        int type = buffer.getInt();
+        int unkonwn1 = buffer.getInt();
+        int unkonwn2 = buffer.getInt();
         entryCount = buffer.getInt();
         indicesCount = buffer.getInt();
         long padding = buffer.getLong();// paddings
 
-        log.info("magic:{}, type:{}, data.length:{}, entryCount:{}, indicesCount:{}", String.format("%08X", magic), type, bytes.length, entryCount, indicesCount);
+        log.debug("unkonwn1:{}, unkonwn2:{}, data.length:{}, entryCount:{}, indicesCount:{}", unkonwn1, unkonwn2, bytes.length, entryCount, indicesCount);
 
         data = new ArrayList<>(entryCount);
 
