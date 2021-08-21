@@ -1,7 +1,5 @@
 package ffxiv.housim.saintcoinach.graphics.sgb;
 
-import org.checkerframework.checker.units.qual.C;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,12 +8,12 @@ import java.util.Map;
 public enum SgbGroupEntryType {
     Unsupported(-1),
     None(0, 0x18),// offset 1C
-    Model(1, 0x92),// BgParts Keep this for backwards compatability
-    Light(3),
-    Vfx(4),
+    Model(1, 0x5C),// BgParts Keep this for backwards compatability
+    Light(3, 0x6C),
+    Vfx(4, 0x58),
     PositionMarker(5),
     Gimmick(6),// SharedGroup6 // secondary variable is set to 2
-    Sound(7),
+    Sound(7, 0xCC),
     EventNpc(8),
     BattleNpc(9),
     Aetheryte(12),
@@ -43,7 +41,7 @@ public enum SgbGroupEntryType {
     ClickableRange(70),
     PrefetchRange(71),
     FateRange(72),
-    SphereCastRange(75),
+    SphereCastRange(75, 0x3C),
     ;
     final int value;
     final int size;

@@ -14,6 +14,6 @@ public abstract class ScdEntry {
 
     @Override
     public String toString() {
-        return String.format("%s, size:%d bytes", header.codec, getDecoded().length);
+        return String.format("%s, size:%d bytes", header.codec, getDecoded() != null ? getDecoded().length : 0);
     }
 }

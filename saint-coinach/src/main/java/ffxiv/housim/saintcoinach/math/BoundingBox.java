@@ -81,4 +81,9 @@ public class BoundingBox {
 
         return new BoundingBox (retPointA, retPointB);
     }
+
+    @Override
+    public String toString() {
+        return String.format("[min=%s, max=%s]", pointA, pointB);
+    }
 }

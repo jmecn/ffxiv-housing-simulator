@@ -140,13 +140,17 @@ public class SgbGroup implements ISgbData {
                 int entryType = buffer.getInt(entryOffset);
                 SgbGroupEntryType type = SgbGroupEntryType.of(entryType);
 
-                log.debug("entry#{}, offset:{}, entryOffset:{}, type:{}, entrySize={}", i, entryOffsets[i], entryOffset, type, size);
+                int entrySize = size > 0 ? size : type.size;
+                log.debug("entry#{}, offset:{}, entryOffset:{}, type:{}, entrySize={}", i, entryOffsets[i], entryOffset, type, entrySize);
                 switch (type) {
                     case Model:
                         entries[i] = new SgbGroupEntryModel(coll, buffer, entryOffset);
                         break;
                     case Gimmick:
                         entries[i] = new SgbGimmickEntry(coll, buffer, entryOffset);
+                        break;
+                    case Sound:
+                        entries[i] = new SgbGroupEntrySound(coll, buffer, entryOffset);
                         break;
                     case Light:
                         entries[i] = new SgbGroupEntryLight(coll, buffer, entryOffset);
@@ -160,8 +164,14 @@ public class SgbGroup implements ISgbData {
                     case ChairMarker:
                         entries[i] = new SgbGroupEntryChairMarker(coll, buffer, entryOffset);
                         break;
+                    case ClickableRange:
+                        entries[i] = new SgbGroupEntryClickableRange(coll, buffer, entryOffset);
+                        break;
+                    case SphereCastRange:
+                        entries[i] = new SgbGroupEntrySphereCastRange(coll, buffer, entryOffset);
+                        break;
                     default:
-                        log.warn("Unsupported sgb entry type:{}, value:{}, offset:{}, path:{}", type, entryType, entryOffset, parent.getFile().getPath());
+                        log.warn("Unsupported sgb entry type:{}, value:{}, offset:{}, size:{}, path:{}", type, entryType, entryOffset, entrySize, parent.getFile().getPath());
                         break;
                     // TODO: Work out other parts.
                 }

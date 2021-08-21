@@ -12,29 +12,16 @@ import lombok.Getter;
 import java.nio.ByteBuffer;
 
 public class SgbGroupEntryModel implements ISgbGroupEntry {
-    public class HeaderData {// size 0x38 = 56 bytes
-        public SgbGroupEntryType type;
-        public int gimmickId;
-        public int nameOffset;
-        public Vector3 translation;
-        public Vector3 rotation;
-        public Vector3 scale;
-        public int modelFileOffset;
-        public int collisionFileOffset;
+    // size 0x38 = 56 bytes
+    public SgbGroupEntryType type;
+    public int gimmickId;
+    public int nameOffset;
+    public Vector3 translation;
+    public Vector3 rotation;
+    public Vector3 scale;
+    public int modelFileOffset;
+    public int collisionFileOffset;
 
-        HeaderData(ByteBuffer buffer) {
-            type = SgbGroupEntryType.of(buffer.getInt());
-            gimmickId = buffer.getInt();
-            nameOffset = buffer.getInt();
-            translation = new Vector3(buffer);
-            rotation = new Vector3(buffer);
-            scale = new Vector3(buffer);
-            modelFileOffset = buffer.getInt();
-            collisionFileOffset = buffer.getInt();
-        }
-    }
-
-    private final HeaderData header;
     @Getter
     private final String name;
     @Getter
@@ -49,14 +36,24 @@ public class SgbGroupEntryModel implements ISgbGroupEntry {
     public SgbGroupEntryModel(PackCollection coll, ByteBuffer buffer, int offset) {
         buffer.position(offset);
 
-        header = new HeaderData(buffer);
-        name = ByteBufferStr.getString(buffer, offset + header.nameOffset);
-        modelFilePath = ByteBufferStr.getString(buffer, offset + header.modelFileOffset);
-        collisionFilePath = ByteBufferStr.getString(buffer, offset + header.collisionFileOffset);
+        // read data
+        type = SgbGroupEntryType.of(buffer.getInt());
+        gimmickId = buffer.getInt();
+        nameOffset = buffer.getInt();
+        translation = new Vector3(buffer);
+        rotation = new Vector3(buffer);
+        scale = new Vector3(buffer);
+        modelFileOffset = buffer.getInt();
+        collisionFileOffset = buffer.getInt();
+
+        // parse data
+        name = ByteBufferStr.getString(buffer, offset + nameOffset);
+        modelFilePath = ByteBufferStr.getString(buffer, offset + modelFileOffset);
+        collisionFilePath = ByteBufferStr.getString(buffer, offset + collisionFileOffset);
 
         if (!modelFilePath.isEmpty()) {
             ModelFile mdlFile = (ModelFile) coll.tryGetFile(modelFilePath);
-            model = new TransformedModel(mdlFile.getModelDefinition(), header.translation, header.rotation, header.scale);
+            model = new TransformedModel(mdlFile.getModelDefinition(), translation, rotation, scale);
         }
 
         if (!collisionFilePath.isEmpty()) {
@@ -67,6 +64,6 @@ public class SgbGroupEntryModel implements ISgbGroupEntry {
 
     @Override
     public SgbGroupEntryType getType() {
-        return header.type;
+        return type;
     }
 }

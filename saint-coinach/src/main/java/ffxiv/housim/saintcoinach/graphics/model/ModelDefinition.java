@@ -16,8 +16,6 @@ import java.util.List;
 
 @Slf4j
 public class ModelDefinition {
-    public final static int StringsCountOffset = 0x00;
-    public final static int StringsSizeOffset = 0x04;
     public final static int StringsOffset = 0x08;
 
     public final static int ModelCount = 3;
@@ -25,14 +23,14 @@ public class ModelDefinition {
     protected String[] materialNames;
     protected String[] attributeNames;
 
-    private Model[] models = new Model[ModelCount];
+    private final Model[] models = new Model[ModelCount];
 
     @Getter
     private List<ModelQuality> availableQualities;
     @Getter
     private ModelDefinitionHeader header;
     @Getter
-    private ModelFile file;
+    private final ModelFile file;
     @Getter
     private VertexFormat[] vertexFormats;
     @Getter
@@ -65,7 +63,7 @@ public class ModelDefinition {
     private BoneIndices boneIndices;
     // Here's padding, but not keeping a variable amount of 0s
     @Getter
-    private ModelBoundingBoxes BoundingBoxes;
+    private ModelBoundingBoxes boundingBoxes;
     @Getter
     private Bone[] bones;
 
@@ -197,19 +195,29 @@ public class ModelDefinition {
         }
 
         this.boneIndices = new BoneIndices(buffer);
+        if (boneIndices.dataSize > 0) {
+            for (MeshHeader h : meshHeaders) {
+                log.info("vertexCount:{}", h.vertexCount);
+            }
+            log.info("boneIndicesCount:{}", boneIndices.bones.length);
+        }
 
         // Just padding, first byte specifying how many 0-bytes follow.
         int padding = buffer.get();
         buffer.position(buffer.position() + padding);
 
-        this.BoundingBoxes = new ModelBoundingBoxes(buffer);
+        try {
+            this.boundingBoxes = new ModelBoundingBoxes(buffer);
+        } catch (Exception e) {
+            log.error("", e);
+        }
 
         this.bones = new Bone[header.boneCount];
         for (var i = 0; i < header.boneCount; i++)
             this.bones[i] = new Bone(this, i, buffer);
 
         if (buffer.position() != buffer.limit()) {
-            //System.Diagnostics.Debugger.Break();    // Something's not right here.
+            log.warn("Something's not right here. position:{}, limit:{}", buffer.position(), buffer.limit());
         }
 
         buildVertexFormats();
@@ -227,7 +235,6 @@ public class ModelDefinition {
         }
 
         this.vertexFormats = new VertexFormat[header.meshCount];
-        var offset = 0;
         for (var i = 0; i < header.meshCount; i++) {
             this.vertexFormats[i] = new VertexFormat(buffer);
         }

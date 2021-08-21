@@ -22,4 +22,9 @@ public final class Vector2 {
         x = buffer.getFloat();
         y = buffer.getFloat();
     }
+
+    @Override
+    public String toString() {
+        return String.format("(%.4f, %.4f)", x, y);
+    }
 }

@@ -42,4 +42,9 @@ public final class Vector4 {
         z = buffer.getFloat();
         w = buffer.getFloat();
     }
+
+    @Override
+    public String toString() {
+        return String.format("(%.4f, %.4f, %.4f, %.4f)", x, y, z, w);
+    }
 }

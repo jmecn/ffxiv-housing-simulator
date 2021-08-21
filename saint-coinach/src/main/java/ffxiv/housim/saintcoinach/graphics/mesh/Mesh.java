@@ -12,12 +12,19 @@ public class Mesh {
 
     @Getter
     private Model model;
+    @Getter
     private MeshHeader header;
+    @Getter
     private VertexFormat vertexFormat;
+    @Getter
     private int index;
+    @Getter
     private Vertex[] vertices;
+    @Getter
     private short[] indices;
+    @Getter
     private MeshPart[] parts;
+    @Getter
     private MaterialDefinition material;
 
     public Mesh(Model model, int index, byte[] vertexBuffer, byte[] indexBuffer) {

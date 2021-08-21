@@ -14,7 +14,7 @@ public class BoneIndices {// 8 in hsl, provides references to bones for MeshPart
         dataSize = buffer.getInt();
         int len = dataSize / 2;
         bones = new short[len];
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < len && false; i++) {
             bones[i] = buffer.getShort();
         }
     }
