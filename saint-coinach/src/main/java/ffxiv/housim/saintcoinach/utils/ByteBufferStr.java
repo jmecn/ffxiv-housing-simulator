@@ -16,7 +16,7 @@ public class ByteBufferStr {
         int limit = buffer.limit();
 
         if (offset < 0 || offset > limit) {
-            log.warn("Invalid offset:{}", offset);
+            log.debug("Invalid offset:{}", offset);
         } else {
             for (int ptr = offset; ptr >= 0 && ptr < limit; ptr++) {
                 byte val = buffer.get(ptr);

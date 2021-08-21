@@ -6,13 +6,13 @@ public class ImcVariant {
 
     public final static ImcVariant DEFAULT = new ImcVariant((short) 1, (short) 0x03FF, (short) 0);
 
-    public short variant;// TODO: Only lower 8 bits are for v####, upper 8 bits unknown
+    public short materialNum;// TODO: Only lower 8 bits are for v####, upper 8 bits unknown
     public short partVisibilityMask;
     public short effectNum;
 
     // internal use only
     ImcVariant(ByteBuffer buffer) {
-        variant = buffer.getShort();
+        materialNum = buffer.getShort();
         partVisibilityMask = buffer.getShort();
         effectNum = buffer.getShort();
     }
@@ -23,7 +23,7 @@ public class ImcVariant {
     }
 
     public ImcVariant(short variant, short partVisibilityMask, short effectNum) {
-        this.variant = variant;
+        this.materialNum = variant;
         this.partVisibilityMask = partVisibilityMask;
         this.effectNum = effectNum;
     }

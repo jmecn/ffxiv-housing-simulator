@@ -79,7 +79,7 @@ public class TestExCollection {
 
     @Test
     public void testSgb() {
-        PackFile file = collection.tryGetFile("bgcommon/hou/indoor/general/0280/asset/fun_b0_m0280.sgb");
+        PackFile file = collection.tryGetFile("bgcommon/hou/indoor/general/0888/asset/fun_b0_m0888.sgb");
         SgbFile sgbFile = new SgbFile(file);
         log.info("{}", sgbFile);
         sgbFile.getData();

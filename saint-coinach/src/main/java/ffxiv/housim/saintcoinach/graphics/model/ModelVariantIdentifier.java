@@ -4,5 +4,5 @@ import ffxiv.housim.saintcoinach.graphics.imc.ImcVariant;
 
 public class ModelVariantIdentifier {
     public ImcVariant imcVariant;
-    public int stainKey;
+    public Integer stainKey;
 }

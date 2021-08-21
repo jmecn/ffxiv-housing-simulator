@@ -30,6 +30,7 @@ public class PathExpander {
     private Pattern pattern;
     private String replacement;
     private String stainReplacement;
+    @Getter
     private boolean containsVariant;
 
     public PathExpander(String pattern, String replacementFormat, String replacementStainFormat, boolean containsVariant) {
@@ -39,20 +40,18 @@ public class PathExpander {
         this.containsVariant = containsVariant;
     }
 
-    public boolean tryExpand(String input) {
-        String path;
-        String stainedPath;
+    public boolean tryExpand(String input, ExpandResult save) {
         Matcher matcher = pattern.matcher(input);
         if (!matcher.find()) {
-            path = null;
-            stainedPath = null;
             return false;
         }
-        path = matcher.replaceAll(replacement);
+
+        save.pathFormat = matcher.replaceAll(replacement);
+        save.variantsAvailable = containsVariant;
         if (stainReplacement == null || stainReplacement.isBlank()) {
-            stainedPath = null;
+            save.stainedPathFormat = null;
         } else {
-            stainedPath = matcher.replaceAll(stainReplacement);
+            save.stainedPathFormat = matcher.replaceAll(stainReplacement);
         }
         return true;
     }

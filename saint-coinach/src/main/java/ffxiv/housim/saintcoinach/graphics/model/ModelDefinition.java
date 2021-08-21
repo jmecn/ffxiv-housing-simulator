@@ -27,8 +27,29 @@ public class ModelDefinition {
 
     @Getter
     private List<ModelQuality> availableQualities;
-    @Getter
-    private ModelDefinitionHeader header;
+
+    int stringCount;
+    int stringBlockSize;
+    private String[] stringArray;
+
+    public int unknown1;
+    public short meshCount;
+    public short attributeCount;
+    public short partCount;
+    public short materialCount;
+    public short boneCount;
+    public short boneListCount;  // 3 in hsl
+    public short unknownStruct5Count;  // 4 in hsl
+    public short unknownStruct6Count;  // 5 in hsl
+    public short unknownStruct7Count;  // 6 in hsl
+    public short unknown2;
+    public short unknownStruct1Count;  // 0 in hsl
+    public byte unknownStruct2Count;  // 1 in hsl
+    public byte unknown3;
+    public short[] unknown4 = new short[5];
+    public short unknownStruct3Count;  // 7 in hsl
+    public short[] unknown5 = new short[8];
+
     @Getter
     private final ModelFile file;
     @Getter
@@ -91,6 +112,10 @@ public class ModelDefinition {
         return models[v];
     }
 
+    public String getMaterialName(int index) {
+        return materialNames[index];
+    }
+
     private final static int FormatPart = 0;
     private final static int DefinitionPart = 1;
 
@@ -110,16 +135,12 @@ public class ModelDefinition {
             return;
         }
 
-        int stringCount = buffer.getInt();
-        int stringSize = buffer.getInt();
+        readStrings(buffer);
 
-        int offset = StringsOffset + stringSize;// Skipping those, they'll be read further along the road
+        readHeader(buffer);
 
-        buffer.position(offset);
-        header = new ModelDefinitionHeader(buffer);
-
-        unknownStructs1 = new ModelStruct1[header.unknownStruct1Count];
-        for (int i = 0; i < header.unknownStruct1Count; i++) {
+        unknownStructs1 = new ModelStruct1[unknownStruct1Count];
+        for (int i = 0; i < unknownStruct1Count; i++) {
             unknownStructs1[i] = new ModelStruct1(buffer);
         }
 
@@ -130,7 +151,7 @@ public class ModelDefinition {
 
         // Skip 120 bytes after model headers
         if (isOrg) {
-            offset = buffer.position() + 120;
+            int offset = buffer.position() + 120;
             buffer.position(offset);
         }
 
@@ -141,56 +162,60 @@ public class ModelDefinition {
             }
         }
 
-        meshHeaders = new MeshHeader[header.meshCount];
-        for (int i = 0; i < header.meshCount; i++) {
+        meshHeaders = new MeshHeader[meshCount];
+        for (int i = 0; i < meshCount; i++) {
             meshHeaders[i] = new MeshHeader(buffer);
         }
 
-        attributeNames = readStrings(buffer, header.attributeCount);
-        attributes = new ModelAttribute[header.attributeCount];
-        for (var i = 0; i < header.attributeCount; i++) {
+        attributeNames = readStrings(buffer, attributeCount);
+        attributes = new ModelAttribute[attributeCount];
+        for (var i = 0; i < attributeCount; i++) {
             attributes[i] = new ModelAttribute(this, i);
         }
 
-        unknownStructs2 = new ModelStruct2[header.unknownStruct2Count];
-        for (int i = 0; i < header.unknownStruct2Count; i++) {
+        unknownStructs2 = new ModelStruct2[unknownStruct2Count];
+        for (int i = 0; i < unknownStruct2Count; i++) {
             unknownStructs2[i] = new ModelStruct2(buffer);
         }
 
-        meshPartHeaders = new MeshPartHeader[header.partCount];
-        for (int i = 0; i < header.partCount; i++) {
+        meshPartHeaders = new MeshPartHeader[partCount];
+        for (int i = 0; i < partCount; i++) {
             meshPartHeaders[i] = new MeshPartHeader(buffer);
         }
 
-        unknownStructs3 = new ModelStruct3[header.unknownStruct3Count];
-        for (int i = 0; i < header.unknownStruct3Count; i++) {
+        unknownStructs3 = new ModelStruct3[unknownStruct3Count];
+        for (int i = 0; i < unknownStruct3Count; i++) {
             unknownStructs3[i] = new ModelStruct3(buffer);
         }
 
-        materialNames = readStrings(buffer, header.materialCount);
-        materials = new MaterialDefinition[header.materialCount];
-        for (var i = 0; i < header.materialCount; i++) {
+        materialNames = readStrings(buffer, materialCount);
+        // this is a hack
+        for (int i = 0; i < materialCount; i++) {
+            materialNames[i] = stringArray[i];
+        }
+        materials = new MaterialDefinition[materialCount];
+        for (var i = 0; i < materialCount; i++) {
             materials[i] = new MaterialDefinition(this, i);
         }
 
-        boneNames = readStrings(buffer, header.boneCount);
-        boneLists = new BoneList[header.boneListCount];
-        for (int i = 0; i < header.boneListCount; i++) {
+        boneNames = readStrings(buffer, boneCount);
+        boneLists = new BoneList[boneListCount];
+        for (int i = 0; i < boneListCount; i++) {
             boneLists[i] = new BoneList(buffer);
         }
 
-        unknownStructs5 = new ModelStruct5[header.unknownStruct5Count];
-        for (int i = 0; i < header.unknownStruct5Count; i++) {
+        unknownStructs5 = new ModelStruct5[unknownStruct5Count];
+        for (int i = 0; i < unknownStruct5Count; i++) {
             unknownStructs5[i] = new ModelStruct5(buffer);
         }
 
-        unknownStructs6 = new ModelStruct6[header.unknownStruct6Count];
-        for (int i = 0; i < header.unknownStruct6Count; i++) {
+        unknownStructs6 = new ModelStruct6[unknownStruct6Count];
+        for (int i = 0; i < unknownStruct6Count; i++) {
             unknownStructs6[i] = new ModelStruct6(buffer);
         }
 
-        unknownStructs7 = new ModelStruct7[header.unknownStruct7Count];
-        for (int i = 0; i < header.unknownStruct7Count; i++) {
+        unknownStructs7 = new ModelStruct7[unknownStruct7Count];
+        for (int i = 0; i < unknownStruct7Count; i++) {
             unknownStructs7[i] = new ModelStruct7(buffer);
         }
 
@@ -212,17 +237,67 @@ public class ModelDefinition {
             log.error("", e);
         }
 
-        this.bones = new Bone[header.boneCount];
-        for (var i = 0; i < header.boneCount; i++)
+        this.bones = new Bone[boneCount];
+        for (var i = 0; i < boneCount; i++)
             this.bones[i] = new Bone(this, i, buffer);
 
         if (buffer.position() != buffer.limit()) {
-            log.warn("Something's not right here. position:{}, limit:{}", buffer.position(), buffer.limit());
+            log.debug("Something's not right here. position:{}, limit:{}", buffer.position(), buffer.limit());
         }
 
         buildVertexFormats();
     }
 
+    private void readHeader(ByteBuffer buffer) {
+        unknown1 = buffer.getInt();
+        meshCount = buffer.getShort();
+        attributeCount = buffer.getShort();
+        partCount = buffer.getShort();
+        materialCount = buffer.getShort();
+        boneCount = buffer.getShort();
+        boneListCount = buffer.getShort();
+        unknownStruct5Count = buffer.getShort();
+        unknownStruct6Count = buffer.getShort();
+        unknownStruct7Count = buffer.getShort();
+        unknown2 = buffer.getShort();
+        unknownStruct1Count = buffer.getShort();
+        unknownStruct2Count = buffer.get();
+        unknown3 = buffer.get();
+        for (int i = 0; i < 5; i++) {
+            unknown4[i] = buffer.getShort();
+        }
+        unknownStruct3Count = buffer.getShort();
+        for (int i = 0; i < 8; i++) {
+            unknown5[i] = buffer.getShort();
+        }
+    }
+
+    private String[] readStrings(ByteBuffer buffer) {
+        stringCount = buffer.getInt();
+
+        // read data
+        int stringBlockSize = buffer.getInt();
+        byte[] stringBuffer = new byte[stringBlockSize];
+        buffer.get(stringBuffer);
+
+        stringArray = new String[stringCount];
+        int stringCounter = 0;
+        int start=0, end=0;
+        for (int i = 0; i < stringBuffer.length; i++)
+        {
+            if (stringBuffer[i] == 0)
+            {
+                if (stringCounter >= stringCount)
+                    break;
+                stringArray[stringCounter] = new String(stringBuffer, start, end-start);
+                start = end+1;
+                stringCounter++;
+            }
+            end++;
+        }
+        log.debug("strings count:{}, values:{}", stringCount, stringArray);
+        return stringArray;
+    }
     private void buildVertexFormats() {
         ByteBuffer buffer;
         try {
@@ -234,18 +309,29 @@ public class ModelDefinition {
             return;
         }
 
-        this.vertexFormats = new VertexFormat[header.meshCount];
-        for (var i = 0; i < header.meshCount; i++) {
+        this.vertexFormats = new VertexFormat[meshCount];
+        for (var i = 0; i < meshCount; i++) {
             this.vertexFormats[i] = new VertexFormat(buffer);
         }
     }
 
     private static String[] readStrings(ByteBuffer buffer, int count) {
+
+        int[] stringOffsets = new int[count];
         String[] values = new String[count];
+
         for (var i = 0; i < count; i++) {
-            int stringOffset = buffer.getInt();
-            values[i] = ByteBufferStr.getString(buffer, StringsOffset + stringOffset);
+            stringOffsets[i] = buffer.getInt();
         }
+
+        int ptr = buffer.position();
+
+        for (int i = 0; i < count; i++) {
+            values[i] = ByteBufferStr.getString(buffer, StringsOffset + stringOffsets[i]);
+        }
+        log.debug("string offsets:{}, values:{}", stringOffsets, values);
+
+        buffer.position(ptr);
         return values;
     }
 }
