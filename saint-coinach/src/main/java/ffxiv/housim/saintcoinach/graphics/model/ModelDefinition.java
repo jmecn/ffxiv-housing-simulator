@@ -1,6 +1,5 @@
 package ffxiv.housim.saintcoinach.graphics.model;
 
-import ffxiv.housim.saintcoinach.ex.Header;
 import ffxiv.housim.saintcoinach.graphics.material.MaterialDefinition;
 import ffxiv.housim.saintcoinach.graphics.mesh.MeshHeader;
 import ffxiv.housim.saintcoinach.graphics.mesh.MeshPartHeader;

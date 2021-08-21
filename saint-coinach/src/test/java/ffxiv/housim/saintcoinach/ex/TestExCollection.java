@@ -82,5 +82,6 @@ public class TestExCollection {
         PackFile file = collection.tryGetFile("bgcommon/hou/indoor/general/0280/asset/fun_b0_m0280.sgb");
         SgbFile sgbFile = new SgbFile(file);
         log.info("{}", sgbFile);
+        sgbFile.getData();
     }
 }
