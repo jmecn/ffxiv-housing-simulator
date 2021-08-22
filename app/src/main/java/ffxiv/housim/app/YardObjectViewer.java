@@ -21,7 +21,7 @@ import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.ex.Language;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.xiv.IXivSheet;
-import ffxiv.housim.saintcoinach.xiv.entity.housing.HousingFurniture;
+import ffxiv.housim.saintcoinach.xiv.entity.housing.HousingYardObject;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -29,15 +29,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class FurnitureViewer extends SimpleApplication {
+public class YardObjectViewer extends SimpleApplication {
 
     private ARealmReversed ffxiv;
     private PackCollection packs;
-    private List<HousingFurniture> list;
+    private List<HousingYardObject> list;
 
     private int index;
 
-    public FurnitureViewer() {
+    public YardObjectViewer() {
         super();
     }
 
@@ -50,17 +50,17 @@ public class FurnitureViewer extends SimpleApplication {
             System.exit(-1);
         }
         packs = ffxiv.getGameData().getPackCollection();
-        IXivSheet<HousingFurniture> sheet = ffxiv.getGameData().getSheet(HousingFurniture.class);
+        IXivSheet<HousingYardObject> sheet = ffxiv.getGameData().getSheet(HousingYardObject.class);
 
         list = new ArrayList<>(sheet.getCount());
 
-        for (HousingFurniture f : sheet) {
+        for (HousingYardObject f : sheet) {
             if (f.getSgbPath() == null || f.getSgbPath().isBlank()) {
-                log.info("ignore HousingFurniture #{}, {}", f.getModelKey(), f.getItem());
+                log.info("ignore HousingYardObject #{}, {}", f.getModelKey(), f.getItem());
                 continue;
             }
             if (f.getItem() == null || f.getItem().getName().isBlank()) {
-                log.info("ignore HousingFurniture #{}, {}", f.getModelKey(), f.getSgbPath());
+                log.info("ignore HousingYardObject #{}, {}", f.getModelKey(), f.getSgbPath());
                 continue;
             }
             list.add(f);
@@ -69,7 +69,7 @@ public class FurnitureViewer extends SimpleApplication {
         index = 0;
     }
 
-    private Node viewNode = new Node("furnuture");
+    private Node viewNode = new Node("yard_object");
 
     @Override
     public void simpleInitApp() {
@@ -145,7 +145,7 @@ public class FurnitureViewer extends SimpleApplication {
 
     private void reload() {
         enqueue(() -> {
-            HousingFurniture f = list.get(index);
+            HousingYardObject f = list.get(index);
             log.info("load #{}, {}, {}", f.getModelKey(), f.getItem(), f.getSgbPath());
             Node node = ModelFactory.load(f.getSgbPath());
             viewNode.detachAllChildren();
@@ -168,7 +168,7 @@ public class FurnitureViewer extends SimpleApplication {
 
     public static void main(String[] args) {
         AppSettings setting = new AppSettings(true);
-        setting.setTitle("Final Fantasy XIV Housing Furniture Viewer");
+        setting.setTitle("Final Fantasy XIV Housing Yard Object Viewer");
         setting.setResolution(1280, 720);
         setting.setResizable(true);
         setting.setFrameRate(60);
@@ -176,7 +176,7 @@ public class FurnitureViewer extends SimpleApplication {
         // LWJGL-OpenGL2
         setting.setRenderer(AppSettings.LWJGL_OPENGL41);
 
-        FurnitureViewer app = new FurnitureViewer();
+        YardObjectViewer app = new YardObjectViewer();
         app.setSettings(setting);
         app.start();
     }

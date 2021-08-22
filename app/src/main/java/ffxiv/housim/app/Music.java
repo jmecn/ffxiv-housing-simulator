@@ -19,8 +19,8 @@ import java.io.InputStream;
 @Slf4j
 public class Music {
 
-    final static String NAME = "music/ffxiv/bgm_con_bahamut_bigboss0.scd";
-    // final static String NAME = "music/ffxiv/bgm_system_title.scd";
+    // final static String NAME = "music/ffxiv/bgm_con_bahamut_bigboss0.scd";
+    final static String NAME = "music/ffxiv/bgm_system_title.scd";
 
     public static void main(String[] args) {
         String gameDir = System.getenv("FFXIV_HOME");
