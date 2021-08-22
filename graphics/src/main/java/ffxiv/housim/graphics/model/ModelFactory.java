@@ -5,6 +5,7 @@ import com.jme3.material.Material;
 import com.jme3.material.Materials;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
@@ -37,15 +38,16 @@ public class ModelFactory {
         SgbGroup data = (SgbGroup) sgbFile.getData()[0];
 
         int models = 0;
+        int chairs = 0;
         int targets = 0;
         for (ISgbGroupEntry e : data.getEntries()) {
 
             if (e instanceof SgbGroupEntryModel me) {
                 build(root, me, models++);
             } else if (e instanceof SgbGroupEntryChairMarker ce) {
-                build(root, ce);
+                build(root, ce, chairs++);
             } else if (e instanceof SgbGroupEntryTargetMarker te) {
-                build(root, te, targets++);
+                // build(root, te, targets++);
             }
         }
 
@@ -72,10 +74,10 @@ public class ModelFactory {
         root.attachChild(mark);
     }
 
-    private static void build(Node root, SgbGroupEntryChairMarker ce) {
+    private static void build(Node root, SgbGroupEntryChairMarker ce, int chairs) {
         ColorRGBA color = new ColorRGBA(1.0f, 0f, 0f, 1f);
 
-        Geometry mark = new Geometry("ChairMarker:" + ce.getName());
+        Geometry mark = new Geometry("ChairMarker#" + chairs);
         mark.setMesh(new Sphere(8, 4, 0.1f));
         mark.setMaterial(colorMaterial(color));
 
@@ -120,6 +122,7 @@ public class ModelFactory {
             Geometry geom = new Geometry("#" + models);
             geom.setMesh(mesh);
             geom.setMaterial(material);
+            geom.setShadowMode(RenderQueue.ShadowMode.Cast);
             root.attachChild(geom);
         }
     }

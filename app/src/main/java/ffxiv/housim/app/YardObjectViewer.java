@@ -8,15 +8,16 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
+import com.jme3.util.SkyFactory;
 import com.jme3.util.TempVars;
+import ffxiv.housim.graphics.state.CheckerBoardState;
 import ffxiv.housim.graphics.model.ModelFactory;
+import ffxiv.housim.graphics.state.LightState;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.ex.Language;
 import ffxiv.housim.saintcoinach.io.PackCollection;
@@ -154,16 +155,17 @@ public class YardObjectViewer extends SimpleApplication {
     }
 
     private void initScene() {
-        //viewPort.setBackgroundColor(ColorRGBA.DarkGray);
+        stateManager.attach(new CheckerBoardState());
+        stateManager.attach(new LightState());
+
+        Spatial sky = SkyFactory.createSky(assetManager, "sky/env1.hdr", SkyFactory.EnvMapType.EquirectMap);
+        rootNode.attachChild(sky);
+
+        cam.setLocation(new Vector3f(0f, 5f, 10f));
+        cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 
         flyCam.setMoveSpeed(10f);
         flyCam.setDragToRotate(true);
-
-        rootNode.addLight(new AmbientLight(new ColorRGBA(0.3f, 0.3f, 0.3f, 1f)));
-
-        rootNode.addLight(new DirectionalLight(
-                new Vector3f(-3, -4, -5).normalizeLocal(),
-                new ColorRGBA(0.7f, 0.7f, 0.7f, 1f)));
     }
 
     public static void main(String[] args) {
