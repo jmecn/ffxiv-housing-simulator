@@ -13,6 +13,7 @@
         <module>app</module>
         <module>saint-coinach</module>
         <module>graphics</module>
+        <module>hbqj</module>
     </modules>
 
     <packaging>pom</packaging>
