@@ -61,7 +61,7 @@ public class LightState extends BaseAppState {
         pl.setRadius(100);
 
         PointLightShadowRenderer plsr = new PointLightShadowRenderer(assetManager, 1024);
-        plsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+        plsr.setEdgeFilteringMode(EdgeFilteringMode.Dither);
         plsr.setLight(pl);
 
         app.getViewPort().addProcessor(plsr);

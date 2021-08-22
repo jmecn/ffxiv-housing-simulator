@@ -3,6 +3,8 @@ package ffxiv.housim.app;
 import com.jme3.app.SimpleApplication;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
+import com.jme3.environment.EnvironmentCamera;
+import com.jme3.environment.LightProbeFactory;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
@@ -162,7 +164,7 @@ public class FurnitureViewer extends SimpleApplication {
         stateManager.attach(new CheckerBoardState());
         stateManager.attach(new LightState());
 
-        Spatial sky = SkyFactory.createSky(assetManager, "sky/env1.hdr", SkyFactory.EnvMapType.EquirectMap);
+        Spatial sky = SkyFactory.createSky(assetManager, "sky/inside.hdr", SkyFactory.EnvMapType.EquirectMap);
         rootNode.attachChild(sky);
 
         cam.setLocation(new Vector3f(0f, 5f, 10f));
