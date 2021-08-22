@@ -55,3 +55,5 @@ hs_err_pid*
 **/*.http
 **/**/.rebel-remote.xml.bak
 **/**/rebel.xml
+
+Definitions

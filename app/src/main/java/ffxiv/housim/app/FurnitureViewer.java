@@ -1,13 +1,14 @@
 package ffxiv.housim.app;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
-import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.material.Materials;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -16,6 +17,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
+import ffxiv.housim.saintcoinach.ARealmReversed;
+import ffxiv.housim.saintcoinach.ex.Language;
 import ffxiv.housim.saintcoinach.graphics.material.MaterialDefinition;
 import ffxiv.housim.saintcoinach.graphics.model.*;
 import ffxiv.housim.saintcoinach.graphics.sgb.*;
@@ -23,17 +26,114 @@ import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.math.Vector3;
 import ffxiv.housim.saintcoinach.math.Vector4;
+import ffxiv.housim.saintcoinach.xiv.IXivSheet;
+import ffxiv.housim.saintcoinach.xiv.entity.housing.HousingFurniture;
+import lombok.extern.slf4j.Slf4j;
 
-public class SceneGroup extends SimpleApplication {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+@Slf4j
+public class FurnitureViewer extends SimpleApplication {
+
+    private ARealmReversed ffxiv;
+    private PackCollection packs;
+    private List<HousingFurniture> furnitures;
+
+    private int index;
+
+    public FurnitureViewer() {
+        super();
+    }
+
+    private void initFurnitures()  {
+        String gameDir = System.getenv("FFXIV_HOME");
+        try {
+            ffxiv = new ARealmReversed(gameDir, Language.ChineseSimplified);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        packs = ffxiv.getGameData().getPackCollection();
+        IXivSheet<HousingFurniture> sheet = ffxiv.getGameData().getSheet(HousingFurniture.class);
+
+        furnitures = new ArrayList<>(sheet.getCount());
+
+        for (HousingFurniture f : sheet) {
+            if (f.getSgbPath() == null || f.getSgbPath().isBlank()) {
+                log.info("ignore HousingFurniture #{}, {}", f.getModelKey(), f.getItem());
+                continue;
+            }
+            if (f.getItem() == null || f.getItem().getName().isBlank()) {
+                log.info("ignore HousingFurniture #{}, {}", f.getModelKey(), f.getSgbPath());
+                continue;
+            }
+            furnitures.add(f);
+        }
+
+        index = 0;
+    }
+
+    private Node furnutureNode = new Node("furnuture");
 
     @Override
     public void simpleInitApp() {
         initScene();
 
-        String gameDir = System.getenv("FFXIV_HOME");
-        PackCollection packs = new PackCollection(gameDir + "/game/sqpack");
+        initFurnitures();
 
-        PackFile file = packs.tryGetFile("bgcommon/hou/indoor/general/0280/asset/fun_b0_m0280.sgb");
+        initInput();
+
+        rootNode.attachChild(furnutureNode);
+
+        reload();
+    }
+
+    private void initInput() {
+        inputManager.addMapping("F_LEFT", new KeyTrigger(KeyInput.KEY_LEFT));
+        inputManager.addMapping("F_RIGHT", new KeyTrigger(KeyInput.KEY_RIGHT));
+        inputManager.addListener(new ActionListener() {
+            @Override
+            public void onAction(String name, boolean isPressed, float tpf) {
+
+                if (isPressed) {
+                    switch (name) {
+                        case "F_RIGHT": {
+                            index++;
+                            if (index >= furnitures.size()) {
+                                index = 0;
+                            }
+                            reload();
+                            break;
+                        }
+                        case "F_LEFT": {
+                            index--;
+                            if (index < 0) {
+                                index = furnitures.size() - 1;
+                            }
+                            reload();
+                            break;
+                        }
+                    }
+                }
+            }
+        }, "F_LEFT", "F_RIGHT");
+    }
+
+    private void reload() {
+        enqueue(() -> {
+            HousingFurniture f = furnitures.get(index);
+            log.info("load #{}, {}, {}", f.getModelKey(), f.getItem(), f.getSgbPath());
+            Node node = load(f.getSgbPath());
+            furnutureNode.detachAllChildren();
+            furnutureNode.attachChild(node);
+        });
+    }
+
+    private Node load(String sgbPath) {
+
+        PackFile file = packs.tryGetFile(sgbPath);
         SgbFile sgbFile = new SgbFile(file);
 
         Node root = new Node(sgbFile.getFile().getPath());
@@ -48,6 +148,8 @@ public class SceneGroup extends SimpleApplication {
                 build(root, te);
             }
         }
+
+        return root;
     }
 
     private void build(Node root, SgbGroupEntryTargetMarker tc) {
@@ -162,7 +264,6 @@ public class SceneGroup extends SimpleApplication {
                         color[i * 4 + 1] = v.y;
                         color[i * 4 + 2] = v.z;
                         color[i * 4 + 3] = v.w;
-                        System.out.printf("Colors:%f, %f, %f, %f\n", v.x, v.y, v.z, v.w);
                     }
                     mesh.setBuffer(VertexBuffer.Type.Color, 4, color);
                     break;
@@ -262,7 +363,7 @@ public class SceneGroup extends SimpleApplication {
 
     public static void main(String[] args) {
         AppSettings setting = new AppSettings(true);
-        setting.setTitle("Final Fantasy XIV Housing Simulator v0.0.1-SNAPSHOT");
+        setting.setTitle("Final Fantasy XIV Housing Furniture Viewer");
         setting.setResolution(1280, 720);
         setting.setResizable(true);
         setting.setFrameRate(60);
@@ -270,7 +371,7 @@ public class SceneGroup extends SimpleApplication {
         // LWJGL-OpenGL2
         setting.setRenderer(AppSettings.LWJGL_OPENGL41);
 
-        SceneGroup app = new SceneGroup();
+        FurnitureViewer app = new FurnitureViewer();
         app.setSettings(setting);
         app.start();
     }

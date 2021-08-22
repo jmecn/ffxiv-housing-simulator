@@ -161,7 +161,7 @@ public class ARealmReversed {
 
         File versionFile = Paths.get("Definitions", "game.ver").toFile();
         if (!versionFile.exists()) {
-            log.error("Definitions/game.ver not exist.");
+            log.error("Definitions/game.ver not exist. {}", versionFile.getAbsolutePath());
             throw new FileNotFoundException("Definitions/game.ver must exist.");
         }
 

@@ -9,4 +9,8 @@ public class Item extends ItemBase {
     public Item(IXivSheet sheet, IRelationalRow sourceRow) {
         super(sheet, sourceRow);
     }
+
+    public String getName() {
+        return asString("Name");
+    }
 }
