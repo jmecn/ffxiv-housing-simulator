@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Arrays;
 
 @Slf4j
 public class Material {
@@ -80,17 +79,8 @@ public class Material {
         // read header
         readHeader(buffer);
 
-        // read strings
-        int offset = buffer.position();
-        int stringsStart = offset + 4 * (texCount + mapCount + colorSetCount);
-
-        this.texNames = readStrings(buffer, stringsStart, texCount);
-        this.maps = readStrings(buffer, stringsStart, mapCount);
-        this.colorSets = readStrings(buffer, stringsStart, colorSetCount);
-        this.shader = ByteBufferStr.getString(buffer, stringsStart + shaderOffset);
-
-        offset = stringsStart + stringsSize;
-        buffer.position(offset);
+        // read names of texture, map, color set and shader
+        readNames(buffer);
 
         // read ColorSet data
         this.unknown = new byte[unknownSize];
@@ -116,6 +106,48 @@ public class Material {
         mapCount = buffer.get();
         colorSetCount = buffer.get();
         unknownSize = buffer.get();
+    }
+
+    private void readNames(ByteBuffer buffer) {
+        int[] texOffset = new int[texCount];
+        for (var i = 0; i < texCount; i++) {
+            texOffset[i] = buffer.getShort();
+            buffer.getShort();// 0 or 1, what to do with this?
+        }
+
+        int[] mapOffset = new int[mapCount];
+        for (var i = 0; i < mapCount; i++) {
+            mapOffset[i] = buffer.getShort();
+            buffer.getShort();// 0 or 1, what to do with this?
+        }
+
+        int[] colorSetOffset = new int[colorSetCount];
+        for (var i = 0; i < colorSetCount; i++) {
+            colorSetOffset[i] = buffer.getShort();
+            buffer.getShort();// 0 or 1, what to do with this?
+        }
+
+        // read string data
+        byte[] stringsData = new byte[stringsSize];
+        buffer.get(stringsData);
+        ByteBuffer stringBuffer = ByteBuffer.wrap(stringsData);
+
+        this.texNames = new String[texCount];
+        for (int i = 0; i < texCount; i++) {
+            texNames[i] = ByteBufferStr.getString(stringBuffer, texOffset[i]);
+        }
+
+        this.maps = new String[mapCount];
+        for (int i = 0; i < mapCount; i++) {
+            maps[i] = ByteBufferStr.getString(stringBuffer, mapOffset[i]);
+        }
+
+        this.colorSets = new String[colorSetCount];
+        for (int i = 0; i < colorSetCount; i++) {
+            colorSets[i] = ByteBufferStr.getString(stringBuffer, colorSetOffset[i]);
+        }
+
+        this.shader = ByteBufferStr.getString(stringBuffer, shaderOffset);
     }
 
     private void readMetadata(ByteBuffer buffer) {
@@ -148,24 +180,6 @@ public class Material {
         // data
         this.data = new byte[dataSize];
         buffer.get(data);
-    }
-
-    private String[] readStrings(ByteBuffer buffer, int stringOffset, int count) {
-
-        int[] stringOffsets = new int[count];
-        String[] values = new String[count];
-
-        for (var i = 0; i < count; i++) {
-            stringOffsets[i] = buffer.getShort();
-            int v = buffer.getShort();
-            log.info("string offset:{}, padding:{}", stringOffsets[i], v);
-        }
-
-        for (int i = 0; i < count; i++) {
-            values[i] = ByteBufferStr.getString(buffer, stringOffset + stringOffsets[i]);
-        }
-
-        return values;
     }
 
     private void loadTextures() {

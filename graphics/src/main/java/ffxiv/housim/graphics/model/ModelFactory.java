@@ -11,9 +11,12 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.shape.Sphere;
+import com.jme3.texture.Texture;
+import ffxiv.housim.graphics.texture.TextureFactory;
 import ffxiv.housim.saintcoinach.graphics.material.MaterialDefinition;
 import ffxiv.housim.saintcoinach.graphics.model.*;
 import ffxiv.housim.saintcoinach.graphics.sgb.*;
+import ffxiv.housim.saintcoinach.imaging.ImageFile;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.math.Vector3;
@@ -236,10 +239,21 @@ public class ModelFactory {
     }
 
     private static Material build(MaterialDefinition matDef) {
+        ffxiv.housim.saintcoinach.graphics.material.Material m = matDef.get();
+
+        ImageFile file = m.getTextureFiles()[0];
+        Texture diffuse = null;
+        if (file != null) {
+            diffuse = TextureFactory.get(file);
+        }
+
         Material mat = new Material(assetManager, Materials.LIGHTING);
         mat.setColor("Diffuse", ColorRGBA.White);
         mat.setColor("Ambient", ColorRGBA.White);
         mat.setBoolean("UseMaterialColors", true);
+        if (diffuse != null) {
+            mat.setTexture("DiffuseMap", diffuse);
+        }
         return mat;
     }
 

@@ -219,12 +219,12 @@ public class ModelDefinition {
             unknownStructs7[i] = new ModelStruct7(buffer);
         }
 
-        this.boneIndices = new BoneIndices(buffer);
+        this.boneIndices = new BoneIndices(buffer);// TODO need more work
         if (boneIndices.dataSize > 0) {
             for (MeshHeader h : meshHeaders) {
-                log.info("vertexCount:{}", h.vertexCount);
+                log.debug("vertexCount:{}", h.vertexCount);
             }
-            log.info("boneIndicesCount:{}", boneIndices.bones.length);
+            log.debug("boneIndicesCount:{}", boneIndices.bones.length);
         }
 
         // Just padding, first byte specifying how many 0-bytes follow.
