@@ -7,6 +7,8 @@ import ffxiv.housim.saintcoinach.graphics.material.MaterialDefinition;
 import ffxiv.housim.saintcoinach.graphics.mesh.Mesh;
 import ffxiv.housim.saintcoinach.graphics.model.*;
 import ffxiv.housim.saintcoinach.graphics.sgb.*;
+import ffxiv.housim.saintcoinach.graphics.shpk.ShPkFile;
+import ffxiv.housim.saintcoinach.graphics.shpk.Shader;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.math.Vector3;
@@ -122,6 +124,13 @@ public class TestExCollection {
 
     private static Material build(MaterialDefinition matDef) {
         Material mat = matDef.get();
+
+        ShPkFile shpk = mat.getShPk();
+
+        Shader vs = shpk.getVertexShader(shpk.getVertexShaderCount() - 1);
+        log.info("vs, params:{}, dxbc:{} bytes", vs.getParameters(), shpk.getDXBC(vs).length);
+        Shader ps = shpk.getPixelShader(shpk.getPixelShaderCount() - 1);
+        log.info("ps, params:{}, dxbc:{} bytes", ps.getParameters(), shpk.getDXBC(ps).length);
 
         return mat;
     }
