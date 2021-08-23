@@ -101,7 +101,7 @@ public class ModelFactory {
         Vector3 trans = transformedModel.getTranslation();
         Vector3 rotate = transformedModel.getRotation();
         Vector3 scale = transformedModel.getScale();
-        log.info("trans:{}, rotate:{}, scale:{}", trans, rotate, scale);
+        log.debug("trans:{}, rotate:{}, scale:{}", trans, rotate, scale);
 
         root.setLocalTranslation(trans.x, trans.y, trans.z);
         root.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));

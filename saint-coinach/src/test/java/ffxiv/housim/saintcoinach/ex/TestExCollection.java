@@ -2,9 +2,15 @@ package ffxiv.housim.saintcoinach.ex;
 
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.ex.relational.RelationalExCollection;
-import ffxiv.housim.saintcoinach.graphics.sgb.SgbFile;
+import ffxiv.housim.saintcoinach.graphics.material.Material;
+import ffxiv.housim.saintcoinach.graphics.material.MaterialDefinition;
+import ffxiv.housim.saintcoinach.graphics.mesh.Mesh;
+import ffxiv.housim.saintcoinach.graphics.model.*;
+import ffxiv.housim.saintcoinach.graphics.sgb.*;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
+import ffxiv.housim.saintcoinach.math.Vector3;
+import ffxiv.housim.saintcoinach.math.Vector4;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -81,7 +87,42 @@ public class TestExCollection {
     public void testSgb() {
         PackFile file = collection.tryGetFile("bgcommon/hou/indoor/general/0888/asset/fun_b0_m0888.sgb");
         SgbFile sgbFile = new SgbFile(file);
-        log.info("{}", sgbFile);
-        sgbFile.getData();
+        SgbGroup group = (SgbGroup) sgbFile.getData()[0];
+        log.info("{}", group);
+
+        int models = 0;
+        for (ISgbGroupEntry e : group.getEntries()) {
+
+            if (e instanceof SgbGroupEntryModel me) {
+                build(me, models++);
+            }
+        }
+
+    }
+    private static void build(SgbGroupEntryModel me, int models) {
+
+        TransformedModel transformedModel = me.getModel();
+
+        // transform
+        Vector3 trans = transformedModel.getTranslation();
+        Vector3 rotate = transformedModel.getRotation();
+        Vector3 scale = transformedModel.getScale();
+        log.info("trans:{}, rotate:{}, scale:{}", trans, rotate, scale);
+
+        // model
+        ModelDefinition modelDefinition = transformedModel.getModel();
+
+        Model model = modelDefinition.getModel(ModelQuality.High);
+
+        for (ffxiv.housim.saintcoinach.graphics.mesh.Mesh m : model.getMeshes()) {
+            // material
+            build(m.getMaterial());
+        }
+    }
+
+    private static Material build(MaterialDefinition matDef) {
+        Material mat = matDef.get();
+
+        return mat;
     }
 }
