@@ -1,6 +1,7 @@
 package ffxiv.housim.saintcoinach.graphics.material;
 
 import ffxiv.housim.saintcoinach.graphics.imc.ImcVariant;
+import ffxiv.housim.saintcoinach.graphics.shpk.ShPkFile;
 import ffxiv.housim.saintcoinach.imaging.ImageFile;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
@@ -60,6 +61,8 @@ public class Material {
     private ImcVariant variant;
     @Getter
     private ImageFile[] textureFiles;// related texture files
+    @Getter
+    private ShPkFile shpk;
 
     public Material(MaterialDefinition definition, PackFile file, ImcVariant variant) {
         this.definition = definition;
@@ -94,6 +97,9 @@ public class Material {
 
         // load ImageFiles
         loadTextures();
+
+        // load shader
+        loadShader();
     }
 
     private void readHeader(ByteBuffer buffer) {
@@ -193,6 +199,17 @@ public class Material {
             }
 
             textureFiles[i] = (ImageFile) packs.tryGetFile(fileName);
+        }
+    }
+
+    private void loadShader() {
+        PackCollection packs = file.getPack().getCollection();
+        String shaderPack = "shader/shpk/" + shader;
+
+        PackFile file = packs.tryGetFile(shaderPack);
+        if (file != null) {
+            log.info("load shpk:{}", shaderPack);
+            ShPkFile shpk = new ShPkFile(file);
         }
     }
 }

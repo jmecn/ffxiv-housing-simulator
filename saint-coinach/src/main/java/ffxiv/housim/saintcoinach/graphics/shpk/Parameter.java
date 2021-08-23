@@ -6,26 +6,40 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 public class Parameter {
-
-    @Getter
-    private ParameterHeader header;
     @Getter
     private ParameterType type;
+
     @Getter
     private int id;
+
+    @Getter
+    private short registerIndex;
+    @Getter
+    private short registerCount;
+
     @Getter
     private String name;
 
-    public Parameter(ShPkFile file, ParameterHeader header, ByteBuffer buffer) {
-        this.header = header;
-        this.type = header.getType();
-        this.id = header.getId();
+    Parameter(ParameterType type, ByteBuffer buffer, int parameterListOffset) {
+        this.type = type;
 
-        int offset = file.getHeader().getParameterListOffset() + header.getNameOffset();
-        int length = header.getNameLength();
+        this.id = buffer.getInt();
+        int nameOffset = buffer.getInt();
+        int nameLength = buffer.getInt();
+
+        this.registerIndex = buffer.getShort();
+        this.registerCount = buffer.getShort();
+
+        int offset = parameterListOffset + nameOffset;
+        int length = nameLength;
 
         byte[] bytes = new byte[length];
         buffer.get(offset, bytes);
         this.name = new String(bytes, StandardCharsets.US_ASCII);
+    }
+
+    @Override
+    public String toString() {
+        return type + ": " + name;
     }
 }
