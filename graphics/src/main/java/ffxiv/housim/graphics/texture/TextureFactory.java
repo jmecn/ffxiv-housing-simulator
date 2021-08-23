@@ -80,11 +80,9 @@ public class TextureFactory {
             mipmapSizes[0] = data.length;
         }
 
-        log.info("mipmapSizes:{}", mipmapSizes);
+        log.debug("mipmapSizes:{}", mipmapSizes);
 
         ByteBuffer buffer = BufferUtils.createByteBuffer(data);
-        log.info("order:{}", buffer.order());
-
         return new Image(format, header.getWidth(), header.getHeight(), buffer, mipmapSizes, ColorSpace.sRGB);
     }
 }

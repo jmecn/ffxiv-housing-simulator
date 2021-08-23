@@ -5,19 +5,13 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.light.AmbientLight;
-import com.jme3.light.PointLight;
-import com.jme3.material.Material;
+import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.ViewPort;
-import com.jme3.renderer.queue.RenderQueue.ShadowMode;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Sphere;
+import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.shadow.EdgeFilteringMode;
-import com.jme3.shadow.PointLightShadowRenderer;
-
-import java.awt.*;
 
 /**
  * 灯光模块
@@ -29,15 +23,12 @@ public class LightState extends BaseAppState {
 
     private Node rootNode;
 
-    // 光源点
-    private Node node = new Node("LightSources");
-
     private ViewPort viewPort;
     private AssetManager assetManager;
 
     // 光源
     private AmbientLight al;
-    private PointLight pl;
+    private DirectionalLight dl;
 
     @Override
     protected void initialize(Application app) {
@@ -56,33 +47,17 @@ public class LightState extends BaseAppState {
         al = new AmbientLight(new ColorRGBA(0.5f, 0.5f, 0.5f, 1.0f));
 
         // 点光源
-        Vector3f position = new Vector3f(4, 10, 5);
-        pl = new PointLight(position, new ColorRGBA(0.5f, 0.5f, 0.5f, 0.7f));
-        pl.setRadius(100);
+        Vector3f position = new Vector3f(-4, -10, -5).normalizeLocal();
+        dl = new DirectionalLight(position, new ColorRGBA(0.7f, 0.7f, 0.7f, 0.7f));
 
-        PointLightShadowRenderer plsr = new PointLightShadowRenderer(assetManager, 1024);
-        plsr.setEdgeFilteringMode(EdgeFilteringMode.Dither);
-        plsr.setLight(pl);
+        DirectionalLightShadowRenderer dlsr = new DirectionalLightShadowRenderer(assetManager, 1024, 4);
+        dlsr.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+        dlsr.setShadowIntensity(0.3f);
+        dlsr.setLight(dl);
+        dlsr.setRenderBackFacesShadows(false);
 
-        app.getViewPort().addProcessor(plsr);
+        app.getViewPort().addProcessor(dlsr);
 
-        lightSource(position, pl.getColor());
-    }
-
-    /**
-     * 创建一个小球，表示光源的位置。
-     */
-    private void lightSource(Vector3f position, ColorRGBA color) {
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", color);
-        mat.setColor("GlowColor", color);
-
-        Geometry geom = new Geometry("LightSource", new Sphere(6, 12, 0.2f));
-        geom.setMaterial(mat);
-        geom.setLocalTranslation(position);
-        geom.setShadowMode(ShadowMode.Off);
-
-        node.attachChild(geom);
     }
 
     @Override
@@ -92,20 +67,14 @@ public class LightState extends BaseAppState {
     protected void onEnable() {
         // 添加光源
         rootNode.addLight(al);
-        rootNode.addLight(pl);
-
-        // 添加光源节点
-        rootNode.attachChild(node);
+        rootNode.addLight(dl);
     }
 
     @Override
     protected void onDisable() {
-        // 移除光源节点
-        node.removeFromParent();
-        
         // 移除光源
         rootNode.removeLight(al);
-        rootNode.removeLight(pl);
+        rootNode.removeLight(dl);
     }
 
 }

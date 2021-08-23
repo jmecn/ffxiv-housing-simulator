@@ -56,6 +56,6 @@ public class ImageHeader {
             mipmapOffsets[i] = buffer.getInt() - LENGTH;
         }
 
-        log.info("format:{}, width:{}, height:{}, depth:{}, numMipmaps:{}, mipmapOffsets:{}", format, width, height, depth, numMipmaps, mipmapOffsets);
+        log.debug("format:{}, width:{}, height:{}, depth:{}, numMipmaps:{}, mipmapOffsets:{}", format, width, height, depth, numMipmaps, mipmapOffsets);
     }
 }

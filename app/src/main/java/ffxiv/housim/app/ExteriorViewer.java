@@ -16,14 +16,15 @@ import com.jme3.system.AppSettings;
 import com.jme3.util.SkyFactory;
 import com.jme3.util.TempVars;
 import ffxiv.housim.graphics.model.MaterialFactory;
-import ffxiv.housim.graphics.state.CheckerBoardState;
 import ffxiv.housim.graphics.model.ModelFactory;
+import ffxiv.housim.graphics.state.CheckerBoardState;
 import ffxiv.housim.graphics.state.LightState;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
-import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
-import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingFurniture;
+import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingExterior;
+import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingYardObject;
+import ffxiv.housim.saintcoinach.io.PackCollection;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -31,15 +32,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class FurnitureViewer extends SimpleApplication {
+public class ExteriorViewer extends SimpleApplication {
 
     private ARealmReversed ffxiv;
     private PackCollection packs;
-    private List<HousingFurniture> list;
+    private List<HousingExterior> list;
 
     private int index;
 
-    public FurnitureViewer() {
+    public ExteriorViewer() {
         super();
     }
 
@@ -52,17 +53,13 @@ public class FurnitureViewer extends SimpleApplication {
             System.exit(-1);
         }
         packs = ffxiv.getGameData().getPackCollection();
-        IXivSheet<HousingFurniture> sheet = ffxiv.getGameData().getSheet(HousingFurniture.class);
+        IXivSheet<HousingExterior> sheet = ffxiv.getGameData().getSheet(HousingExterior.class);
 
         list = new ArrayList<>(sheet.getCount());
 
-        for (HousingFurniture f : sheet) {
-            if (f.getSgbPath() == null || f.getSgbPath().isBlank()) {
-                log.info("ignore HousingFurniture #{}, {}", f.getModelKey(), f.getItem());
-                continue;
-            }
-            if (f.getItem() == null || f.getItem().getName().isBlank()) {
-                log.info("ignore HousingFurniture #{}, {}", f.getModelKey(), f.getSgbPath());
+        for (HousingExterior f : sheet) {
+            if (f.getModel() == null || f.getModel().isBlank()) {
+                log.info("ignore HousingExterior #{}, {}", f.getExteriorKey(), f.getModel());
                 continue;
             }
             list.add(f);
@@ -71,11 +68,10 @@ public class FurnitureViewer extends SimpleApplication {
         index = 0;
     }
 
-    private Node viewNode = new Node("furnuture");
+    private Node viewNode = new Node("Housing Exterior");
 
     @Override
     public void simpleInitApp() {
-        stateManager.attach(new CheckerBoardState());
         initScene();
 
         initFurnitures();
@@ -150,9 +146,9 @@ public class FurnitureViewer extends SimpleApplication {
 
     private void reload() {
         enqueue(() -> {
-            HousingFurniture f = list.get(index);
-            log.info("load #{}, {}, {}", f.getModelKey(), f.getItem(), f.getSgbPath());
-            Node node = ModelFactory.load(f.getSgbPath());
+            HousingExterior f = list.get(index);
+            log.info("load #{}, {}, {}", f.getExteriorType(), f.getExteriorKey(), f.getModel());
+            Node node = ModelFactory.load(f.getModel());
             viewNode.detachAllChildren();
             viewNode.attachChild(node);
         });
@@ -162,7 +158,7 @@ public class FurnitureViewer extends SimpleApplication {
         stateManager.attach(new CheckerBoardState());
         stateManager.attach(new LightState());
 
-        Spatial sky = SkyFactory.createSky(assetManager, "sky/inside.hdr", SkyFactory.EnvMapType.EquirectMap);
+        Spatial sky = SkyFactory.createSky(assetManager, "sky/env1.hdr", SkyFactory.EnvMapType.EquirectMap);
         rootNode.attachChild(sky);
 
         cam.setLocation(new Vector3f(0f, 5f, 10f));
@@ -174,7 +170,7 @@ public class FurnitureViewer extends SimpleApplication {
 
     public static void main(String[] args) {
         AppSettings setting = new AppSettings(true);
-        setting.setTitle("Final Fantasy XIV Housing Furniture Viewer");
+        setting.setTitle("Final Fantasy XIV Housing Exterior Viewer");
         setting.setResolution(1280, 720);
         setting.setResizable(true);
         setting.setFrameRate(60);
@@ -182,7 +178,7 @@ public class FurnitureViewer extends SimpleApplication {
         // LWJGL-OpenGL2
         setting.setRenderer(AppSettings.LWJGL_OPENGL41);
 
-        FurnitureViewer app = new FurnitureViewer();
+        ExteriorViewer app = new ExteriorViewer();
         app.setSettings(setting);
         app.start();
     }

@@ -15,6 +15,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import com.jme3.util.SkyFactory;
 import com.jme3.util.TempVars;
+import ffxiv.housim.graphics.model.MaterialFactory;
 import ffxiv.housim.graphics.state.CheckerBoardState;
 import ffxiv.housim.graphics.model.ModelFactory;
 import ffxiv.housim.graphics.state.LightState;
@@ -82,6 +83,8 @@ public class YardObjectViewer extends SimpleApplication {
 
         ModelFactory.setPacks(packs);
         ModelFactory.setAssetManager(assetManager);
+        MaterialFactory.setPacks(packs);
+        MaterialFactory.setAssetManager(assetManager);
 
         rootNode.attachChild(viewNode);
 
@@ -163,6 +166,7 @@ public class YardObjectViewer extends SimpleApplication {
 
         cam.setLocation(new Vector3f(0f, 5f, 10f));
         cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+        cam.setFov(60);
 
         flyCam.setMoveSpeed(10f);
         flyCam.setDragToRotate(true);

@@ -63,7 +63,7 @@ public class ModelFactory {
 
         Geometry mark = new Geometry("TargetMarker#" + targets);
         mark.setMesh(new Sphere(8, 4, 0.1f));
-        mark.setMaterial(colorMaterial(color));
+        mark.setMaterial(MaterialFactory.colorMaterial(color));
 
         // transform
         Vector3 trans = tc.getTranslation();
@@ -82,7 +82,7 @@ public class ModelFactory {
 
         Geometry mark = new Geometry("ChairMarker#" + chairs);
         mark.setMesh(new Sphere(8, 4, 0.1f));
-        mark.setMaterial(colorMaterial(color));
+        mark.setMaterial(MaterialFactory.colorMaterial(color));
 
         // transform
         Vector3 trans = ce.getTranslation();
@@ -120,12 +120,12 @@ public class ModelFactory {
             Mesh mesh = build(m);
 
             // material
-            Material material = build(m.getMaterial());
+            Material material = MaterialFactory.build(m.getMaterial());
 
             Geometry geom = new Geometry("#" + models);
             geom.setMesh(mesh);
             geom.setMaterial(material);
-            geom.setShadowMode(RenderQueue.ShadowMode.Cast);
+            geom.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
             root.attachChild(geom);
         }
     }
@@ -236,31 +236,5 @@ public class ModelFactory {
         mesh.updateCounts();
 
         return mesh;
-    }
-
-    private static Material build(MaterialDefinition matDef) {
-        ffxiv.housim.saintcoinach.material.Material m = matDef.get();
-
-        ImageFile file = m.getTextureFiles()[0];
-        Texture diffuse = null;
-        if (file != null) {
-            diffuse = TextureFactory.get(file);
-        }
-
-        Material mat = new Material(assetManager, Materials.LIGHTING);
-        mat.setColor("Diffuse", ColorRGBA.White);
-        mat.setColor("Ambient", ColorRGBA.White);
-        mat.setBoolean("UseMaterialColors", true);
-        if (diffuse != null) {
-            mat.setTexture("DiffuseMap", diffuse);
-        }
-        return mat;
-    }
-
-    private static Material colorMaterial(ColorRGBA color) {
-        Material mat = new Material(assetManager, Materials.UNSHADED);
-        mat.setColor("Color", color);
-        mat.getAdditionalRenderState().setWireframe(true);
-        return mat;
     }
 }
