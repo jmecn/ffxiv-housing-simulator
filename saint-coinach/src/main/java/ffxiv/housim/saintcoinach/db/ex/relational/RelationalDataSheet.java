@@ -4,7 +4,6 @@ import ffxiv.housim.saintcoinach.db.ex.DataSheet;
 import ffxiv.housim.saintcoinach.db.ex.ISheet;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.db.ex.Page;
-import ffxiv.housim.saintcoinach.ex.*;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;
 

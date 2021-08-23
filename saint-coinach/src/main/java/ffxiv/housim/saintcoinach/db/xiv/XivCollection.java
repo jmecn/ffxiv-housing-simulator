@@ -7,7 +7,6 @@ import ffxiv.housim.saintcoinach.db.ex.ISheet;
 import ffxiv.housim.saintcoinach.db.ex.relational.*;
 import ffxiv.housim.saintcoinach.db.xiv.sheets.InventoryItemSheet;
 import ffxiv.housim.saintcoinach.db.xiv.sheets.ItemActionSheet;
-import ffxiv.housim.saintcoinach.ex.*;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,7 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class XivCollection extends RelationalExCollection {
-    private final static String PACKAGE_NAME = "ffxiv.housim.saintcoinach.xiv.entity";
 
     private Map<String, Class<IXivRow>> sheetNameToTypeMap;
 
@@ -99,7 +97,8 @@ public class XivCollection extends RelationalExCollection {
             return;
         }
 
-        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(PACKAGE_NAME)) {
+        String packageName = getClass().getPackageName() + ".entity";
+        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(packageName)) {
             Class<?> clazz = classInfo.load();
 
             if (!IXivRow.class.isAssignableFrom(clazz)) {

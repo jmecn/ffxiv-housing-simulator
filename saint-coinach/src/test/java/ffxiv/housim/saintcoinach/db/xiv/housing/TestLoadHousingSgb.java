@@ -11,7 +11,6 @@ import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingYardObject;
 import ffxiv.housim.saintcoinach.scene.sgb.SgbFile;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.db.xiv.entity.Item;
-import ffxiv.housim.saintcoinach.xiv.entity.housing.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;

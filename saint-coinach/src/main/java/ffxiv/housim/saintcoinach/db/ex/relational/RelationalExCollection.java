@@ -6,7 +6,6 @@ import ffxiv.housim.saintcoinach.db.ex.IDataRow;
 import ffxiv.housim.saintcoinach.db.ex.ISheet;
 import ffxiv.housim.saintcoinach.db.ex.relational.definition.RelationDefinition;
 import ffxiv.housim.saintcoinach.db.ex.relational.definition.SheetDefinition;
-import ffxiv.housim.saintcoinach.ex.*;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;

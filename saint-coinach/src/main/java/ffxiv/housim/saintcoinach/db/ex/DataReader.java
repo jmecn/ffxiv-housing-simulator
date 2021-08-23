@@ -1,7 +1,6 @@
 package ffxiv.housim.saintcoinach.db.ex;
 
 import ffxiv.housim.saintcoinach.db.ex.datareaders.*;
-import ffxiv.housim.saintcoinach.ex.datareaders.*;
 
 import java.lang.reflect.Type;
 import java.nio.ByteBuffer;

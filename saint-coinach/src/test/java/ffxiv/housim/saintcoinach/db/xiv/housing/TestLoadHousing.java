@@ -9,7 +9,6 @@ import ffxiv.housim.saintcoinach.db.xiv.entity.housing.*;
 import ffxiv.housim.saintcoinach.db.xiv.IXivRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivSubRow;
-import ffxiv.housim.saintcoinach.xiv.entity.housing.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;

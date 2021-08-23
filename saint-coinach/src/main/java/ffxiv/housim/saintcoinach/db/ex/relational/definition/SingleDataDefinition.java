@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import ffxiv.housim.saintcoinach.db.ex.IDataRow;
 import ffxiv.housim.saintcoinach.db.ex.relational.IValueConverter;
 import ffxiv.housim.saintcoinach.db.ex.relational.valueconverters.*;
-import ffxiv.housim.saintcoinach.ex.relational.valueconverters.*;
 
 import java.lang.reflect.Type;
 
