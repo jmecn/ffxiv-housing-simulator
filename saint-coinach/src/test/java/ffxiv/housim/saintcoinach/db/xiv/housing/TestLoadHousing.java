@@ -102,6 +102,11 @@ public class TestLoadHousing {
         foreach(HousingPreset.class);
     }
 
+    @Test
+    public void testMap() {
+        foreach(XivMap.class);
+    }
+
 
     public <T extends IXivRow> void foreach(Class<T> clazz) {
         IXivSheet<T> sheet = aRealmReversed.getGameData().getSheet(clazz);
