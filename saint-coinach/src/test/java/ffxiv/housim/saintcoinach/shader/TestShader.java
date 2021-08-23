@@ -1,6 +1,6 @@
 package ffxiv.housim.saintcoinach.shader;
 
-import ffxiv.housim.saintcoinach.graphics.shpk.ShPkFile;
+import ffxiv.housim.saintcoinach.material.shpk.ShPkFile;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import org.junit.Before;

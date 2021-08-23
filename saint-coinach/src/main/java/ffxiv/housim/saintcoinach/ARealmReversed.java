@@ -1,27 +1,22 @@
 package ffxiv.housim.saintcoinach;
 
 import com.google.common.io.Files;
-import com.google.common.io.Resources;
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import ffxiv.housim.saintcoinach.ex.Language;
-import ffxiv.housim.saintcoinach.ex.relational.definition.RelationDefinition;
-import ffxiv.housim.saintcoinach.ex.relational.definition.SheetDefinition;
+import ffxiv.housim.saintcoinach.db.ex.Language;
+import ffxiv.housim.saintcoinach.db.ex.relational.definition.RelationDefinition;
+import ffxiv.housim.saintcoinach.db.ex.relational.definition.SheetDefinition;
 import ffxiv.housim.saintcoinach.io.PackCollection;
-import ffxiv.housim.saintcoinach.xiv.XivCollection;
+import ffxiv.housim.saintcoinach.db.xiv.XivCollection;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Slf4j

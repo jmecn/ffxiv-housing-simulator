@@ -1,7 +1,7 @@
 package ffxiv.housim.saintcoinach.io;
 
-import ffxiv.housim.saintcoinach.graphics.model.ModelFile;
-import ffxiv.housim.saintcoinach.imaging.ImageFile;
+import ffxiv.housim.saintcoinach.scene.model.ModelFile;
+import ffxiv.housim.saintcoinach.texture.ImageFile;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;

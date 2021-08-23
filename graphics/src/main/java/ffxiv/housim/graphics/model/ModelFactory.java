@@ -13,10 +13,10 @@ import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.Texture;
 import ffxiv.housim.graphics.texture.TextureFactory;
-import ffxiv.housim.saintcoinach.graphics.material.MaterialDefinition;
-import ffxiv.housim.saintcoinach.graphics.model.*;
-import ffxiv.housim.saintcoinach.graphics.sgb.*;
-import ffxiv.housim.saintcoinach.imaging.ImageFile;
+import ffxiv.housim.saintcoinach.material.MaterialDefinition;
+import ffxiv.housim.saintcoinach.scene.model.*;
+import ffxiv.housim.saintcoinach.scene.sgb.*;
+import ffxiv.housim.saintcoinach.texture.ImageFile;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.math.Vector3;
@@ -115,7 +115,7 @@ public class ModelFactory {
 
         Model model = modelDefinition.getModel(ModelQuality.High);
 
-        for (ffxiv.housim.saintcoinach.graphics.mesh.Mesh m : model.getMeshes()) {
+        for (ffxiv.housim.saintcoinach.scene.mesh.Mesh m : model.getMeshes()) {
             // mesh
             Mesh mesh = build(m);
 
@@ -130,7 +130,7 @@ public class ModelFactory {
         }
     }
 
-    private static Mesh build(ffxiv.housim.saintcoinach.graphics.mesh.Mesh m) {
+    private static Mesh build(ffxiv.housim.saintcoinach.scene.mesh.Mesh m) {
         VertexFormat vertexFormat = m.getVertexFormat();
 
         short[] indices = m.getIndices();
@@ -239,7 +239,7 @@ public class ModelFactory {
     }
 
     private static Material build(MaterialDefinition matDef) {
-        ffxiv.housim.saintcoinach.graphics.material.Material m = matDef.get();
+        ffxiv.housim.saintcoinach.material.Material m = matDef.get();
 
         ImageFile file = m.getTextureFiles()[0];
         Texture diffuse = null;

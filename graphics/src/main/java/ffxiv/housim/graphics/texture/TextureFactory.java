@@ -5,8 +5,8 @@ import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.jme3.texture.image.ColorSpace;
 import com.jme3.util.BufferUtils;
-import ffxiv.housim.saintcoinach.imaging.ImageFile;
-import ffxiv.housim.saintcoinach.imaging.ImageHeader;
+import ffxiv.housim.saintcoinach.texture.ImageFile;
+import ffxiv.housim.saintcoinach.texture.ImageHeader;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 

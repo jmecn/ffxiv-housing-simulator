@@ -2,14 +2,9 @@ package ffxiv.housim.saintcoinach.io;
 
 import static org.junit.Assert.*;
 
-import ffxiv.housim.saintcoinach.ARealmReversed;
-import ffxiv.housim.saintcoinach.ex.Language;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
 
 @Slf4j
 public class TestPackFile {

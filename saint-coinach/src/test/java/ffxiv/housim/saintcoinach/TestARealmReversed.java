@@ -1,12 +1,8 @@
 package ffxiv.housim.saintcoinach;
 
-import ffxiv.housim.saintcoinach.ex.Language;
-import ffxiv.housim.saintcoinach.ex.relational.IRelationalMultiRow;
-import ffxiv.housim.saintcoinach.ex.relational.IRelationalSheet;
-import ffxiv.housim.saintcoinach.xiv.IXivSheet;
-import ffxiv.housim.saintcoinach.xiv.XivSheet;
-import ffxiv.housim.saintcoinach.xiv.entity.Item;
-import ffxiv.housim.saintcoinach.xiv.entity.PlaceName;
+import ffxiv.housim.saintcoinach.db.ex.Language;
+import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
+import ffxiv.housim.saintcoinach.db.xiv.entity.Item;
 import org.junit.Test;
 
 import java.io.IOException;

@@ -1,6 +1,6 @@
 package ffxiv.housim.saintcoinach.math;
 
-import ffxiv.housim.saintcoinach.xiv.XivName;
+import ffxiv.housim.saintcoinach.db.xiv.XivName;
 
 @XivName("Color")
 public final class XivColor {
