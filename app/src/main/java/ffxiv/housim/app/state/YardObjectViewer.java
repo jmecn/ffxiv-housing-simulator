@@ -1,6 +1,8 @@
-package ffxiv.housim.app;
+package ffxiv.housim.app.state;
 
-import com.jme3.app.SimpleApplication;
+import com.jme3.app.*;
+import com.jme3.app.state.ConstantVerifierState;
+import com.jme3.audio.AudioListenerState;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.KeyInput;
@@ -16,15 +18,14 @@ import com.jme3.system.AppSettings;
 import com.jme3.util.SkyFactory;
 import com.jme3.util.TempVars;
 import ffxiv.housim.graphics.model.MaterialFactory;
-import ffxiv.housim.graphics.model.ModelFactory;
 import ffxiv.housim.graphics.state.CheckerBoardState;
+import ffxiv.housim.graphics.model.ModelFactory;
 import ffxiv.housim.graphics.state.LightState;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
-import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
-import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingExterior;
-import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingYardObject;
 import ffxiv.housim.saintcoinach.io.PackCollection;
+import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
+import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingYardObject;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -32,16 +33,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class ExteriorViewer extends SimpleApplication {
+public class YardObjectViewer extends SimpleApplication {
 
     private ARealmReversed ffxiv;
     private PackCollection packs;
-    private List<HousingExterior> list;
+    private List<HousingYardObject> list;
 
     private int index;
 
-    public ExteriorViewer() {
-        super();
+    public YardObjectViewer() {
+        super(new StatsAppState(), new FlyCamAppState(), new AudioListenerState(), new DebugKeysAppState(),
+                new ConstantVerifierState(), new DetailedProfilerState());
     }
 
     private void initFurnitures()  {
@@ -53,13 +55,17 @@ public class ExteriorViewer extends SimpleApplication {
             System.exit(-1);
         }
         packs = ffxiv.getGameData().getPackCollection();
-        IXivSheet<HousingExterior> sheet = ffxiv.getGameData().getSheet(HousingExterior.class);
+        IXivSheet<HousingYardObject> sheet = ffxiv.getGameData().getSheet(HousingYardObject.class);
 
         list = new ArrayList<>(sheet.getCount());
 
-        for (HousingExterior f : sheet) {
-            if (f.getModel() == null || f.getModel().isBlank()) {
-                log.info("ignore HousingExterior #{}, {}", f.getExteriorKey(), f.getModel());
+        for (HousingYardObject f : sheet) {
+            if (f.getSgbPath() == null || f.getSgbPath().isBlank()) {
+                log.info("ignore HousingYardObject #{}, {}", f.getModelKey(), f.getItem());
+                continue;
+            }
+            if (f.getItem() == null || f.getItem().getName().isBlank()) {
+                log.info("ignore HousingYardObject #{}, {}", f.getModelKey(), f.getSgbPath());
                 continue;
             }
             list.add(f);
@@ -68,7 +74,7 @@ public class ExteriorViewer extends SimpleApplication {
         index = 0;
     }
 
-    private Node viewNode = new Node("Housing Exterior");
+    private Node viewNode = new Node("yard_object");
 
     @Override
     public void simpleInitApp() {
@@ -146,9 +152,9 @@ public class ExteriorViewer extends SimpleApplication {
 
     private void reload() {
         enqueue(() -> {
-            HousingExterior f = list.get(index);
-            log.info("load #{}, {}, {}", f.getExteriorType(), f.getExteriorKey(), f.getModel());
-            Node node = ModelFactory.load(f.getModel());
+            HousingYardObject f = list.get(index);
+            log.info("load #{}, {}, {}", f.getModelKey(), f.getItem(), f.getSgbPath());
+            Node node = ModelFactory.load(f.getSgbPath());
             viewNode.detachAllChildren();
             viewNode.attachChild(node);
         });
@@ -163,6 +169,7 @@ public class ExteriorViewer extends SimpleApplication {
 
         cam.setLocation(new Vector3f(0f, 5f, 10f));
         cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+        cam.setFov(60);
 
         flyCam.setMoveSpeed(10f);
         flyCam.setDragToRotate(true);
@@ -170,7 +177,7 @@ public class ExteriorViewer extends SimpleApplication {
 
     public static void main(String[] args) {
         AppSettings setting = new AppSettings(true);
-        setting.setTitle("Final Fantasy XIV Housing Exterior Viewer");
+        setting.setTitle("Final Fantasy XIV Housing Yard Object Viewer");
         setting.setResolution(1280, 720);
         setting.setResizable(true);
         setting.setFrameRate(60);
@@ -178,7 +185,7 @@ public class ExteriorViewer extends SimpleApplication {
         // LWJGL-OpenGL2
         setting.setRenderer(AppSettings.LWJGL_OPENGL41);
 
-        ExteriorViewer app = new ExteriorViewer();
+        YardObjectViewer app = new YardObjectViewer();
         app.setSettings(setting);
         app.start();
     }

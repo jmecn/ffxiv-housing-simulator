@@ -1,4 +1,4 @@
-package ffxiv.housim.app;
+package ffxiv.housim.app.state;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.collision.CollisionResult;
