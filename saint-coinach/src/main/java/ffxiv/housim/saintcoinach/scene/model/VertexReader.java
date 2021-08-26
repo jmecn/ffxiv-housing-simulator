@@ -26,43 +26,16 @@ public final class VertexReader {
         Object data = readData(buffer, element.dataType, offset + element.offset);
 
         switch (element.attribute) {
-            case BlendIndices:
-                vertex.blendIndices = (int) data;
-                break;
-            case BlendWeights:
-                vertex.blendWeights = (Vector4) data;
-                break;
-            case Color:
-                vertex.color = (Vector4) data;
-                break;
-            case Normal:
-                vertex.normal = forceToVector3(data);
-                break;
-            case Position:
-                vertex.position = forceToVector4(data);
-                break;
-            case Tangent2:
-                vertex.tangent2 = (Vector4) data;
-                break;
-            case Tangent1:
-                vertex.tangent1 = (Vector4) data;
-                break;
-            case UV:
-                vertex.uv = forceToVector4(data);
-                break;
-            default:
-                throw new IllegalArgumentException();
+            case Position -> vertex.position = (Vector4) data;
+            case BlendWeights -> vertex.blendWeights = (Vector4) data;
+            case BlendIndices -> vertex.blendIndices = (int) data;
+            case Normal -> vertex.normal = (Vector4) data;
+            case UV -> vertex.uv = forceToVector4(data);
+            case Tangent2 -> vertex.tangent2 = (Vector4) data;
+            case Tangent1 -> vertex.tangent1 = (Vector4) data;
+            case Color -> vertex.color = (Vector4) data;
+            default -> throw new IllegalArgumentException();
         }
-    }
-
-    static Vector3 forceToVector3(Object value) {
-        if (value instanceof Vector3 v3) {
-            return v3;
-        }
-        if (value instanceof Vector4 v4) {
-            return new Vector3(v4);
-        }
-        throw new IllegalArgumentException();
     }
 
     static Vector4 forceToVector4(Object value) {
@@ -72,9 +45,9 @@ public final class VertexReader {
         if (value instanceof Vector2 v2) {
             return new Vector4(v2, new Vector2(0));
         }
-        if (value instanceof Vector3 v3) {
-            return new Vector4(v3, 1);
-        }
+//        if (value instanceof Vector3 v3) {
+//            return new Vector4(v3, 1);
+//        }
         throw new IllegalArgumentException();
     }
 

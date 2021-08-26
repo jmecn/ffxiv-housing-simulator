@@ -17,7 +17,7 @@ public class Shader {
     private int dataOffset;
     @Getter
     private int dataLength;
-    private short numUniforms;
+    private short numConstants;
     private short numSamplers;
     private short numX;
     private short numY;
@@ -33,16 +33,16 @@ public class Shader {
         // 0x10 bytes
         this.dataOffset = buffer.getInt();
         this.dataLength = buffer.getInt();
-        this.numUniforms = buffer.getShort();
+        this.numConstants = buffer.getShort();
         this.numSamplers = buffer.getShort();
         this.numX = buffer.getShort();
         this.numY = buffer.getShort();
 
         // paramCount * 10 bytes
-        int paramCount = numUniforms + numSamplers + numX + numY;
+        int paramCount = numConstants + numSamplers + numX + numY;
         parameters = new ArrayList<>(paramCount);
 
-        for (int i = 0; i < numUniforms; i++) {
+        for (int i = 0; i < numConstants; i++) {
             parameters.add(new Parameter(ParameterType.Uniform, buffer, parameterListOffset));
         }
 

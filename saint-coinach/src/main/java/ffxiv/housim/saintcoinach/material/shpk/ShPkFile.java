@@ -1,5 +1,6 @@
 package ffxiv.housim.saintcoinach.material.shpk;
 
+import com.google.common.base.Functions;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class ShPkFile {
@@ -53,6 +56,8 @@ public class ShPkFile {
     private List<Shader> shaders;
     @Getter
     private List<Parameter> parameters;
+    @Getter
+    private Map<Integer, Parameter> parameterMap;
 
     @Getter
     private PackFile file;
@@ -141,6 +146,7 @@ public class ShPkFile {
             parameters.add(new Parameter(ParameterType.Sampler, buffer, parameterListOffset));
         }
 
+        parameterMap = parameters.stream().collect(Collectors.toUnmodifiableMap(Parameter::getId, Functions.identity()));
     }
 
     /**
@@ -175,6 +181,10 @@ public class ShPkFile {
 
     public Shader getShader(int index) {
         return shaders.get(index);
+    }
+
+    public Parameter getParameter(int parameterId) {
+        return parameterMap.get(parameterId);
     }
 
     /**

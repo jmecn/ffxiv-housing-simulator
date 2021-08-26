@@ -2,7 +2,6 @@ package ffxiv.housim.graphics.model;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
-import com.jme3.material.Materials;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.renderer.queue.RenderQueue;
@@ -11,12 +10,8 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.shape.Sphere;
-import com.jme3.texture.Texture;
-import ffxiv.housim.graphics.texture.TextureFactory;
-import ffxiv.housim.saintcoinach.material.MaterialDefinition;
 import ffxiv.housim.saintcoinach.scene.model.*;
 import ffxiv.housim.saintcoinach.scene.sgb.*;
-import ffxiv.housim.saintcoinach.texture.ImageFile;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.math.Vector3;
@@ -50,7 +45,7 @@ public class ModelFactory {
             } else if (e instanceof SgbGroupEntryChairMarker ce) {
                 build(root, ce, chairs++);
             } else if (e instanceof SgbGroupEntryTargetMarker te) {
-                // build(root, te, targets++);
+                build(root, te, targets++);
             }
         }
 
@@ -74,7 +69,7 @@ public class ModelFactory {
         mark.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
         mark.setLocalScale(scale.x, scale.y, scale.z);
 
-        root.attachChild(mark);
+        // root.attachChild(mark);
     }
 
     private static void build(Node root, SgbGroupEntryChairMarker ce, int chairs) {
@@ -90,7 +85,7 @@ public class ModelFactory {
         Vector3 rotate = ce.getRotation();
 
         mark.setLocalTranslation(trans.x, trans.y, trans.z);
-        mark.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
+        //mark.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
         mark.setLocalScale(scale.x, scale.y, scale.z);
 
         root.attachChild(mark);
@@ -107,7 +102,7 @@ public class ModelFactory {
         log.debug("trans:{}, rotate:{}, scale:{}", trans, rotate, scale);
 
         root.setLocalTranslation(trans.x, trans.y, trans.z);
-        root.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
+        //root.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
         root.setLocalScale(scale.x, scale.y, scale.z);
 
         // model
@@ -125,7 +120,7 @@ public class ModelFactory {
             Geometry geom = new Geometry("#" + models);
             geom.setMesh(mesh);
             geom.setMaterial(material);
-            geom.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+            geom.setShadowMode(RenderQueue.ShadowMode.Cast);
             root.attachChild(geom);
         }
     }
@@ -142,14 +137,18 @@ public class ModelFactory {
 
         for (VertexFormatElement element : vertexFormat.getElements()) {
             switch (element.attribute) {
-                case BlendIndices:
-                    int[] boneIndices = new int[vertCount];
-                    for ( int i = 0; i < vertCount; i++) {
-                        boneIndices[i] = vertices[i].blendIndices;
+                case Position -> {
+                    float[] positions = new float[vertCount * 4];
+                    for (int i = 0; i < vertCount; i++) {
+                        Vector4 v = vertices[i].position;
+                        positions[i * 4] = v.x;
+                        positions[i * 4 + 1] = v.y;
+                        positions[i * 4 + 2] = v.z;
+                        positions[i * 4 + 3] = v.w;
                     }
-                    mesh.setBuffer(VertexBuffer.Type.BoneIndex, 1, boneIndices);
-                    break;
-                case BlendWeights:{
+                    mesh.setBuffer(VertexBuffer.Type.Position, 4, positions);
+                }
+                case BlendWeights -> {
                     float[] weights = new float[vertCount * 4];
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].blendWeights;
@@ -159,9 +158,60 @@ public class ModelFactory {
                         weights[i * 4 + 3] = v.w;
                     }
                     mesh.setBuffer(VertexBuffer.Type.BoneWeight, 4, weights);
-                    break;
                 }
-                case Color: {
+                case BlendIndices -> {
+                    int[] boneIndices = new int[vertCount];
+                    for (int i = 0; i < vertCount; i++) {
+                        boneIndices[i] = vertices[i].blendIndices;
+                    }
+                    mesh.setBuffer(VertexBuffer.Type.BoneIndex, 1, boneIndices);
+                }
+                case Normal -> {
+                    float[] normal = new float[vertCount * 4];
+                    for (int i = 0; i < vertCount; i++) {
+                        Vector4 v = vertices[i].normal;
+                        normal[i * 4] = v.x;
+                        normal[i * 4 + 1] = v.y;
+                        normal[i * 4 + 2] = v.z;
+                        normal[i * 4 + 3] = v.w;
+                    }
+                    mesh.setBuffer(VertexBuffer.Type.Normal, 4, normal);
+                }
+                case UV -> {
+                    float[] uv = new float[vertCount * 4];
+                    for (int i = 0; i < vertCount; i++) {
+                        Vector4 v = vertices[i].uv;
+                        uv[i * 4] = v.x;
+                        uv[i * 4 + 1] = v.y;
+                        uv[i * 4 + 2] = v.z;
+                        uv[i * 4 + 3] = v.w;
+                    }
+                    mesh.setBuffer(VertexBuffer.Type.TexCoord, 4, uv);
+                }
+                case Tangent2 -> {
+                    float[] tangent = new float[vertCount * 4];
+                    for (int i = 0; i < vertCount; i++) {
+                        Vector4 v = vertices[i].tangent2;
+                        tangent[i * 4] = v.x;
+                        tangent[i * 4 + 1] = v.y;
+                        tangent[i * 4 + 2] = v.z;
+                        tangent[i * 4 + 3] = v.w;
+                    }
+                    // use uv2 as Tangent2
+                    mesh.setBuffer(VertexBuffer.Type.TexCoord2, 4, tangent);
+                }
+                case Tangent1 -> {
+                    float[] tangent = new float[vertCount * 4];
+                    for (int i = 0; i < vertCount; i++) {
+                        Vector4 v = vertices[i].tangent1;
+                        tangent[i * 4] = v.x;
+                        tangent[i * 4 + 1] = v.y;
+                        tangent[i * 4 + 2] = v.z;
+                        tangent[i * 4 + 3] = v.w;
+                    }
+                    mesh.setBuffer(VertexBuffer.Type.Tangent, 4, tangent);
+                }
+                case Color -> {
                     float[] color = new float[vertCount * 4];
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].color;
@@ -171,63 +221,8 @@ public class ModelFactory {
                         color[i * 4 + 3] = v.w;
                     }
                     mesh.setBuffer(VertexBuffer.Type.Color, 4, color);
-                    break;
                 }
-                case Normal:
-                    float[] normal = new float[vertCount * 3];
-                    for ( int i = 0; i < vertCount; i++) {
-                        Vector3 v = vertices[i].normal;
-                        normal[i * 3] = v.x;
-                        normal[i * 3 + 1] = v.y;
-                        normal[i * 3 + 2] = v.z;
-                    }
-                    mesh.setBuffer(VertexBuffer.Type.Normal, 3, normal);
-                    break;
-                case Position:
-                    float[] positions = new float[vertCount * 3];
-                    for ( int i = 0; i < vertCount; i++) {
-                        Vector4 v = vertices[i].position;
-                        positions[i * 3] = v.x;
-                        positions[i * 3 + 1] = v.y;
-                        positions[i * 3 + 2] = v.z;
-                    }
-                    mesh.setBuffer(VertexBuffer.Type.Position, 3, positions);
-                    break;
-                case Tangent2: {
-                    float[] tangent = new float[vertCount * 4];
-                    for (int i = 0; i < vertCount; i++) {
-                        Vector4 v = vertices[i].tangent2;
-                        tangent[i * 4] = v.x;
-                        tangent[i * 4 + 1] = v.y;
-                        tangent[i * 4 + 2] = v.z;
-                        tangent[i * 4 + 3] = v.w;
-                    }
-                    mesh.setBuffer(VertexBuffer.Type.Binormal, 4, tangent);
-                    break;
-                }
-                case Tangent1: {
-                    float[] tangent = new float[vertCount * 4];
-                    for ( int i = 0; i < vertCount; i++) {
-                        Vector4 v = vertices[i].tangent1;
-                        tangent[i * 4] = v.x;
-                        tangent[i * 4 + 1] = v.y;
-                        tangent[i * 4 + 2] = v.z;
-                        tangent[i * 4 + 3] = v.w;
-                    }
-                    mesh.setBuffer(VertexBuffer.Type.Tangent, 4, tangent);
-                    break;
-                }
-                case UV:
-                    float[] uv = new float[vertCount * 2];
-                    for ( int i = 0; i < vertCount; i++) {
-                        Vector4 v = vertices[i].uv;
-                        uv[i * 2] = v.x;
-                        uv[i * 2 + 1] = v.y;
-                    }
-                    mesh.setBuffer(VertexBuffer.Type.TexCoord, 2, uv);
-                    break;
-                default:
-                    throw new IllegalArgumentException();
+                default -> throw new IllegalArgumentException();
             }
         }
 

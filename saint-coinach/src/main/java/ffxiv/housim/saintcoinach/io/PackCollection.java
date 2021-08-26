@@ -59,4 +59,23 @@ public class PackCollection {
         }
         return pack;
     }
+
+    public Pack tryGetPack(PackIdentifier id) {
+        if (id == null) {
+            return null;
+        }
+
+        Pack pack = packs.get(id);
+        if (pack != null) {
+            return pack;
+        }
+
+        try {
+            pack = new Pack(this, dataDirectory, id);
+            packs.put(id, pack);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return pack;
+    }
 }

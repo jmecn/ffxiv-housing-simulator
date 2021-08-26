@@ -20,6 +20,26 @@ public class Index2Source implements IPackSource {
         this.index = index;
     }
 
+    @Override
+    public boolean directoryExists(String path) {
+        return false;
+    }
+
+    @Override
+    public boolean directoryExists(int hash) {
+        return false;
+    }
+
+    @Override
+    public PackDirectory tryGetDirectory(String path) {
+        return null;
+    }
+
+    @Override
+    public PackDirectory tryGetDirectory(int hash) {
+        return null;
+    }
+
     public boolean fileExists(String path) {
         int hash = Hash.compute(path);
         return fileExists(hash);
@@ -50,6 +70,11 @@ public class Index2Source implements IPackSource {
     public PackFile tryGetFile(String path) {
         int hash = Hash.compute(path);
         return tryGetFile(hash);
+    }
+
+    @Override
+    public PackFile tryGetFile(int directoryKey, int fileKey) {
+        return tryGetFile(fileKey);
     }
 
     public PackFile tryGetFile(int hash) {

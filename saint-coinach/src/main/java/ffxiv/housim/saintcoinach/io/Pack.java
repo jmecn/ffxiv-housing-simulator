@@ -28,6 +28,7 @@ public class Pack {
     @Getter
     private PackCollection collection;
     private String dataDirectory;
+    @Getter
     private IPackSource source;
 
     // Serialize only

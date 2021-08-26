@@ -23,7 +23,7 @@ public class IconConverter implements IValueConverter<ImageFile> {
 
     @Override
     public ImageFile convert(IDataRow row, Object rawValue) {
-        int nr = (int) rawValue;
+        int nr = ((Number) rawValue).intValue();
         if (nr <= 0 || nr > 999999) {
             return null;
         }

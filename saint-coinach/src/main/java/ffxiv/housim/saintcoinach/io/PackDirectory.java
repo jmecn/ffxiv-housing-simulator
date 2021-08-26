@@ -40,6 +40,26 @@ public class PackDirectory implements IPackSource {
     }
 
     @Override
+    public boolean directoryExists(String path) {
+        return false;
+    }
+
+    @Override
+    public boolean directoryExists(int hash) {
+        return false;
+    }
+
+    @Override
+    public PackDirectory tryGetDirectory(String path) {
+        return null;
+    }
+
+    @Override
+    public PackDirectory tryGetDirectory(int hash) {
+        return null;
+    }
+
+    @Override
     public boolean fileExists(String name) {
         int hash = Hash.compute(name);
         return fileExists(hash);
@@ -57,6 +77,11 @@ public class PackDirectory implements IPackSource {
             file.setPath(String.format("%s/%s", getPath(), name));
         }
         return file;
+    }
+
+    @Override
+    public PackFile tryGetFile(int directoryKey, int fileKey) {
+        return tryGetFile(fileKey);
     }
 
     public PackFile tryGetFile(int hash) {

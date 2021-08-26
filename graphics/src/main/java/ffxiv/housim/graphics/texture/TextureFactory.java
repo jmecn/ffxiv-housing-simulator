@@ -56,6 +56,7 @@ public class TextureFactory {
                 break;
         }
         Texture2D texture = new Texture2D(image);
+        texture.setWrap(Texture.WrapMode.Repeat);
 
         int numMipmaps = imageFile.getImageHeader().getNumMipmaps();
         if (numMipmaps > 1) {

@@ -19,11 +19,13 @@ public class IndexSource implements IPackSource {
         this.index = index;
     }
 
+    @Override
     public boolean directoryExists(String path) {
         int hash = Hash.compute(path);
         return directoryExists(hash);
     }
 
+    @Override
     public boolean directoryExists(int hash) {
         return index.getDirectories().containsKey(hash);
     }
@@ -45,11 +47,13 @@ public class IndexSource implements IPackSource {
         return dir;
     }
 
+    @Override
     public PackDirectory tryGetDirectory(String path) {
         int hash = Hash.compute(path);
         return tryGetDirectory(hash);
     }
 
+    @Override
     public PackDirectory tryGetDirectory(int hash) {
         PackDirectory dir = directories.get(hash);
         if (dir != null) {
@@ -102,6 +106,7 @@ public class IndexSource implements IPackSource {
         return null;
     }
 
+    @Override
     public PackFile tryGetFile(int directoryKey, int fileKey) {
         PackDirectory dir = tryGetDirectory(directoryKey);
         if (dir != null) {

@@ -4,8 +4,11 @@ import lombok.Getter;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Parameter {
+
     @Getter
     private ParameterType type;
 
@@ -40,6 +43,11 @@ public class Parameter {
 
     @Override
     public String toString() {
-        return type + ": " + name;
+        return String.format("0x%08X: %s (%s)", id, name, type);
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }

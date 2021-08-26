@@ -1,10 +1,15 @@
 package ffxiv.housim.saintcoinach.shader;
 
+import com.google.common.io.Files;
+import ffxiv.housim.saintcoinach.io.*;
+import ffxiv.housim.saintcoinach.material.shpk.Parameter;
 import ffxiv.housim.saintcoinach.material.shpk.ShPkFile;
-import ffxiv.housim.saintcoinach.io.PackCollection;
-import ffxiv.housim.saintcoinach.io.PackFile;
+import ffxiv.housim.saintcoinach.material.shpk.Shader;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -98,9 +103,41 @@ public class TestShader {
     }
 
     @Test
+    public void testBgDx11() {
+
+        PackIdentifier id = new PackIdentifier(05, 00, 00);
+        Pack pack = packs.tryGetPack(id);
+        IPackSource source = pack.getSource();
+
+        PackDirectory dir = source.tryGetDirectory(0xE3466A82);
+
+        PackFile file = dir.tryGetFile("bg.shpk");
+        ShPkFile shpk = new ShPkFile(file);
+
+        for ( int pid = 0; pid < shpk.getPixelShaderCount(); pid+= 5) {
+            Shader ps = shpk.getPixelShader(pid);
+            byte[] psd = shpk.getDXBC(ps);
+            try {
+                Files.write(psd, new File("ps-dx11-" + pid + ".dxbc"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    @Test
     public void testBg() {
         PackFile file = packs.tryGetFile("shader/shpk/bg.shpk");
         ShPkFile shpk = new ShPkFile(file);
+        Shader vs = shpk.getVertexShader(0);
+        Shader ps = shpk.getPixelShader(0);
+        byte[] vsd = shpk.getDXBC(vs);
+        byte[] psd = shpk.getDXBC(ps);
+        try {
+            Files.write(vsd, new File("vs-0.dxbc"));
+            Files.write(psd, new File("ps-0.dxbc"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

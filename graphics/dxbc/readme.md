@@ -2,12 +2,14 @@
 
 DX11渲染地板，使用了延迟着色，输出为4个ColorBuffer
 
-color0为 normal
-color1为 specular
-color2为 base color
-color3为 ???
-depth
-stencil
+GBuffer
+
+- color0为 normal
+- color1为 specular
+- color2为 base color
+- color3为 ???
+- depth
+- stencil
 
 ## 参考反编译文档
 

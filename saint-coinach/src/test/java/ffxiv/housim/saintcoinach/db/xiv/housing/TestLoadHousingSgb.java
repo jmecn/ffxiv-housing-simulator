@@ -40,7 +40,6 @@ public class TestLoadHousingSgb {
             PackFile file = aRealmReversed.getGameData().getPackCollection().tryGetFile(e.getModel());
             if (file != null) {
                 SgbFile sgb = new SgbFile(file);
-                sgb.getData();
                 log.info("#{}: {}, {}, {}, {}, {}", e.getKey(), e.getExteriorKey(), e.getExteriorType(), e.getPlaceName(), e.getHousingSize(), e.getModel());
             } else {
                 log.info("#{}: {}, {}, {}, {}, {}, {}", e.getKey(), e.getExteriorKey(), e.getExteriorType(), e.getPlaceName(), e.getHousingSize(), e.getModel(), "NOT EXIST");
@@ -65,7 +64,6 @@ public class TestLoadHousingSgb {
             PackFile file = aRealmReversed.getGameData().getPackCollection().tryGetFile(e.getSgbPath());
             if (file != null) {
                 SgbFile sgb = new SgbFile(file);
-                sgb.getData();
                 log.info("#{}: {}, {}, {}", e.getKey(), e.getModelKey(), item, e.getSgbPath());
             } else {
                 log.info("#{}: {}, {}, {}, {}", e.getKey(), e.getModelKey(), item, e.getSgbPath(), "NOT EXIST");
@@ -80,7 +78,6 @@ public class TestLoadHousingSgb {
             log.info("#{}: {}, {}, {}", e.getKey(), e.getModelKey(), item, e.getSgbPath());
             PackFile file = aRealmReversed.getGameData().getPackCollection().tryGetFile(e.getSgbPath());
             SgbFile sgb = new SgbFile(file);
-            sgb.getData();
         });
     }
 
@@ -90,7 +87,6 @@ public class TestLoadHousingSgb {
 
     public <T extends IXivRow> void foreach(Class<T> clazz, Visitor<T> visitor) {
         IXivSheet<T> sheet = aRealmReversed.getGameData().getSheet(clazz);
-
         log.info("Visit sheet: {}, row count: {}", sheet.getName(), sheet.getCount());
         for (T xivRow : sheet) {
             visitor.visit(xivRow);

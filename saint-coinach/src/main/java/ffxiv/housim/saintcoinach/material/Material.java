@@ -48,6 +48,7 @@ public class Material {
 
     private MaterialStruct1[] structs1;
     private MaterialStruct2[] structs2;
+    @Getter
     private MaterialTextureParameter[] textureParameters;
     private byte[] data;
 

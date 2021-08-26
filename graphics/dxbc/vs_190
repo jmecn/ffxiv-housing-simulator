@@ -4,7 +4,7 @@
 //
 // Buffer Definitions:
 //
-// cbuffer g_MaterialParameter
+// cbuffer g_MaterialParameter // 9
 // {
 //
 //   float4 g_MaterialParameter[11];    // Offset:    0 Size:   176
@@ -14,18 +14,18 @@
 // cbuffer g_CameraParameter
 // {
 //
-//   struct CameraParameter
+//   struct CameraParameter // 26
 //   {
 //
 //       row_major float3x4 m_ViewMatrix;// Offset:    0
-//       row_major float3x4 m_InverseViewMatrix;// Offset:   48
-//       row_major float4x4 m_ViewProjectionMatrix;// Offset:   96
-//       row_major float4x4 m_InverseViewProjectionMatrix;// Offset:  160
-//       row_major float4x4 m_InverseProjectionMatrix;// Offset:  224
-//       row_major float4x4 m_ProjectionMatrix;// Offset:  288
-//       row_major float4x4 m_MainViewToProjectionMatrix;// Offset:  352
-//       float3 m_EyePosition;          // Offset:  416
-//       float3 m_LookAtVector;         // Offset:  432
+//       row_major float3x4 m_InverseViewMatrix;// Offset:   48 index 3
+//       row_major float4x4 m_ViewProjectionMatrix;// Offset:   96 index 6
+//       row_major float4x4 m_InverseViewProjectionMatrix;// Offset:  160 index 10
+//       row_major float4x4 m_InverseProjectionMatrix;// Offset:  224 index 14
+//       row_major float4x4 m_ProjectionMatrix;// Offset:  288 index 18
+//       row_major float4x4 m_MainViewToProjectionMatrix;// Offset:  352 index 22
+//       float3 m_EyePosition;          // Offset:  416 index 26
+//       float3 m_LookAtVector;         // Offset:  432 index 27
 //
 //   } g_CameraParameter;               // Offset:    0 Size:   444
 //
@@ -34,13 +34,13 @@
 // cbuffer g_InstanceData
 // {
 //
-//   struct BGInstanceData
+//   struct BGInstanceData // 6
 //   {
 //
 //       row_major float3x4 m_TransformMatrix;// Offset:    0
-//       float4 m_InstanceParam0;       // Offset:   48
-//       float4 m_InstanceParam1;       // Offset:   64
-//       float4 m_InstanceParam2;       // Offset:   80
+//       float4 m_InstanceParam0;       // Offset:   48 index 3
+//       float4 m_InstanceParam1;       // Offset:   64 index 4
+//       float4 m_InstanceParam2;       // Offset:   80 index 5
 //
 //   } g_InstanceData;                  // Offset:    0 Size:    96
 //
@@ -105,36 +105,51 @@
 0x000000C4: dcl_output o7.xyzw
 0x000000D0: dcl_output o8.xyzw
 0x000000DC: dcl_temps 2
-0x000000E4: mov r0.w, l(1.000000)
-0x000000F8: mov r1.xyz, v0.xyzx
-0x0000010C: mov r1.w, l(1.000000)
-0x00000120: dp4 r0.x, cb2[0].xyzw, r1.xyzw
-0x00000140: dp4 r0.y, cb2[1].xyzw, r1.xyzw
-0x00000160: dp4 r0.z, cb2[2].xyzw, r1.xyzw
-0x00000180: dp4 o0.x, cb1[22].xyzw, r0.xyzw
-0x000001A0: dp4 o0.y, cb1[23].xyzw, r0.xyzw
-0x000001C0: dp4 o0.z, cb1[24].xyzw, r0.xyzw
-0x000001E0: dp4 o0.w, cb1[25].xyzw, r0.xyzw
-0x00000200: mov o5.xyz, r0.xyzx
-0x00000214: dp3 o1.x, cb2[0].xyzx, v1.xyzx
-0x00000234: dp3 o1.y, cb2[1].xyzx, v1.xyzx
-0x00000254: dp3 o1.z, cb2[2].xyzx, v1.xyzx
-0x00000274: mov o1.w, cb2[3].w
-0x0000028C: mad o2.w, v2.w, l(2.000000), l(-1.000000)
-0x000002B0: mad r0.xyz, v2.xyzx, l(2.000000, 2.000000, 2.000000, 0.000000), l(-1.000000, -1.000000, -1.000000, 0.000000)
-0x000002EC: dp3 o2.x, cb2[0].xyzx, r0.xyzx
-0x0000030C: dp3 o2.y, cb2[1].xyzx, r0.xyzx
-0x0000032C: dp3 o2.z, cb2[2].xyzx, r0.xyzx
-0x0000034C: mov o3.xyzw, l(0,0,0,0)
-0x0000036C: mov o4.xyzw, v6.xyzw
-0x00000380: mul o5.w, v0.w, cb2[3].x
-0x000003A0: dp3 r0.x, cb0[8].xyzx, l(1.000000, 1.000000, 1.000000, 0.000000)
-0x000003CC: lt r0.x, l(0.000000), r0.x
-0x000003E8: add r0.yzw, -cb0[8].xxyz, cb2[5].xxyz
-0x00000410: mad r0.yzw, cb2[5].wwww, r0.yyzw, cb0[8].xxyz
-0x0000043C: and o6.xyz, r0.yzwy, r0.xxxx
-0x00000458: mov o6.w, cb2[4].w
-0x00000470: mov o7.xyzw, l(0,0,0,0)
-0x00000490: mov o8.xyzw, l(0,0,0,0)
-0x000004B0: ret
-// Approximately 32 instruction slots used
+
+varying vec4 o1;
+varying vec4 o2;
+varying vec4 o3;
+varying vec4 o4;
+varying vec4 o5;
+varying vec4 o6;
+varying vec4 o7;
+varying vec4 o8;
+
+void main() {
+    // SV_POSITION = mvp * position
+    float3 wsPos = mul(m_TransformMatrix, vec4(v0.xyz, 1.0));
+    gl_Position = mul(m_MainViewToProjectionMatrix, vec4(wsPos, 1.0));
+
+    // NORMAL
+    o1.xyz = mul(m_TransformMatrix, v1.xyzx);
+    o1.w = m_InstanceParam0.w;
+
+    // BINORMAL
+    vec3 bn = v2.xyz * 2.0 - 1.0;
+    o2.xyz = mul(m_TransformMatrix, bn.xyzx);
+    o2.w = v2.w * 2.0 - 1.0;
+
+    // TANGENT?
+    o3 = float4(0.0);
+
+    // TEXCOORD
+    o4.xyzw = v6.xyzw;
+
+    // worldSpacePosition
+    o5.xyz = wsPos;
+    o5.w = v0.w * m_InstanceParam0.x;
+
+    //
+    vec3 m8 = g_MaterialParameter[8].xyz;
+
+    if (dot(m8, vec3(1.0)) > 0) {// if (m8.x + m8.y + m8.z) > 0
+        o6.xyz = (m_InstanceParam2.xyz - m8.xyz) * m_InstanceParam2.w + m8.xyz;
+    } else {
+        o6.xyz = vec3(0.0);
+    }
+    o6.w = m_InstanceParam1.w;
+
+    //
+    o7 = vec4(0.0);
+    o8 = vec4(0.0);
+}
