@@ -21,6 +21,9 @@ MaterialDef ShowNormals {
         Texture2D SamplerColorMap1
         Texture2D SamplerNormalMap1
         Texture2D SamplerSpecularMap1
+
+        // only in water.shpk
+        Texture2D g_SamplerWaveMap
     }
 
     Technique {
