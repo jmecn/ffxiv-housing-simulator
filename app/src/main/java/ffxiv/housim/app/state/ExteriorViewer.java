@@ -174,6 +174,7 @@ public class ExteriorViewer extends SimpleApplication {
         setting.setResizable(true);
         setting.setFrameRate(60);
         setting.setSamples(4);
+        setting.setGammaCorrection(false);
         // LWJGL-OpenGL2
         setting.setRenderer(AppSettings.LWJGL_OPENGL41);
 

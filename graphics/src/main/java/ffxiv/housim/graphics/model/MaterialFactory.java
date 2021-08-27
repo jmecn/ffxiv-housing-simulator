@@ -41,7 +41,7 @@ public class MaterialFactory {
         for (MaterialTextureParameter e : matParams) {
             Parameter param = shPk.getParameter(e.getParameterId());
             ImageFile image = textureFiles[e.getTextureIndex()];
-            log.debug("param:{}, image:{}", param, image.getPath());
+            log.info("param:{}, image:{}", param, image.getPath());
             if (param.getType() == ParameterType.Sampler) {
                 Texture texture = TextureFactory.get(image);
                 String name = param.getName().substring(2);

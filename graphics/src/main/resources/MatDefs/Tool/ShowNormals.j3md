@@ -26,11 +26,11 @@ MaterialDef ShowNormals {
         FragmentShader GLSL310 GLSL300 GLSL100 GLSL150: MatDefs/Tool/ShowNormals.frag
 
         WorldParameters {
-            WorldMatrixInverseTranspose
-            WorldViewProjectionMatrix
+            NormalMatrix
             WorldMatrix
             ViewProjectionMatrix
-            ViewMatrix
+            WorldViewProjectionMatrix
+            Resolution
         }
 
         Defines {
