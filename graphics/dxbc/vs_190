@@ -129,7 +129,7 @@ void main() {
     o2.xyz = mul(m_TransformMatrix, bn.xyzx);
     o2.w = v2.w * 2.0 - 1.0;
 
-    // TANGENT?
+    // ??
     o3 = float4(0.0);
 
     // TEXCOORD
@@ -139,9 +139,8 @@ void main() {
     o5.xyz = wsPos;
     o5.w = v0.w * m_InstanceParam0.x;
 
-    //
+    // ??
     vec3 m8 = g_MaterialParameter[8].xyz;
-
     if (dot(m8, vec3(1.0)) > 0) {// if (m8.x + m8.y + m8.z) > 0
         o6.xyz = (m_InstanceParam2.xyz - m8.xyz) * m_InstanceParam2.w + m8.xyz;
     } else {
@@ -149,7 +148,7 @@ void main() {
     }
     o6.w = m_InstanceParam1.w;
 
-    //
+    // ?? color
     o7 = vec4(0.0);
     o8 = vec4(0.0);
 }

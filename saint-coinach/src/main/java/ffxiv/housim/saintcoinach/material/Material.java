@@ -23,6 +23,7 @@ public class Material {
     // header
     private int unknownHeader;// 4 bytes 0x00 0x00 0x03 0x01
     private short fileSize;
+    @Getter
     private short colorSetDataSize;// 0 or 512 bytes
     private short stringsSize;
     private short shaderOffset;

@@ -84,7 +84,7 @@ public class CheckerBoardState extends BaseAppState implements ActionListener {
         grid.rotate(-FastMath.HALF_PI, 0, 0);
         grid.center();
 
-        Material mat = new Material(assetManager, "MatDefs/CheckerBoard.j3md");
+        Material mat = new Material(assetManager, "MatDefs/Tool/CheckerBoard.j3md");
         mat.setColor("Color", new ColorRGBA(1f, 1f, 1f, 0.7f));
         mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
         mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);

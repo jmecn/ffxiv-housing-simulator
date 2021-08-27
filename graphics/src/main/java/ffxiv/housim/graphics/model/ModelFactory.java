@@ -10,6 +10,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.shape.Sphere;
+import ffxiv.housim.saintcoinach.math.Ubyte4;
 import ffxiv.housim.saintcoinach.scene.model.*;
 import ffxiv.housim.saintcoinach.scene.sgb.*;
 import ffxiv.housim.saintcoinach.io.PackCollection;
@@ -148,10 +149,10 @@ public class ModelFactory {
                     }
                     mesh.setBuffer(VertexBuffer.Type.Position, 4, positions);
                 }
-                case BlendWeights -> {
+                case BoneWeights -> {
                     float[] weights = new float[vertCount * 4];
                     for (int i = 0; i < vertCount; i++) {
-                        Vector4 v = vertices[i].blendWeights;
+                        Vector4 v = vertices[i].boneWeights;
                         weights[i * 4] = v.x;
                         weights[i * 4 + 1] = v.y;
                         weights[i * 4 + 2] = v.z;
@@ -159,12 +160,16 @@ public class ModelFactory {
                     }
                     mesh.setBuffer(VertexBuffer.Type.BoneWeight, 4, weights);
                 }
-                case BlendIndices -> {
-                    int[] boneIndices = new int[vertCount];
+                case BoneIndices -> {
+                    short[] boneIndices = new short[vertCount * 4];
                     for (int i = 0; i < vertCount; i++) {
-                        boneIndices[i] = vertices[i].blendIndices;
+                        Ubyte4 v = vertices[i].boneIndices;
+                        boneIndices[i * 4] = v.x;
+                        boneIndices[i * 4 + 1] = v.y;
+                        boneIndices[i * 4 + 2] = v.z;
+                        boneIndices[i * 4 + 3] = v.w;
                     }
-                    mesh.setBuffer(VertexBuffer.Type.BoneIndex, 1, boneIndices);
+                    mesh.setBuffer(VertexBuffer.Type.BoneIndex, 4, boneIndices);
                 }
                 case Normal -> {
                     float[] normal = new float[vertCount * 4];
@@ -177,10 +182,10 @@ public class ModelFactory {
                     }
                     mesh.setBuffer(VertexBuffer.Type.Normal, 4, normal);
                 }
-                case UV -> {
+                case TexCoord -> {
                     float[] uv = new float[vertCount * 4];
                     for (int i = 0; i < vertCount; i++) {
-                        Vector4 v = vertices[i].uv;
+                        Vector4 v = vertices[i].texCoord;
                         uv[i * 4] = v.x;
                         uv[i * 4 + 1] = v.y;
                         uv[i * 4 + 2] = v.z;
@@ -188,27 +193,27 @@ public class ModelFactory {
                     }
                     mesh.setBuffer(VertexBuffer.Type.TexCoord, 4, uv);
                 }
-                case Tangent2 -> {
+                case Binormal -> {
+                    float[] binormal = new float[vertCount * 4];
+                    for (int i = 0; i < vertCount; i++) {
+                        Vector4 v = vertices[i].binormal;
+                        binormal[i * 4] = v.x;
+                        binormal[i * 4 + 1] = v.y;
+                        binormal[i * 4 + 2] = v.z;
+                        binormal[i * 4 + 3] = v.w;
+                    }
+                    mesh.setBuffer(VertexBuffer.Type.Binormal, 4, binormal);
+                }
+                case Tangent -> {
                     float[] tangent = new float[vertCount * 4];
                     for (int i = 0; i < vertCount; i++) {
-                        Vector4 v = vertices[i].tangent2;
+                        Vector4 v = vertices[i].tangent;
                         tangent[i * 4] = v.x;
                         tangent[i * 4 + 1] = v.y;
                         tangent[i * 4 + 2] = v.z;
                         tangent[i * 4 + 3] = v.w;
                     }
                     // use uv2 as Tangent2
-                    mesh.setBuffer(VertexBuffer.Type.TexCoord2, 4, tangent);
-                }
-                case Tangent1 -> {
-                    float[] tangent = new float[vertCount * 4];
-                    for (int i = 0; i < vertCount; i++) {
-                        Vector4 v = vertices[i].tangent1;
-                        tangent[i * 4] = v.x;
-                        tangent[i * 4 + 1] = v.y;
-                        tangent[i * 4 + 2] = v.z;
-                        tangent[i * 4 + 3] = v.w;
-                    }
                     mesh.setBuffer(VertexBuffer.Type.Tangent, 4, tangent);
                 }
                 case Color -> {

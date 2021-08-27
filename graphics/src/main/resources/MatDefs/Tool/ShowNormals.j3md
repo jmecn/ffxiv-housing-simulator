@@ -1,0 +1,48 @@
+MaterialDef ShowNormals {
+
+    MaterialParameters {
+        // For instancing
+        Boolean UseInstancing
+
+        Boolean HasSamplerColorMap0
+        Boolean HasSamplerNormalMap0
+        Boolean HasSamplerSpecularMap0
+
+        Texture2D SamplerColorMap0
+        Texture2D SamplerNormalMap0
+        Texture2D SamplerSpecularMap0
+
+        Boolean HasSamplerColorMap1
+        Boolean HasSamplerNormalMap1
+        Boolean HasSamplerSpecularMap1
+
+        Texture2D SamplerColorMap1
+        Texture2D SamplerNormalMap1
+        Texture2D SamplerSpecularMap1
+    }
+
+    Technique {
+        VertexShader GLSL310 GLSL300 GLSL100 GLSL150:   MatDefs/Tool/ShowNormals.vert
+        FragmentShader GLSL310 GLSL300 GLSL100 GLSL150: MatDefs/Tool/ShowNormals.frag
+
+        WorldParameters {
+            WorldMatrixInverseTranspose
+            WorldViewProjectionMatrix
+            WorldMatrix
+            ViewProjectionMatrix
+            ViewMatrix
+        }
+
+        Defines {
+            INSTANCING : UseInstancing
+
+            HAS_COLORMAP_0 : HasSamplerColorMap0
+            HAS_NORMALMAP_0 : HasSamplerNormalMap0
+            HAS_SPECULARMAP_0 : HasSamplerSpecularMap0
+
+            HAS_COLORMAP_1 : HasSamplerColorMap1
+            HAS_NORMALMAP_1 : HasSamplerNormalMap1
+            HAS_SPECULARMAP_1 : HasSamplerSpecularMap1
+        }
+    }
+}

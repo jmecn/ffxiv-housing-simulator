@@ -38,8 +38,8 @@ MaterialDef CheckerBoard {
     }
 
     Technique {
-        VertexShader GLSL310 GLSL300 GLSL100 GLSL150:   MatDefs/CheckerBoard.vert
-        FragmentShader GLSL310 GLSL300 GLSL100 GLSL150: MatDefs/CheckerBoard.frag
+        VertexShader GLSL310 GLSL300 GLSL100 GLSL150:   MatDefs/Tool/CheckerBoard.vert
+        FragmentShader GLSL310 GLSL300 GLSL100 GLSL150: MatDefs/Tool/CheckerBoard.frag
 
         WorldParameters {
             WorldViewProjectionMatrix

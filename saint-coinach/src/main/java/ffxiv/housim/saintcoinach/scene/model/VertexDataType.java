@@ -3,14 +3,21 @@ package ffxiv.housim.saintcoinach.scene.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum VertexDataType {// byte
+public enum VertexDataType {
 
-    Single3(0x02),
-    Single4(0x03),
-    UInt(0x05),
-    ByteFloat4(0x08),
+    Float1(0x00),
+    Float2(0x01),
+    Float3(0x02),
+    Float4(0x03),
+    Ubyte4(0x05),
+    Short2(0x06),
+    Short4(0x07),
+    Ubyte4n(0x08),//Ubyte4 normalize
+    Short2n(0x09),
+    Short4n(0x0A),
     Half2(0x0D),
     Half4(0x0E),
+    Compress(0x0F),
 
     ;
 
