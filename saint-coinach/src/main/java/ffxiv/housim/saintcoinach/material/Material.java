@@ -35,6 +35,7 @@ public class Material {
     private String[] texNames;
     private String[] maps;
     private String[] colorSets;
+    @Getter
     private String shader;// bg.shpk
     private byte[] unknown;
     private byte[] colorSetData;// half float rgba color, width 4 * height 16 in pixel size

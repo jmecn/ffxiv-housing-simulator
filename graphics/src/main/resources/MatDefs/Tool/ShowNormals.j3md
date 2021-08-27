@@ -4,6 +4,8 @@ MaterialDef ShowNormals {
         // For instancing
         Boolean UseInstancing
 
+        Float AlphaDiscardThreshold
+
         Boolean HasSamplerColorMap0
         Boolean HasSamplerNormalMap0
         Boolean HasSamplerSpecularMap0
@@ -36,6 +38,7 @@ MaterialDef ShowNormals {
         Defines {
             INSTANCING : UseInstancing
 
+            DISCARD_ALPHA : AlphaDiscardThreshold
             HAS_COLORMAP_0 : HasSamplerColorMap0
             HAS_NORMALMAP_0 : HasSamplerNormalMap0
             HAS_SPECULARMAP_0 : HasSamplerSpecularMap0

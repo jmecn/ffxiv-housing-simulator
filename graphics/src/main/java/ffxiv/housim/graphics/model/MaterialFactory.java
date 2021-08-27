@@ -13,6 +13,8 @@ import ffxiv.housim.saintcoinach.material.shpk.Parameter;
 import ffxiv.housim.saintcoinach.material.shpk.ParameterType;
 import ffxiv.housim.saintcoinach.material.shpk.ShPkFile;
 import ffxiv.housim.saintcoinach.texture.ImageFile;
+import ffxiv.housim.saintcoinach.texture.ImageFormat;
+import ffxiv.housim.saintcoinach.utils.HalfHelper;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,6 +35,8 @@ public class MaterialFactory {
 
         ffxiv.housim.saintcoinach.material.Material m = matDef.get();
 
+        String shader = m.getShader();
+
         ShPkFile shPk = m.getShPk();
 
         ImageFile[] textureFiles = m.getTextureFiles();
@@ -47,6 +51,9 @@ public class MaterialFactory {
                 String name = param.getName().substring(2);
                 mat.setTexture(name, texture);
                 mat.setBoolean("Has" + name, true);
+                if (name.contains("ColorMap0") && "bg.shpk".equals(shader)) {
+                    mat.setFloat("AlphaDiscardThreshold", e.alphaDiscard);
+                }
             }
         }
 

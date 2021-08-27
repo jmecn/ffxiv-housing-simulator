@@ -2,6 +2,10 @@
 
 uniform vec2 g_Resolution;
 
+#ifdef DISCARD_ALPHA
+uniform float m_AlphaDiscardThreshold;
+#endif
+
 uniform bool m_HasSamplerNormalMap0;
 
 uniform sampler2D m_SamplerColorMap0;
@@ -66,11 +70,12 @@ vec4 getNormal() {
 void main(){
     vec2 st = gl_FragCoord.xy / g_Resolution.xy;
 
+    #ifdef DISCARD_ALPHA
     float alpha = texture(m_SamplerColorMap0, v_TexCoord.st).a;
-    alpha -= 0.5;
-    if (alpha < 0.0) {
+    if (alpha < m_AlphaDiscardThreshold) {
         discard;
     }
+    #endif
     // normal map
     #ifdef HAS_NORMALMAP_0
     gl_FragColor = calcMapNormal();
