@@ -10,7 +10,23 @@ public class Item extends ItemBase {
         super(sheet, sourceRow);
     }
 
-    public String getName() {
-        return asString("Name");
+    public boolean isUnique() {
+        return asBoolean("IsUnique");
+    }
+
+    public boolean isUntradable() {
+        return asBoolean("IsUntradable");
+    }
+
+    public boolean isDyeable() {
+        return asBoolean("IsDyeable");
+    }
+
+    public boolean isIndisposable() {
+        return asBoolean("IsIndisposable");
+    }
+
+    public boolean isCollectable() {
+        return asBoolean("IsCollectable");
     }
 }

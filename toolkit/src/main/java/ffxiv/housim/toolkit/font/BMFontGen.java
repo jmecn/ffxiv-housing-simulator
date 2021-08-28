@@ -42,6 +42,8 @@ public class BMFontGen {
     }
 
     public void collectChars() {
+        addAscii();
+        addItemNames();
         addFurnitureNames();
     }
 
