@@ -9,11 +9,11 @@ public class HousingInterior extends XivRow {
         super(sheet, sourceRow);
     }
 
-    public short getId() {
-        return asInt16("Id");
+    public short getOrder() {
+        return asInt16("Order");
     }
 
-    public short getCategory() {
-        return asInt16("Category");
+    public short getHousingItemCategory() {
+        return asInt16("HousingItemCategory");
     }
 }

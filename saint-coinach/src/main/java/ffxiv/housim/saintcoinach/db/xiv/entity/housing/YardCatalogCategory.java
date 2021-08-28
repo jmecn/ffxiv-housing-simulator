@@ -14,8 +14,8 @@ public class YardCatalogCategory extends XivRow {
         return asString("Category");// Name
     }
 
-    public Short getType() {
-        return asInt16("Type");// 17-庭具
+    public Short getHousingItemCategory() {
+        return asInt16("HousingItemCategory");// 17-庭具
     }
 
     public byte getOrder() {

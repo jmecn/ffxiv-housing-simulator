@@ -14,12 +14,12 @@ public class FurnitureCatalogCategory extends XivRow {
         return asString("Category");// Name
     }
 
-    public Short getType() {
-        return asInt16("Type");// 12-家具 13-桌台 14-桌上 15-壁挂 16-地毯
+    public short getHousingItemCategory() {
+        return asInt16("HousingItemCategory");// 12-家具 13-桌台 14-桌上 15-壁挂 16-地毯
     }
 
-    public byte getOrder() {
-        return asByte("Order");
+    public short getOrder() {
+        return asInt16("Order");
     }
 
     @Override

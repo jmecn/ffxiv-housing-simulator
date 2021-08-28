@@ -10,8 +10,8 @@ public class YardCatalogItemList extends XivRow {
         super(sheet, sourceRow);
     }
 
-    public FurnitureCatalogCategory getCategory() {
-        return as(FurnitureCatalogCategory.class, "Category");
+    public YardCatalogCategory getCategory() {
+        return as(YardCatalogCategory.class, "Category");
     }
 
     public Item getItem() {

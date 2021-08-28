@@ -53,7 +53,7 @@ public class TestLoadHousingSgb {
 
         foreach(HousingInterior.class, e-> {
             Item item = items.get(e.getKey());
-            log.info("#{}: {}, {}, {}", e.getKey(), item, e.getId(), e.getCategory());
+            log.info("#{}: {}, {}, {}", e.getKey(), item, e.getHousingItemCategory(), e.getOrder());
         });
     }
 
