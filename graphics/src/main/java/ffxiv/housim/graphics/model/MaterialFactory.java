@@ -28,7 +28,7 @@ public class MaterialFactory {
     static AssetManager assetManager;
 
     public static Material build(MaterialDefinition matDef) {
-        return buildShowNormal(matDef);
+        return buildLightingMat(matDef);
     }
 
     public static Material buildShowNormal(MaterialDefinition matDef) {
@@ -67,6 +67,7 @@ public class MaterialFactory {
         ffxiv.housim.saintcoinach.material.Material m = matDef.get();
 
         ShPkFile shPk = m.getShPk();
+        String shader = m.getShader();
 
         ImageFile[] textureFiles = m.getTextureFiles();
         MaterialTextureParameter[] matParams = m.getTextureParameters();
@@ -85,6 +86,9 @@ public class MaterialFactory {
                 String name = param.getName().substring(2);
                 if (name.endsWith("ColorMap0")) {
                     mat.setTexture("DiffuseMap", texture);
+                    if ("bg.shpk".equals(shader)) {
+                        mat.setFloat("AlphaDiscardThreshold", e.alphaDiscard);
+                    }
                 } else if (name.endsWith("NormalMap0")) {
                     //mat.setTexture("NormalMap", texture);
                 } else if (name.endsWith("SpecularMap0")) {
