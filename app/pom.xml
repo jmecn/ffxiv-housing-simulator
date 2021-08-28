@@ -19,11 +19,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.simsilica</groupId>
             <artifactId>lemur</artifactId>
         </dependency>
@@ -82,21 +77,13 @@
         <finalName>ffxiv-housing-simulator-${project.version}</finalName>
         <plugins>
             <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.1</version>
-                <configuration>
-                    <mainClass>ffxiv.housim.app.state.Main</mainClass>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ffxiv.housim.app.state.Main</mainClass>
+                            <mainClass>ffxiv.housim.app.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
