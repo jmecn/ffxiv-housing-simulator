@@ -70,19 +70,10 @@
                         </path>
                     </annotationProcessorPaths>
                     <compilerArgs>
-                        <arg>--add-exports</arg>
-                        <arg>javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED</arg>
-                        <arg>--add-exports</arg>
-                        <arg>javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED</arg>
-                        <arg>--add-exports</arg>
-                        <arg>javafx.graphics/com.sun.javafx.application=ALL-UNNAMED</arg>
-                        <arg>--add-exports</arg>
-                        <arg>javafx.controls/com.sun.javafx.scene.control.skin.resources=ALL-UNNAMED</arg>
                     </compilerArgs>
                 </configuration>
 
             </plugin>
         </plugins>
     </build>
-
 </project>

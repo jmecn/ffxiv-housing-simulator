@@ -29,11 +29,14 @@ public class Material {
     private short shaderOffset;
     private byte texCount;
     private byte mapCount;
+    @Getter
     private byte colorSetCount;
+    @Getter
     private byte unknownSize;
 
     private String[] texNames;
     private String[] maps;
+    @Getter
     private String[] colorSets;
     @Getter
     private String shader;// bg.shpk
@@ -41,6 +44,7 @@ public class Material {
     private byte[] colorSetData;// half float rgba color, width 4 * height 16 in pixel size
 
     // metadata
+    @Getter
     private short dataSize;// Bytes at the end
     private short struct1Count;
     private short struct2Count;
