@@ -1,6 +1,7 @@
 package ffxiv.housim.saintcoinach.db.xiv.entity;
 
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
+import ffxiv.housim.saintcoinach.db.xiv.IXivRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 
 // TODO need implements
@@ -28,5 +29,13 @@ public class Item extends ItemBase {
 
     public boolean isCollectable() {
         return asBoolean("IsCollectable");
+    }
+
+    public short getFilterGroup() {
+        return asInt16("FilterGroup");
+    }
+
+    public IXivRow getAdditionalData() {
+        return as(IXivRow.class, "AdditionalData");
     }
 }

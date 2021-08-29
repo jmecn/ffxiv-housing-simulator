@@ -1,39 +1,60 @@
 package ffxiv.housim.saintcoinach.db.xiv.entity.housing;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 public enum HousingItemCategory {
 
+    ROF(1, "房顶", " bgcommon/hou/dyna/%s/%s_rof/%04d/asset/%s_%s_rof%04d.sgb", "bg/ffxiv/%s/hou/dyna/%s_rof/%04d/asset/%s_%s_rof%04d.sgb"),// rof
+    WAL(2, "外墙", "bgcommon/hou/dyna/%s/%s_wal/%04d/asset/%s_%s_wal%04d.sgb", "bg/ffxiv/%s/hou/dyna/%s_wal/%04d/asset/%s_%s_wal%04d.sgb"),// wal
+    WID(3, "窗户", "bgcommon/hou/dyna/%s/wid/%04d/asset/%s_%s_wid%04d.sgb"),// wid
+    DOR(4, "房门", "bgcommon/hou/dyna/%s/dor/%04d/asset/%s_%s_dor%04d.sgb"),// dor
 
-    ROOF(1, "房顶"),// rof
-    EXTERIOR_WALL(2, "外墙"),//
-    WINDOW(3, "窗户"),// wid
-    DOOR(4, "门"),// dor
+    RF(5, "烟囱", "bgcommon/hou/dyna/opt/rf/%04d/asset/opt_rf_m%04d.sgb"),
+    WL(6, "遮篷", "bgcommon/hou/dyna/opt/wl/%04d/asset/opt_wl_m%04d.sgb"),
+    SG(7, "门牌", "bgcommon/hou/dyna/opt/sg/%04d/asset/opt_sg_m%04d.sgb"),
 
-    RF(5, "烟囱"),// rf bgcommon/hou/dyna/opt/rf/%04d/assert/opt_rf_m%04d.sgb 0~8
-    SG(6, "门牌"),// sg bgcommon/hou/dyna/opt/sg/%04d/assert/opt_sg_m%04d.sgb 0~9
-    WL(7, "遮篷"),// wl bgcommon/hou/dyna/opt/wl/%04d/assert/opt_wl_m%04d.sgb 0~6
+    FNC(8, "栅栏", "bg/ffxiv/%s/hou/dyna/c_fnc/%04d/asset/%s_f_fnc%04da.sgb"),
 
-    FENCE(8, "栅栏"),
+    ROM_WL(9, "内墙", "bgcommon/hou/dyna/mat/wl/%04d/material/rom_wl_2%04da.mtrl"),
+    ROM_FL(10, "地板", "bgcommon/hou/dyna/mat/fl/%04d/material/rom_fl_2%04da.mtrl"),
+    LMP(11, "屋顶照明", "bgcommon/hou/dyna/lmp/lp/%04d/asset/lmp_s0_m%04d.sgb"),
 
-    INTERIOR_WALL(9, "内墙"),
-    FLOOR(10, "地板"),
-    LIGHT(11, "屋顶照明"),
+    FURNISHING(12, "家具", "bgcommon/hou/indoor/general/%04d/asset/fun_b0_m%04d.sgb"),
+    TABLE(13, "桌台", "bgcommon/hou/indoor/general/%04d/asset/fun_b0_m%04d.sgb"),
+    TABLE_TOP(14, "桌上", "bgcommon/hou/indoor/general/%04d/asset/fun_b0_m%04d.sgb"),
+    WALL_MOUNTED(15, "壁挂", "bgcommon/hou/indoor/general/%04d/asset/fun_b0_m%04d.sgb"),
+    Rug(16, "地毯", "bgcommon/hou/indoor/general/%04d/asset/fun_b0_m%04d.sgb"),
 
-    FURNISHING(12, "家具"),
-    TABLE(13, "桌台"),
-    TABLE_TOP(14, "桌上"),
-    WALL_MOUNTED(15, "壁挂"),
-    Rug(16, "地毯"),
-    OUTDOOR_FURNISHING(17, "庭具"),
+    GAR(17, "庭具", "bgcommon/hou/outdoor/general/%04d/asset/gar_b0_m%04d.sgb"),
 
     // 18 cho bgcommon/hou/outdoor/cho/%04d/asset/cho_f%d_m%04d.sgb
     // 19 frm bgcommon/hou/outdoor/frm/%04d/asset/frm_f%d_m%04d.sgb
     ;
 
-    int value;
+    short value;
     String desc;
+    String[] format;
 
-    HousingItemCategory(int value, String desc) {
-        this.value = value;
+    HousingItemCategory(int value, String desc, String ... format) {
+        this.value = (short) value;
         this.desc = desc;
+        this.format = format;
+    }
+
+    // ui/uld/
+    // h_ui_rot02_o
+    // h_ui_trn02_o
+    // vfx/common/eff/%s.avfx
+
+    final static Map<Short, HousingItemCategory> CACHE;
+    static {
+        CACHE = new TreeMap<>();
+        for(HousingItemCategory e : values()) {
+            CACHE.put(e.value, e);
+        }
+    }
+    public static HousingItemCategory of (short val) {
+        return CACHE.get(val);
     }
 }

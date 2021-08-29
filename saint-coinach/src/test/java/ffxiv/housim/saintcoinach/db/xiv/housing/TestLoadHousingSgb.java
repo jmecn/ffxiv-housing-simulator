@@ -40,9 +40,9 @@ public class TestLoadHousingSgb {
             PackFile file = aRealmReversed.getGameData().getPackCollection().tryGetFile(e.getModel());
             if (file != null) {
                 SgbFile sgb = new SgbFile(file);
-                log.info("#{}: {}, {}, {}, {}, {}", e.getKey(), e.getExteriorKey(), e.getExteriorType(), e.getPlaceName(), e.getHousingSize(), e.getModel());
+                log.info("#{}: {}, {}, {}, {}, {}", e.getKey(), e.getExteriorId(), e.getHousingItemCategory(), e.getPlaceName(), e.getHousingSize(), e.getModel());
             } else {
-                log.info("#{}: {}, {}, {}, {}, {}, {}", e.getKey(), e.getExteriorKey(), e.getExteriorType(), e.getPlaceName(), e.getHousingSize(), e.getModel(), "NOT EXIST");
+                log.info("#{}: {}, {}, {}, {}, {}, {}", e.getKey(), e.getExteriorId(), e.getHousingItemCategory(), e.getPlaceName(), e.getHousingSize(), e.getModel(), "NOT EXIST");
             }
         });
     }

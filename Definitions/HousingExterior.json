@@ -3,11 +3,11 @@
   "definitions": [
     {
       "index": 0,
-      "name": "ExteriorKey"
+      "name": "ExteriorId"
     },
     {
       "index": 1,
-      "name": "ExteriorType"
+      "name": "HousingItemCategory"
     },
     {
       "index": 2,

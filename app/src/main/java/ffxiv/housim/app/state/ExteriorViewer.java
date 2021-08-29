@@ -58,7 +58,7 @@ public class ExteriorViewer extends SimpleApplication {
 
         for (HousingExterior f : sheet) {
             if (f.getModel() == null || f.getModel().isBlank()) {
-                log.info("ignore HousingExterior #{}, {}", f.getExteriorKey(), f.getModel());
+                log.info("ignore HousingExterior #{}, {}", f.getExteriorId(), f.getModel());
                 continue;
             }
             list.add(f);
@@ -146,7 +146,7 @@ public class ExteriorViewer extends SimpleApplication {
     private void reload() {
         enqueue(() -> {
             HousingExterior f = list.get(index);
-            log.info("load #{}, {}, {}", f.getExteriorType(), f.getExteriorKey(), f.getModel());
+            log.info("load #{}, {}, {}", f.getExteriorId(), f.getHousingItemCategory(), f.getHousingSize());
             Node node = ModelFactory.load(f.getModel());
             viewNode.detachAllChildren();
             viewNode.attachChild(node);

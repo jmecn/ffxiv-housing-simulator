@@ -5,12 +5,14 @@ import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalSheet;
 import ffxiv.housim.saintcoinach.db.xiv.entity.Stain;
+import ffxiv.housim.saintcoinach.db.xiv.entity.StainTransient;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingFurniture;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.TreeMap;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -67,11 +69,25 @@ public class TestXivCollection {
 
         XivCollection coll = aRealmReversed.getGameData();
         IXivSheet<Stain> items = coll.getSheet(Stain.class);
+        IXivSheet<StainTransient> transients = coll.getSheet(StainTransient.class);
         log.info("start iterator");
+        TreeMap<Short, TreeMap<Short, Stain>> map = new TreeMap<>();
         for (Stain it : items) {
-            log.info("{}, {}, {}, {}, {}, {}, {}", it.getKey(), it.getColor(), it.getShade(), it.getSubOrder(), it.getName(), it.get4(), it.get5());
+            if (it.getShade() == 0) {
+                continue;
+            }
+            StainTransient tras = transients.get(it.getKey());
+            log.info("{}, {}, {}, {}, {}, {}, {}, {}", it.getKey(), it.getColor(), it.getShade(), it.getSubOrder(), it.getName(), it.get4(), it.get5(), tras.getItem());
+
+            TreeMap<Short, Stain> cache = map.get(it.getShade());
+            if (cache == null) {
+                cache = new TreeMap<>();
+                map.put(it.getShade(), cache);
+            }
+
+            cache.put(it.getSubOrder(), it);
         }
-        System.out.println(items.getCount());
+        log.info("stain:{}", map);
     }
 
 }

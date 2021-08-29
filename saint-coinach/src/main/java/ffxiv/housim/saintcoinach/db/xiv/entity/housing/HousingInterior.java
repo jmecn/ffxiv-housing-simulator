@@ -5,6 +5,7 @@ import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
 
 public class HousingInterior extends XivRow {
+
     public HousingInterior(IXivSheet sheet, IRelationalRow sourceRow) {
         super(sheet, sourceRow);
     }
