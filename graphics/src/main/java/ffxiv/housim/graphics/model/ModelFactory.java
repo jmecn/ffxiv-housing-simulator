@@ -47,6 +47,8 @@ public class ModelFactory {
                 build(root, ce, chairs++);
             } else if (e instanceof SgbGroupEntryTargetMarker te) {
                 build(root, te, targets++);
+            } else {
+                log.warn("unsupported entry:{}", e);
             }
         }
 
@@ -70,7 +72,7 @@ public class ModelFactory {
         mark.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
         mark.setLocalScale(scale.x, scale.y, scale.z);
 
-        // root.attachChild(mark);
+        root.attachChild(mark);
     }
 
     private static void build(Node root, SgbGroupEntryChairMarker ce, int chairs) {
@@ -86,7 +88,7 @@ public class ModelFactory {
         Vector3 rotate = ce.getRotation();
 
         mark.setLocalTranslation(trans.x, trans.y, trans.z);
-        //mark.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
+        mark.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
         mark.setLocalScale(scale.x, scale.y, scale.z);
 
         root.attachChild(mark);
@@ -103,7 +105,7 @@ public class ModelFactory {
         log.debug("trans:{}, rotate:{}, scale:{}", trans, rotate, scale);
 
         root.setLocalTranslation(trans.x, trans.y, trans.z);
-        //root.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
+        root.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
         root.setLocalScale(scale.x, scale.y, scale.z);
 
         // model

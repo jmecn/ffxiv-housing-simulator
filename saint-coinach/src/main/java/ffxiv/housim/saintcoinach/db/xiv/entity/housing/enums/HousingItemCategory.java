@@ -1,14 +1,15 @@
-package ffxiv.housim.saintcoinach.db.xiv.entity.housing;
+package ffxiv.housim.saintcoinach.db.xiv.entity.housing.enums;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 public enum HousingItemCategory {
 
-    ROF(1, "房顶", " bgcommon/hou/dyna/%s/%s_rof/%04d/asset/%s_%s_rof%04d.sgb", "bg/ffxiv/%s/hou/dyna/%s_rof/%04d/asset/%s_%s_rof%04d.sgb"),// rof
-    WAL(2, "外墙", "bgcommon/hou/dyna/%s/%s_wal/%04d/asset/%s_%s_wal%04d.sgb", "bg/ffxiv/%s/hou/dyna/%s_wal/%04d/asset/%s_%s_wal%04d.sgb"),// wal
-    WID(3, "窗户", "bgcommon/hou/dyna/%s/wid/%04d/asset/%s_%s_wid%04d.sgb"),// wid
-    DOR(4, "房门", "bgcommon/hou/dyna/%s/dor/%04d/asset/%s_%s_dor%04d.sgb"),// dor
+    ROF(1, "房顶", " bgcommon/hou/dyna/%s/%s_rof/%04d/asset/%s_%s_rof%04d.sgb", "bg/ffxiv/%s/hou/dyna/%s_rof/%04d/asset/%s_%s_rof%04d.sgb"),
+    WAL(2, "外墙", "bgcommon/hou/dyna/%s/%s_wal/%04d/asset/%s_%s_wal%04d.sgb", "bg/ffxiv/%s/hou/dyna/%s_wal/%04d/asset/%s_%s_wal%04d.sgb"),
+    WID(3, "窗户", "bgcommon/hou/dyna/%s/wid/%04d/asset/%s_%s_wid%04d.sgb"),
+    DOR(4, "房门", "bgcommon/hou/dyna/%s/dor/%04d/asset/%s_%s_dor%04d.sgb"),
 
     RF(5, "烟囱", "bgcommon/hou/dyna/opt/rf/%04d/asset/opt_rf_m%04d.sgb"),
     WL(6, "遮篷", "bgcommon/hou/dyna/opt/wl/%04d/asset/opt_wl_m%04d.sgb"),
@@ -42,17 +43,25 @@ public enum HousingItemCategory {
         this.format = format;
     }
 
+    public short getValue() {
+        return value;
+    }
+
     public String getName() {
         return name;
     }
+
+    public String getFormat(int index) {
+        return format[index];
+    }
+
     // ui/uld/
     // h_ui_rot02_o
     // h_ui_trn02_o
     // vfx/common/eff/%s.avfx
 
-    final static Map<Short, HousingItemCategory> CACHE;
+    final static Map<Short, HousingItemCategory> CACHE = new HashMap<>();
     static {
-        CACHE = new TreeMap<>();
         for(HousingItemCategory e : values()) {
             CACHE.put(e.value, e);
         }

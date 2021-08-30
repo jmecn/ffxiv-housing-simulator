@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class ByteBufferStr {
 
-    private final static int INIT_LEN = 67;
+    private final static int INIT_LEN = 68;
 
     public static String getString(ByteBuffer buffer, int offset) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream(INIT_LEN);

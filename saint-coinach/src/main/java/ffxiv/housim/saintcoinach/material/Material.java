@@ -78,7 +78,7 @@ public class Material {
     }
 
     private void build() {
-        log.info("file:{}", file.getPath());
+        log.debug("file:{}", file.getPath());
 
         byte[] bytes = file.getData();
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
@@ -210,7 +210,7 @@ public class Material {
 
         PackFile file = packs.tryGetFile(shaderPack);
         if (file != null) {
-            log.info("load shpk:{}", shaderPack);
+            log.debug("load shpk:{}", shaderPack);
             return new ShPkFile(file);
         }
 

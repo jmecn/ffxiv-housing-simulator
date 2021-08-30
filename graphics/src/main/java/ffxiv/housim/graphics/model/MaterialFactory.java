@@ -59,7 +59,7 @@ public class MaterialFactory {
             }
         }
 
-        log.info("colorSet size:{}, unknownSize:{}, colorSet count:{}, colorSet names:{}", m.getColorSetDataSize(), m.getUnknownSize(), m.getColorSetCount(), m.getColorSets());
+        log.debug("colorSet size:{}, unknownSize:{}, colorSet count:{}, colorSet names:{}", m.getColorSetDataSize(), m.getUnknownSize(), m.getColorSetCount(), m.getColorSets());
         return mat;
     }
 
@@ -99,7 +99,7 @@ public class MaterialFactory {
             }
         }
 
-        log.info("colorSet size:{}, unknownSize:{}, colorSet count:{}, colorSet names:{}, data size:{}", m.getColorSetDataSize(), m.getUnknownSize(), m.getColorSetCount(), m.getColorSets(), m.getDataSize());
+        log.debug("colorSet size:{}, unknownSize:{}, colorSet count:{}, colorSet names:{}, data size:{}", m.getColorSetDataSize(), m.getUnknownSize(), m.getColorSetCount(), m.getColorSets(), m.getDataSize());
         return mat;
     }
 

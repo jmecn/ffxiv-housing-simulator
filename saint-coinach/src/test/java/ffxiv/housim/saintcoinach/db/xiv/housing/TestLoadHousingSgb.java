@@ -4,11 +4,12 @@ import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.db.xiv.IXivRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
-import ffxiv.housim.saintcoinach.db.xiv.entity.housing.*;
-import ffxiv.housim.saintcoinach.io.PackCollection;
-import ffxiv.housim.saintcoinach.scene.sgb.SgbFile;
-import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.db.xiv.entity.Item;
+import ffxiv.housim.saintcoinach.db.xiv.entity.housing.*;
+import ffxiv.housim.saintcoinach.db.xiv.entity.housing.enums.HousingItemCategory;
+import ffxiv.housim.saintcoinach.io.PackCollection;
+import ffxiv.housim.saintcoinach.io.PackFile;
+import ffxiv.housim.saintcoinach.scene.sgb.SgbFile;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +24,12 @@ import static org.junit.Assert.assertNotNull;
 public class TestLoadHousingSgb {
     ARealmReversed aRealmReversed;
 
+    Map<Integer, Item> i2i = new HashMap<>();
+    Map<Integer, Item> e2i = new HashMap<>();
+    Map<Integer, Item> ue2i = new HashMap<>();
+    Map<Integer, Item> f2i = new HashMap<>();
+    Map<Integer, Item> yo2i = new HashMap<>();
+
     @Before
     public void getGameDir() {
         String gameDir = System.getenv("FFXIV_HOME");
@@ -31,6 +38,26 @@ public class TestLoadHousingSgb {
             aRealmReversed = new ARealmReversed(gameDir, Language.ChineseSimplified);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        IXivSheet<Item> items = aRealmReversed.getGameData().getSheet(Item.class);
+        for (Item i : items) {
+            if (14 != i.getFilterGroup()) {// 14 for housing
+                continue;
+            }
+
+            IXivRow row = i.getAdditionalData();
+            if (row instanceof HousingInterior) {
+                i2i.put(row.getKey(), i);
+            } else if (row instanceof HousingExterior) {
+                e2i.put(row.getKey(), i);
+            } else if (row instanceof HousingUnitedExterior) {
+                ue2i.put(row.getKey(), i);
+            } else if (row instanceof HousingFurniture) {
+                f2i.put(row.getKey(), i);
+            } else if (row instanceof HousingYardObject) {
+                yo2i.put(row.getKey(), i);
+            }
         }
     }
 
@@ -47,31 +74,30 @@ public class TestLoadHousingSgb {
         });
     }
 
+
+    @Test
+    public void testHousingUnitedExterior() {
+        foreach(HousingUnitedExterior.class, e-> {
+            HousingExterior rof = e.getItem(HousingItemCategory.ROF);
+            HousingExterior wal = e.getItem(HousingItemCategory.WAL);
+            HousingExterior wid = e.getItem(HousingItemCategory.WID);
+            HousingExterior dor = e.getItem(HousingItemCategory.DOR);
+            HousingExterior rf = e.getItem(HousingItemCategory.RF);
+            HousingExterior wl = e.getItem(HousingItemCategory.WL);
+            HousingExterior sg = e.getItem(HousingItemCategory.SG);
+            HousingExterior fnc = e.getItem(HousingItemCategory.FNC);
+
+            log.info("#{}:{} {}, {}, {}, {}, {}, {}, {}, {}", e.getKey(), ue2i.get(e.getKey()), rof, wal, wid, dor, rf, wl, sg, fnc);
+        });
+    }
+
     @Test
     public void testHousingInterior() {
         log.info("test housing interior");
         PackCollection packs = aRealmReversed.getGameData().getPackCollection();
 
-        IXivSheet<Item> items = aRealmReversed.getGameData().getSheet(Item.class);
-        Map<Integer, Integer> hi2i = new HashMap<>();
-        Map<Integer, Integer> he2i = new HashMap<>();
-        for (Item i : items) {
-            if (14 != i.getFilterGroup()) {// 14 for housing
-                continue;
-            }
-
-            IXivRow row = i.getAdditionalData();
-            if (row instanceof HousingInterior) {
-                hi2i.put(row.getKey(), i.getKey());
-            } else if (row instanceof HousingExterior) {
-                he2i.put(row.getKey(), i.getKey());
-            }
-        }
-        log.info("load housing interior to item map");
-
         foreach(HousingInterior.class, e-> {
-            Integer i = hi2i.get(e.getKey());
-            Item item = items.get(i);
+            Item item = i2i.get(e.getKey());
 
             HousingItemCategory hcat = HousingItemCategory.of(e.getHousingItemCategory());
             log.info("#{}: {}, {}, {}", e.getKey(), item, hcat.getName(), e.getOrder());

@@ -4,6 +4,8 @@ import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.xiv.entity.PlaceName;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
+import ffxiv.housim.saintcoinach.db.xiv.entity.housing.enums.HousingItemCategory;
+import ffxiv.housim.saintcoinach.db.xiv.entity.housing.enums.HousingSize;
 
 public class HousingExterior extends XivRow {
 
@@ -17,7 +19,7 @@ public class HousingExterior extends XivRow {
     // housing size
     // 254 -> _co -> common
     // 0 -> _s -> small
-    // 1 -> _m -> middle
+    // 1 -> _m -> medium
     // 2 -> _l -> large
 
     // /s_wal /s_rof
@@ -41,8 +43,13 @@ public class HousingExterior extends XivRow {
         return asInt16("ExteriorId");
     }
 
-    public int getHousingItemCategory() {
+    public short getHousingItemCategory() {
         return asInt16("HousingItemCategory");
+    }
+
+    public HousingItemCategory getCategory() {
+        short val = getHousingItemCategory();
+        return HousingItemCategory.of(val);
     }
 
     public PlaceName getPlaceName() {
@@ -53,8 +60,16 @@ public class HousingExterior extends XivRow {
         return asInt16("HousingSize");
     }
 
+    public HousingSize getSize() {
+        return HousingSize.of(getHousingSize());
+    }
+
     public String getModel() {
         return asString("Model");
     }
 
+    @Override
+    public String toString() {
+        return String.format("(#%d: id=%d, cat=%s, size=%s)", getKey(), getExteriorId(), getCategory(), getSize());
+    }
 }

@@ -21,14 +21,21 @@ import ffxiv.housim.graphics.state.CheckerBoardState;
 import ffxiv.housim.graphics.state.LightState;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
+import ffxiv.housim.saintcoinach.db.xiv.IXivRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
+import ffxiv.housim.saintcoinach.db.xiv.entity.Item;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingExterior;
+import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingInterior;
+import ffxiv.housim.saintcoinach.db.xiv.entity.housing.enums.HousingItemCategory;
+import ffxiv.housim.saintcoinach.db.xiv.entity.housing.enums.HousingSize;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class ExteriorViewer extends SimpleApplication {
@@ -36,6 +43,9 @@ public class ExteriorViewer extends SimpleApplication {
     private ARealmReversed ffxiv;
     private PackCollection packs;
     private List<HousingExterior> list;
+
+    private Map<Integer, Item> hi2i = new HashMap<>();
+    private Map<Integer, Item> he2i = new HashMap<>();
 
     private int index;
 
@@ -52,13 +62,29 @@ public class ExteriorViewer extends SimpleApplication {
             System.exit(-1);
         }
         packs = ffxiv.getGameData().getPackCollection();
+
+        IXivSheet<Item> items = ffxiv.getGameData().getSheet(Item.class);
+
+        for (Item i : items) {
+            if (14 != i.getFilterGroup()) {// 14 for housing
+                continue;
+            }
+
+            IXivRow row = i.getAdditionalData();
+            if (row instanceof HousingInterior) {
+                hi2i.put(row.getKey(), i);
+            } else if (row instanceof HousingExterior) {
+                he2i.put(row.getKey(), i);
+            }
+        }
+
         IXivSheet<HousingExterior> sheet = ffxiv.getGameData().getSheet(HousingExterior.class);
 
         list = new ArrayList<>(sheet.getCount());
 
         for (HousingExterior f : sheet) {
-            if (f.getModel() == null || f.getModel().isBlank()) {
-                log.info("ignore HousingExterior #{}, {}", f.getExteriorId(), f.getModel());
+            if (f.getHousingItemCategory() == 0) {
+                log.info("ignore HousingExterior #{}", f.getExteriorId());
                 continue;
             }
             list.add(f);
@@ -145,11 +171,25 @@ public class ExteriorViewer extends SimpleApplication {
 
     private void reload() {
         enqueue(() -> {
-            HousingExterior f = list.get(index);
-            log.info("load #{}, {}, {}", f.getExteriorId(), f.getHousingItemCategory(), f.getHousingSize());
-            Node node = ModelFactory.load(f.getModel());
-            viewNode.detachAllChildren();
-            viewNode.attachChild(node);
+            try {
+                HousingExterior f = list.get(index);
+
+                Item item = he2i.get(f.getKey());
+                HousingItemCategory hic = HousingItemCategory.of(f.getHousingItemCategory());
+                HousingSize hs = HousingSize.of(f.getHousingSize());
+
+                log.info("load #{}:{}, id:{}, cat:{}, size:{}", f.getKey(), item, f.getExteriorId(), hic.getName(), hs.getDesc());
+
+                if (f.getModel().isEmpty()) {
+                    log.info("No model found");
+                    return;
+                }
+                Node node = ModelFactory.load(f.getModel());
+                viewNode.detachAllChildren();
+                viewNode.attachChild(node);
+            } catch (Exception e) {
+                e.printStackTrace();;
+            }
         });
     }
 
