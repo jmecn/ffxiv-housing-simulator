@@ -4,6 +4,8 @@ import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.db.ex.relational.RelationalColumn;
 import ffxiv.housim.saintcoinach.db.ex.relational.RelationalHeader;
+import ffxiv.housim.saintcoinach.db.xiv.entity.level.Level;
+import ffxiv.housim.saintcoinach.db.xiv.entity.level.PlaceName;
 import ffxiv.housim.saintcoinach.db.xiv.entity.level.XivMap;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.*;
 import ffxiv.housim.saintcoinach.db.xiv.IXivRow;
@@ -48,6 +50,16 @@ public class TestLoadHousing {
     }
 
     @Test
+    public void testLevel() {
+        foreach(Level.class);
+    }
+
+    @Test
+    public void testPlaceName() {
+        foreach(PlaceName.class);
+    }
+
+    @Test
     public void testHousingAethernet() {
         foreach(HousingAethernet.class);
     }
@@ -73,8 +85,28 @@ public class TestLoadHousing {
     }
 
     @Test
+    public void testFurnitureCatalogCategory() {
+        foreach(FurnitureCatalogCategory.class);
+    }
+
+    @Test
+    public void testFurnitureCatalogItemList() {
+        foreach(FurnitureCatalogItemList.class);
+    }
+
+    @Test
     public void testHousingYardObject() {
         foreach(HousingYardObject.class);
+    }
+
+    @Test
+    public void testYardCatalogCategory() {
+        foreach(YardCatalogCategory.class);
+    }
+
+    @Test
+    public void testYardCatalogItemList() {
+        foreach(YardCatalogItemList.class);
     }
 
     @Test

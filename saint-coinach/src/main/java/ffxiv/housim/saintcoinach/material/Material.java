@@ -40,7 +40,11 @@ public class Material {
     private String[] colorSets;
     @Getter
     private String shader;// bg.shpk
-    private byte[] unknown;
+    @Getter
+    private int unknown0;// g_WetnessParameter? ID ?
+    @Getter
+    private float[] wetnessParameter;// g_WetnessParameter? mat to 32 bytes
+    @Getter
     private byte[] colorSetData;// half float rgba color, width 4 * height 16 in pixel size
 
     // metadata
@@ -56,7 +60,8 @@ public class Material {
     private MaterialStruct2[] structs2;
     @Getter
     private MaterialTextureParameter[] textureParameters;
-    private byte[] data;
+    @Getter
+    private float[] materialParameter;// g_MaterialParameter, max to 172 bytes
 
     //////////// Material data end
 
@@ -90,10 +95,15 @@ public class Material {
         // read names of texture, map, color set and shader
         readNames(buffer);
 
-        // read ColorSet data
-        this.unknown = new byte[unknownSize];
-        buffer.get(unknown);
+        // read material params
+        assert unknownSize % 4 == 0;
+        this.wetnessParameter = new float[unknownSize / 4 - 1];
+        unknown0 = buffer.getInt();
+        for (int i = 0; i < wetnessParameter.length; i++) {
+            wetnessParameter[i] = buffer.getFloat();
+        }
 
+        // read ColorSet data
         this.colorSetData = new byte[colorSetDataSize];
         buffer.get(colorSetData);
 
@@ -186,8 +196,11 @@ public class Material {
         }
 
         // data
-        this.data = new byte[dataSize];
-        buffer.get(data);
+        assert dataSize % 4 == 0;
+        this.materialParameter = new float[dataSize/4];
+        for (int i = 0; i< materialParameter.length; i++) {
+            materialParameter[i] = buffer.getFloat();
+        }
     }
 
     private void loadTextures() {

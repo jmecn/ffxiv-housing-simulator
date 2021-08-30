@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.Assert.assertNotNull;
@@ -83,53 +84,4 @@ public class TestExCollection {
         }
     }
 
-    @Test
-    public void testSgb() {
-        PackFile file = collection.tryGetFile("bgcommon/hou/indoor/general/0888/asset/fun_b0_m0888.sgb");
-        SgbFile sgbFile = new SgbFile(file);
-        SgbGroup group = (SgbGroup) sgbFile.getData()[0];
-        log.info("{}", group);
-
-        int models = 0;
-        for (ISgbGroupEntry e : group.getEntries()) {
-
-            if (e instanceof SgbGroupEntryModel me) {
-                build(me, models++);
-            }
-        }
-
-    }
-    private static void build(SgbGroupEntryModel me, int models) {
-
-        TransformedModel transformedModel = me.getModel();
-
-        // transform
-        Vector3 trans = transformedModel.getTranslation();
-        Vector3 rotate = transformedModel.getRotation();
-        Vector3 scale = transformedModel.getScale();
-        log.info("trans:{}, rotate:{}, scale:{}", trans, rotate, scale);
-
-        // model
-        ModelDefinition modelDefinition = transformedModel.getModel();
-
-        Model model = modelDefinition.getModel(ModelQuality.High);
-
-        for (ffxiv.housim.saintcoinach.scene.mesh.Mesh m : model.getMeshes()) {
-            // material
-            build(m.getMaterial());
-        }
-    }
-
-    private static Material build(MaterialDefinition matDef) {
-        Material mat = matDef.get();
-
-        ShPkFile shpk = mat.getShPk();
-
-        Shader vs = shpk.getVertexShader(shpk.getVertexShaderCount() - 1);
-        log.info("vs, params:{}, dxbc:{} bytes", vs.getParameters(), shpk.getDXBC(vs).length);
-        Shader ps = shpk.getPixelShader(shpk.getPixelShaderCount() - 1);
-        log.info("ps, params:{}, dxbc:{} bytes", ps.getParameters(), shpk.getDXBC(ps).length);
-
-        return mat;
-    }
 }

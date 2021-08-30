@@ -5,6 +5,7 @@ import com.jme3.material.Material;
 import com.jme3.material.Materials;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
 import ffxiv.housim.graphics.texture.TextureFactory;
 import ffxiv.housim.saintcoinach.io.PackCollection;
@@ -73,9 +74,28 @@ public class MaterialFactory {
         MaterialTextureParameter[] matParams = m.getTextureParameters();
 
         Material mat = new Material(assetManager, Materials.LIGHTING);
-        mat.setColor("Diffuse", ColorRGBA.White);
-        mat.setColor("Ambient", ColorRGBA.White);
-        mat.setColor("Specular", ColorRGBA.Yellow);
+
+        if ("bgcolorchange.shpk".equals(shader)) {
+            return bgcolorchange(m);
+        } else if ("bg.shpk".equals(shader)) {
+            return bg(m);
+        } else if ("water.shpk".equals(shader)) {
+            return water(m);
+        } else {
+            return colorMaterial(ColorRGBA.randomColor());
+        }
+    }
+
+
+    public static Material bg(ffxiv.housim.saintcoinach.material.Material m) {
+
+        ShPkFile shPk = m.getShPk();
+        String shader = m.getShader();
+
+        ImageFile[] textureFiles = m.getTextureFiles();
+        MaterialTextureParameter[] matParams = m.getTextureParameters();
+
+        Material mat = new Material(assetManager, Materials.LIGHTING);
 
         for (MaterialTextureParameter e : matParams) {
             Parameter param = shPk.getParameter(e.getParameterId());
@@ -86,9 +106,7 @@ public class MaterialFactory {
                 String name = param.getName().substring(2);
                 if (name.endsWith("ColorMap0")) {
                     mat.setTexture("DiffuseMap", texture);
-                    if ("bg.shpk".equals(shader)) {
-                        mat.setFloat("AlphaDiscardThreshold", e.alphaDiscard);
-                    }
+                    mat.setFloat("AlphaDiscardThreshold", e.alphaDiscard);
                 } else if (name.endsWith("NormalMap0")) {
                     //mat.setTexture("NormalMap", texture);
                 } else if (name.endsWith("SpecularMap0")) {
@@ -99,6 +117,87 @@ public class MaterialFactory {
             }
         }
 
+        log.debug("colorSet size:{}, unknownSize:{}, colorSet count:{}, colorSet names:{}, data size:{}", m.getColorSetDataSize(), m.getUnknownSize(), m.getColorSetCount(), m.getColorSets(), m.getDataSize());
+        return mat;
+    }
+
+
+    public static Material water(ffxiv.housim.saintcoinach.material.Material m) {
+
+        ShPkFile shPk = m.getShPk();
+        String shader = m.getShader();
+
+        ImageFile[] textureFiles = m.getTextureFiles();
+        MaterialTextureParameter[] matParams = m.getTextureParameters();
+
+        Material mat = new Material(assetManager, Materials.LIGHTING);
+
+        ColorRGBA color = new ColorRGBA(1f, 1f, 1f, 1f);
+        float[] materialParameter = m.getMaterialParameter();
+        if (materialParameter.length > 4) {
+            color.set(materialParameter[0], materialParameter[1], materialParameter[2], materialParameter[3]);
+        }
+        mat.setColor("Diffuse", color);
+        mat.setColor("Ambient", color);
+        mat.setColor("Specular", ColorRGBA.White);
+        //mat.setBoolean("UseMaterialColors", true);
+
+        for (MaterialTextureParameter e : matParams) {
+            Parameter param = shPk.getParameter(e.getParameterId());
+            ImageFile image = textureFiles[e.getTextureIndex()];
+            log.debug("param:{}, image:{}", param, image.getPath());
+            if (param.getType() == ParameterType.Sampler) {
+                Texture texture = TextureFactory.get(image);
+                String name = param.getName().substring(2);
+                if (name.endsWith("WaveMap")) {
+                    mat.setTexture("DiffuseMap", texture);
+                    mat.setTexture("NormalMap", texture);
+                }
+            } else {
+                log.info("ignore param:{}", param.getName());
+            }
+        }
+
+        log.debug("colorSet size:{}, unknownSize:{}, colorSet count:{}, colorSet names:{}, data size:{}", m.getColorSetDataSize(), m.getUnknownSize(), m.getColorSetCount(), m.getColorSets(), m.getDataSize());
+        return mat;
+    }
+
+    public static Material bgcolorchange(ffxiv.housim.saintcoinach.material.Material m) {
+        ShPkFile shPk = m.getShPk();
+
+        ImageFile[] textureFiles = m.getTextureFiles();
+        MaterialTextureParameter[] matParams = m.getTextureParameters();
+
+        Material mat = new Material(assetManager, Materials.LIGHTING);
+
+        ColorRGBA color = new ColorRGBA(1f, 1f, 1f, 1f);
+        float[] materialParameter = m.getMaterialParameter();
+        if (materialParameter.length > 4) {
+            color.set(materialParameter[0], materialParameter[1], materialParameter[2], materialParameter[3]);
+        }
+        mat.setColor("Diffuse", color);
+        mat.setColor("Ambient", color);
+        mat.setColor("Specular", ColorRGBA.White);
+        mat.setBoolean("UseMaterialColors", true);
+
+        for (MaterialTextureParameter e : matParams) {
+            Parameter param = shPk.getParameter(e.getParameterId());
+            ImageFile image = textureFiles[e.getTextureIndex()];
+            log.debug("param:{}, image:{}", param, image.getPath());
+            if (param.getType() == ParameterType.Sampler) {
+                Texture texture = TextureFactory.get(image);
+                String name = param.getName().substring(2);
+                if (name.endsWith("ColorMap0")) {
+                    mat.setTexture("DiffuseMap", texture);
+                } else if (name.endsWith("NormalMap0")) {
+                    //mat.setTexture("NormalMap", texture);
+                } else if (name.endsWith("SpecularMap0")) {
+                    mat.setTexture("SpecularMap", texture);
+                }
+            } else {
+                log.info("ignore param:{}", param.getName());
+            }
+        }
         log.debug("colorSet size:{}, unknownSize:{}, colorSet count:{}, colorSet names:{}, data size:{}", m.getColorSetDataSize(), m.getUnknownSize(), m.getColorSetCount(), m.getColorSets(), m.getDataSize());
         return mat;
     }

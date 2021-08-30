@@ -167,7 +167,7 @@ public class HbqjFurnitureViewer extends SimpleApplication {
     private void reload() {
         Map<Integer, String> fur = initHbqjFur();
 
-        File file = new File("和风茶舍S.json");
+        File file = new File("现代日式S.json");
         if (!file.exists()) {
             log.warn("File not exist");
             return;

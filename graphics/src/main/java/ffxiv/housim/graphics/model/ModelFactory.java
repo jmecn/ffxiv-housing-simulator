@@ -72,7 +72,7 @@ public class ModelFactory {
         mark.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
         mark.setLocalScale(scale.x, scale.y, scale.z);
 
-        root.attachChild(mark);
+        //root.attachChild(mark);
     }
 
     private static void build(Node root, SgbGroupEntryChairMarker ce, int chairs) {

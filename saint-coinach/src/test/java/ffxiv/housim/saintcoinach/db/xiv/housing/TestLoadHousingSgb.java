@@ -9,6 +9,7 @@ import ffxiv.housim.saintcoinach.db.xiv.entity.housing.*;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingItemCategory;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
+import ffxiv.housim.saintcoinach.scene.sgb.ISgbData;
 import ffxiv.housim.saintcoinach.scene.sgb.SgbFile;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
