@@ -26,8 +26,8 @@ import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.entity.Item;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingExterior;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingInterior;
-import ffxiv.housim.saintcoinach.db.xiv.entity.housing.enums.HousingItemCategory;
-import ffxiv.housim.saintcoinach.db.xiv.entity.housing.enums.HousingSize;
+import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingItemCategory;
+import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingSize;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import lombok.extern.slf4j.Slf4j;
 

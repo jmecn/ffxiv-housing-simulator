@@ -1,13 +1,14 @@
-package ffxiv.housim.saintcoinach.db.xiv.entity;
+package ffxiv.housim.saintcoinach.db.xiv.entity.level;
 
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
+import ffxiv.housim.saintcoinach.db.xiv.entity.ILocation;
 
 /**
  * Class representing a location in the game.
  */
-public class Level extends XivRow implements ILocation{
+public class Level extends XivRow implements ILocation {
     public Level(IXivSheet sheet, IRelationalRow sourceRow) {
         super(sheet, sourceRow);
     }

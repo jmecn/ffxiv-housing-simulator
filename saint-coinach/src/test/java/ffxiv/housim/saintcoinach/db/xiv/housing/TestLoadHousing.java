@@ -4,7 +4,7 @@ import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.db.ex.relational.RelationalColumn;
 import ffxiv.housim.saintcoinach.db.ex.relational.RelationalHeader;
-import ffxiv.housim.saintcoinach.db.xiv.entity.XivMap;
+import ffxiv.housim.saintcoinach.db.xiv.entity.level.XivMap;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.*;
 import ffxiv.housim.saintcoinach.db.xiv.IXivRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;

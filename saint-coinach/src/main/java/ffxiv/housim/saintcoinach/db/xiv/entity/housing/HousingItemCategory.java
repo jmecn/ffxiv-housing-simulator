@@ -1,8 +1,7 @@
-package ffxiv.housim.saintcoinach.db.xiv.entity.housing.enums;
+package ffxiv.housim.saintcoinach.db.xiv.entity.housing;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 public enum HousingItemCategory {
 

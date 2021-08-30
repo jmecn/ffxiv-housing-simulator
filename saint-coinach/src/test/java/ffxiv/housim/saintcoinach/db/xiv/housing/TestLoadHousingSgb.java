@@ -6,7 +6,7 @@ import ffxiv.housim.saintcoinach.db.xiv.IXivRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.entity.Item;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.*;
-import ffxiv.housim.saintcoinach.db.xiv.entity.housing.enums.HousingItemCategory;
+import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingItemCategory;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.scene.sgb.SgbFile;

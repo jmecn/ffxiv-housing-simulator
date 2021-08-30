@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach.db.xiv.entity.housing.enums;
+package ffxiv.housim.saintcoinach.db.xiv.entity.housing;
 
 import lombok.Getter;
 

@@ -3,9 +3,9 @@ package ffxiv.housim.saintcoinach.db.xiv.entity.housing;
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
-import ffxiv.housim.saintcoinach.db.xiv.entity.Level;
-import ffxiv.housim.saintcoinach.db.xiv.entity.PlaceName;
-import ffxiv.housim.saintcoinach.db.xiv.entity.TerritoryType;
+import ffxiv.housim.saintcoinach.db.xiv.entity.level.Level;
+import ffxiv.housim.saintcoinach.db.xiv.entity.level.PlaceName;
+import ffxiv.housim.saintcoinach.db.xiv.entity.level.TerritoryType;
 
 // 房区
 public class HousingAethernet extends XivRow {

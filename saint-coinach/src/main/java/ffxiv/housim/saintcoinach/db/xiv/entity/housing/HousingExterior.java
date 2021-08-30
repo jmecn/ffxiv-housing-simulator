@@ -1,11 +1,9 @@
 package ffxiv.housim.saintcoinach.db.xiv.entity.housing;
 
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
-import ffxiv.housim.saintcoinach.db.xiv.entity.PlaceName;
+import ffxiv.housim.saintcoinach.db.xiv.entity.level.PlaceName;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
-import ffxiv.housim.saintcoinach.db.xiv.entity.housing.enums.HousingItemCategory;
-import ffxiv.housim.saintcoinach.db.xiv.entity.housing.enums.HousingSize;
 
 public class HousingExterior extends XivRow {
 
