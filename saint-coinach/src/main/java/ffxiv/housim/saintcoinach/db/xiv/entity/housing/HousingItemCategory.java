@@ -33,15 +33,18 @@ public enum HousingItemCategory {
     ;
 
     short value;
-    String desc;
+    String name;
     String[] format;
 
-    HousingItemCategory(int value, String desc, String ... format) {
+    HousingItemCategory(int value, String name, String ... format) {
         this.value = (short) value;
-        this.desc = desc;
+        this.name = name;
         this.format = format;
     }
 
+    public String getName() {
+        return name;
+    }
     // ui/uld/
     // h_ui_rot02_o
     // h_ui_trn02_o

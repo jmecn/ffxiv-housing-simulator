@@ -49,22 +49,26 @@ public class TestFurnitureCatalog {
             Item item = e.getItem();
             var category = e.getCategory();
             HousingFurniture fur = map.get(item.getKey());
-            log.info("key:{}, name:{}, category:{}, cat:{}, order:{}, sgb：{}", fur.getModelKey(), item.getName(), category.getHousingItemCategory(), category.getCategory(), category.getOrder(), fur.getSgbPath());
+            HousingItemCategory hcat = HousingItemCategory.of(category.getHousingItemCategory());
+            log.info("#{}:{}, 类别:{}->{}, 排序:{}", fur.getModelKey(), item.getName(), hcat.getName(), category.getCategory(), category.getOrder());
         });
     }
     @Test
     public void testHousingYardObject() {
         IXivSheet<HousingYardObject> sheet = aRealmReversed.getGameData().getSheet(HousingYardObject.class);
+        Map<Integer, HousingYardObject> map = new HashMap<>();
+        sheet.forEach(it -> {
+            map.put(it.getItem().getKey(), it);
+        });
         foreach(YardCatalogItemList.class, e-> {
             Item item = e.getItem();
+            HousingYardObject obj = map.get(item.getKey());
+            if (obj.getModelKey() == 0) {
+                return;
+            }
             var category = e.getCategory();
-
-            sheet.get(item.getKey());
-
-            log.info("name:{}, category:{}", item.getName(), category);
-//            log.info("#{}: {}, {}, {}", e.getKey(), e.getModelKey(), item, e.getSgbPath());
-//            PackFile file = aRealmReversed.getGameData().getPackCollection().tryGetFile(e.getSgbPath());
-//            SgbFile sgb = new SgbFile(file);
+            HousingItemCategory hcat = HousingItemCategory.of(category.getHousingItemCategory());
+            log.info("#{}:{}, 类别:{}->{}, 排序:{}", obj.getModelKey(), item.getName(), hcat.getName(), category.getCategory(), category.getOrder());
         });
     }
 

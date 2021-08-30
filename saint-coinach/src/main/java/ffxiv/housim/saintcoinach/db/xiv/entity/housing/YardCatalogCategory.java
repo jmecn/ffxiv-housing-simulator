@@ -14,12 +14,12 @@ public class YardCatalogCategory extends XivRow {
         return asString("Category");// Name
     }
 
-    public Short getHousingItemCategory() {
+    public short getHousingItemCategory() {
         return asInt16("HousingItemCategory");// 17-庭具
     }
 
-    public byte getOrder() {
-        return asByte("Order");
+    public short getOrder() {
+        return asInt16("Order");
     }
 
     @Override
