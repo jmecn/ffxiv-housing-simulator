@@ -17,6 +17,8 @@ import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.math.Vector3;
 import ffxiv.housim.saintcoinach.math.Vector4;
+import ffxiv.housim.saintcoinach.scene.terrain.Terrain;
+import ffxiv.housim.saintcoinach.scene.terrain.Territory;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -95,37 +97,48 @@ public class ModelFactory {
     }
 
     private static void build(Node root, SgbGroupEntryModel me, int models) {
+        build(root, me.getModel(), models);
+    }
 
-        TransformedModel transformedModel = me.getModel();
+    private static void build(Node root, TransformedModel transformedModel, int models) {
+        if (transformedModel == null) {
+            return;
+        }
 
+        Node thisNode = new Node("#" + models);
         // transform
         Vector3 trans = transformedModel.getTranslation();
         Vector3 rotate = transformedModel.getRotation();
         Vector3 scale = transformedModel.getScale();
-        log.debug("trans:{}, rotate:{}, scale:{}", trans, rotate, scale);
+        log.info("trans:{}, rotate:{}, scale:{}", trans, rotate, scale);
 
-        root.setLocalTranslation(trans.x, trans.y, trans.z);
-        root.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
-        root.setLocalScale(scale.x, scale.y, scale.z);
+        thisNode.setLocalTranslation(trans.x, trans.y, trans.z);
+        thisNode.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
+        thisNode.setLocalScale(scale.x, scale.y, scale.z);
 
         // model
         ModelDefinition modelDefinition = transformedModel.getModel();
+        log.info("qualities:{}", modelDefinition.getAvailableQualities());
 
         Model model = modelDefinition.getModel(ModelQuality.High);
 
+        int i = 0;
         for (ffxiv.housim.saintcoinach.scene.mesh.Mesh m : model.getMeshes()) {
+            i++;
             // mesh
             Mesh mesh = build(m);
 
             // material
             Material material = MaterialFactory.build(m.getMaterial());
 
-            Geometry geom = new Geometry("#" + models);
+            Geometry geom = new Geometry("#" + models + ":" + i);
             geom.setMesh(mesh);
             geom.setMaterial(material);
             geom.setShadowMode(RenderQueue.ShadowMode.Cast);
-            root.attachChild(geom);
+            thisNode.attachChild(geom);
         }
+
+        root.attachChild(thisNode);
     }
 
     private static Mesh build(ffxiv.housim.saintcoinach.scene.mesh.Mesh m) {
@@ -238,5 +251,28 @@ public class ModelFactory {
         mesh.updateCounts();
 
         return mesh;
+    }
+
+    public static Node load(Territory territory) {
+        if (territory == null) {
+            return null;
+        }
+        Node root = new Node(territory.getName());
+
+        build(root, territory.getTerrain());
+
+        return root;
+    }
+
+    public static void build(Node root, Terrain terrain) {
+
+        if (terrain == null) {
+            return;
+        }
+        TransformedModel[] models = terrain.getParts();
+
+        for (int i=0; i<models.length; i++) {
+            build(root, models[i], i);
+        }
     }
 }

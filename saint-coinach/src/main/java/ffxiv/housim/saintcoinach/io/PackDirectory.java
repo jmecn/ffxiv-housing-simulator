@@ -34,6 +34,11 @@ public class PackDirectory implements IPackSource {
         }
     }
 
+    public void setPath(String path) {
+        if (this.path == null) {
+            this.path = path;
+        }
+    }
     @Override
     public String toString() {
         return getPath();

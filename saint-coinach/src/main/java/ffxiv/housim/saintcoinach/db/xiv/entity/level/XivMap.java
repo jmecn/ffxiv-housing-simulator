@@ -6,6 +6,7 @@ import ffxiv.housim.saintcoinach.db.xiv.XivRow;
 import ffxiv.housim.saintcoinach.db.xiv.XivName;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
+import ffxiv.housim.saintcoinach.scene.terrain.Territory;
 import ffxiv.housim.saintcoinach.texture.ImageFile;
 
 import java.lang.ref.WeakReference;
@@ -112,6 +113,20 @@ public class XivMap extends XivRow {
         return as(TerritoryType.class);
     }
 
+    public Territory getTerritory() {
+        TerritoryType type = getTerritoryType();
+
+        if (type == null || type.getKey() == 0) {
+            return null;
+        }
+
+        Territory t = new Territory(type);
+        if (t.getTerrain() == null && t.getLgbFiles().size() == 0) {
+            return null;
+        }
+
+        return t;
+    }
     public ImageFile getMediumImage() {
         if (mediumImage != null && mediumImage.get() != null) {
             return mediumImage.get();

@@ -10,12 +10,24 @@ import ffxiv.housim.saintcoinach.texture.ImageHeader;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 public class TextureFactory {
 
-    public static Texture get(@NonNull ImageFile imageFile) {
+    static Map<Integer, WeakReference<Texture2D>> cache = new HashMap<>();
+
+    public static Texture2D get(@NonNull ImageFile imageFile) {
+        int hash = imageFile.getPath().hashCode();
+
+        WeakReference<Texture2D> ref = cache.get(hash);
+        if (ref != null && ref.get() != null) {
+            return ref.get();
+        }
+
         Image image = null;
 
         switch(imageFile.getFormat()) {
@@ -62,6 +74,9 @@ public class TextureFactory {
         if (numMipmaps > 1) {
             texture.setMinFilter(Texture.MinFilter.BilinearNearestMipMap);
         }
+
+        cache.put(hash, new WeakReference<>(texture));
+
         return texture;
     }
 

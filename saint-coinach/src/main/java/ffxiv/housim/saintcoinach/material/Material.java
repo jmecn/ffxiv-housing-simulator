@@ -96,11 +96,13 @@ public class Material {
         readNames(buffer);
 
         // read material params
-        assert unknownSize % 4 == 0;
-        this.wetnessParameter = new float[unknownSize / 4 - 1];
-        unknown0 = buffer.getInt();
-        for (int i = 0; i < wetnessParameter.length; i++) {
-            wetnessParameter[i] = buffer.getFloat();
+        if (unknownSize > 0) {
+            assert unknownSize % 4 == 0;
+            this.wetnessParameter = new float[unknownSize / 4 - 1];
+            unknown0 = buffer.getInt();
+            for (int i = 0; i < wetnessParameter.length; i++) {
+                wetnessParameter[i] = buffer.getFloat();
+            }
         }
 
         // read ColorSet data
@@ -196,10 +198,12 @@ public class Material {
         }
 
         // data
-        assert dataSize % 4 == 0;
-        this.materialParameter = new float[dataSize/4];
-        for (int i = 0; i< materialParameter.length; i++) {
-            materialParameter[i] = buffer.getFloat();
+        if (dataSize > 0) {
+            assert dataSize % 4 == 0;
+            this.materialParameter = new float[dataSize / 4];
+            for (int i = 0; i < materialParameter.length; i++) {
+                materialParameter[i] = buffer.getFloat();
+            }
         }
     }
 

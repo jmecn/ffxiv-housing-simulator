@@ -5,10 +5,13 @@ import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.math.Vector3;
 import ffxiv.housim.saintcoinach.scene.model.ModelFile;
 import ffxiv.housim.saintcoinach.scene.model.TransformedModel;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+@Slf4j
 public class Terrain {
 
     final static int CountOffset = 0x04;
@@ -17,6 +20,7 @@ public class Terrain {
     final static int BlockPositionSize = 0x04;
 
     private PackFile file;
+    @Getter
     private TransformedModel[] parts;
 
     public Terrain(PackFile file) {
@@ -35,10 +39,10 @@ public class Terrain {
 
         parts = new TransformedModel[blockCount];
 
+        log.info("blockCount:{}, blockSize:{}, basePath:{}", blockCount, blockSize, blockDirectory);
         for ( int i = 0; i < blockCount; i++) {
-
-            String blockPath = blockDirectory + String.format("%s%04d.mdl", blockDirectory, i);
-            ModelFile blockModelFile = (ModelFile) packs.tryGetFile(blockPath);
+            String blockPath = String.format("%s%04d.mdl", blockDirectory, i);
+            ModelFile mdl = (ModelFile) packs.tryGetFile(blockPath);
 
             buffer.position(BlockPositionsOffset + BlockPositionSize * i);
             float x = buffer.getShort();
@@ -46,7 +50,12 @@ public class Terrain {
             float z = buffer.getShort();
 
             Vector3 translation = new Vector3(blockSize * (x + 0.5f), 0, blockSize * (z + 0.5f));
-            parts[i] = new TransformedModel(blockModelFile.getModelDefinition(), translation, Vector3.ZERO, Vector3.ONE);
+
+            if (mdl == null) {
+                log.warn("terrain part#{} id missing, path={}", i, blockPath);
+                continue;
+            }
+            parts[i] = new TransformedModel(mdl.getModelDefinition(), translation, Vector3.ZERO, Vector3.ONE);
         }
 
     }

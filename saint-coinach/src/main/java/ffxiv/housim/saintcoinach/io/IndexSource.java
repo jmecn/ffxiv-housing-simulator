@@ -100,6 +100,7 @@ public class IndexSource implements IPackSource {
 
         PackDirectory dir = tryGetDirectory(dirPath);
         if (dir != null) {
+            dir.setPath(dirPath);
             return dir.tryGetFile(baseName);
         }
 

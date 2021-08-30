@@ -6,6 +6,7 @@ import ffxiv.housim.saintcoinach.db.ex.relational.RelationalColumn;
 import ffxiv.housim.saintcoinach.db.ex.relational.RelationalHeader;
 import ffxiv.housim.saintcoinach.db.xiv.entity.level.Level;
 import ffxiv.housim.saintcoinach.db.xiv.entity.level.PlaceName;
+import ffxiv.housim.saintcoinach.db.xiv.entity.level.TerritoryType;
 import ffxiv.housim.saintcoinach.db.xiv.entity.level.XivMap;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.*;
 import ffxiv.housim.saintcoinach.db.xiv.IXivRow;
@@ -50,8 +51,8 @@ public class TestLoadHousing {
     }
 
     @Test
-    public void testLevel() {
-        foreach(Level.class);
+    public void testTerritoryType() {
+        foreach(TerritoryType.class);
     }
 
     @Test
@@ -152,6 +153,9 @@ public class TestLoadHousing {
         log.info("{}: {}", sheet.getName(), types);
 
         for (T xivRow : sheet) {
+            if (xivRow.getKey() == 0) {
+                continue;
+            }
             Object[] values = new Object[columns.length];
             for (int i = 0; i < columns.length; i++) {
                 values[i] = xivRow.get(columns[i].getIndex());

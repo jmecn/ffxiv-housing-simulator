@@ -40,9 +40,19 @@ public class XivCollection extends RelationalExCollection {
         return getSheet(name, t);
     }
 
+    public <T extends IXivSubRow> XivSheet2<T> getSheet2(Class<T> t) {
+        XivName attr = t.getAnnotation(XivName.class);
+        String name = attr != null ? attr.value() : t.getSimpleName();
+        return getSheet2(name, t);
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends IXivRow> IXivSheet<T> getSheet(String name, Class<T> t) {
         return (IXivSheet<T>) getSheet(name);
+    }
+
+    public <T extends IXivSubRow> XivSheet2<T> getSheet2(String name, Class<T> t) {
+        return (XivSheet2<T>) getSheet(name);
     }
 
     @SuppressWarnings("unchecked")

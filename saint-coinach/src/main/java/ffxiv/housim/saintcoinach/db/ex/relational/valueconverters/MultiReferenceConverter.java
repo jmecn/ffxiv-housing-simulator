@@ -36,7 +36,18 @@ public class MultiReferenceConverter implements IValueConverter<IRelationalRow> 
             return null;
         }
 
-        int key = (int) rawValue;
+        int key;
+
+        if (rawValue instanceof Byte val) {
+            key = val & 0xFF;
+        } else if (rawValue instanceof Short val) {
+            key = val & 0xFFFF;
+        } else if (rawValue instanceof Number val){
+            key = val.intValue();
+        } else {
+            log.warn("Unsupported class cast to Integer: {}", rawValue.getClass());
+            return null;
+        }
 
         RelationalExCollection coll = (RelationalExCollection) row.getSheet().getCollection();
 
