@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach.db.xiv.entity.level;
+package ffxiv.housim.saintcoinach.db.xiv.entity.map;
 
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.texture.ImageFile;

@@ -3,10 +3,12 @@ package ffxiv.housim.saintcoinach.scene.mesh;
 import ffxiv.housim.saintcoinach.material.MaterialDefinition;
 import ffxiv.housim.saintcoinach.scene.model.*;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+@Slf4j
 public class Mesh {
     public final static byte BytesPerIndex = 2;   // TODO: 99.999% sure this is constant, but you never know.
 
@@ -52,6 +54,18 @@ public class Mesh {
             offsets[i] = header.vertexOffsets[i];
         }
 
+        if (header.vertexBufferCount == 0) {
+            vertices = new Vertex[0];
+            log.warn("vertex buffer count is ZERO!!, VertexBuffer.length={}", data.length);
+            return;
+        }
+
+        if (header.vertexCount == 0) {
+            vertices = new Vertex[0];
+            log.warn("vertex count is ZERO!!, VertexBuffer.length={}", data.length);
+            return;
+        }
+
         ByteBuffer buffer = ByteBuffer.wrap(data);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
@@ -68,6 +82,11 @@ public class Mesh {
     private void readIndices(byte[] data) {
         int position = header.indexBufferOffset * BytesPerIndex;
         this.indices = new short[header.indexCount];
+
+        if (header.indexCount == 0) {
+            log.warn("index count is ZERO!!! IndexBuffer.length={}", data.length);
+            return;
+        }
 
         ByteBuffer buffer = ByteBuffer.wrap(data);
         buffer.order(ByteOrder.LITTLE_ENDIAN);

@@ -2,7 +2,7 @@ package ffxiv.housim.saintcoinach.db.xiv.collections;
 
 import ffxiv.housim.saintcoinach.db.xiv.XivCollection;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
-import ffxiv.housim.saintcoinach.db.xiv.entity.EventItem;
+import ffxiv.housim.saintcoinach.db.xiv.entity.event.EventItem;
 import ffxiv.housim.saintcoinach.db.xiv.entity.Item;
 import ffxiv.housim.saintcoinach.db.xiv.entity.ItemBase;
 

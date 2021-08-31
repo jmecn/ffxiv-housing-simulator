@@ -109,66 +109,65 @@ public class SgbGroup implements ISgbData {
     private String modelFile3;
     private List<String> states;
     private SgbFile parent;
-    private ISgbGroupEntry[] entries;
+    private ISgbEntry[] entries;
 
     public SgbGroup(SgbFile parent, ByteBuffer buffer, int offset) {
         this.parent = parent;
-        int entriesOffset = offset;
-        int count = 0;
 
         PackCollection coll = parent.getFile().getPack().getCollection();
 
-        buffer.position(entriesOffset);
+        buffer.position(offset);
         this.header = new HeaderData(buffer);
-        entriesOffset = buffer.position();
 
-        count = header.entryCount;
-        ISgbGroupEntry[] entries = new ISgbGroupEntry[count];
-        int[] entryOffsets = new int[count];
-        for (int i = 0; i < count; i++) {
+        int entriesOffset = buffer.position();
+        int entryCount = header.entryCount;
+
+        ISgbEntry[] entries = new ISgbEntry[entryCount];
+        int[] entryOffsets = new int[entryCount];
+        for (int i = 0; i < entryCount; i++) {
             entryOffsets[i] = buffer.getInt();
         }
-        log.debug("headerSize:{}, entryCount:{}, entryTableSize:{}, ptr:{}", entriesOffset, count, count * 4, buffer.position());
+        log.debug("headerSize:{}, entryCount:{}, entryTableSize:{}, ptr:{}", entriesOffset, entryCount, entryCount * 4, buffer.position());
 
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < entryCount; i++) {
             int size = -1;
             try {
-                if (i < count - 1) {
+                if (i < entryCount - 1) {
                     size = entryOffsets[i + 1] - entryOffsets[i];
                 }
                 int entryOffset = entriesOffset + entryOffsets[i];
                 int entryType = buffer.getInt(entryOffset);
-                SgbGroupEntryType type = SgbGroupEntryType.of(entryType);
+                SgbEntryType type = SgbEntryType.of(entryType);
 
                 int entrySize = size > 0 ? size : type.size;
                 log.debug("entry#{}, offset:{}, entryOffset:{}, type:{}, entrySize={}", i, entryOffsets[i], entryOffset, type, entrySize);
                 switch (type) {
                     case Model:
-                        entries[i] = new SgbGroupEntryModel(coll, buffer, entryOffset);
+                        entries[i] = new SgbEntryModel(coll, buffer, entryOffset);
                         break;
                     case Gimmick:
-                        entries[i] = new SgbGimmickEntry(coll, buffer, entryOffset);
+                        entries[i] = new SgbEntryGimmick(coll, buffer, entryOffset);
                         break;
                     case Sound:
-                        entries[i] = new SgbGroupEntrySound(coll, buffer, entryOffset);
+                        entries[i] = new SgbEntrySound(coll, buffer, entryOffset);
                         break;
                     case Light:
-                        entries[i] = new SgbGroupEntryLight(coll, buffer, entryOffset);
+                        entries[i] = new SgbEntryLight(coll, buffer, entryOffset);
                         break;
                     case Vfx:
-                        entries[i] = new SgbGroupEntryVfx(coll, buffer, entryOffset);
+                        entries[i] = new SgbEntryVfx(coll, buffer, entryOffset);
                         break;
                     case TargetMarker:
-                        entries[i] = new SgbGroupEntryTargetMarker(coll, buffer, entryOffset);
+                        entries[i] = new SgbEntryTargetMarker(coll, buffer, entryOffset);
                         break;
                     case ChairMarker:
-                        entries[i] = new SgbGroupEntryChairMarker(coll, buffer, entryOffset);
+                        entries[i] = new SgbEntryChairMarker(coll, buffer, entryOffset);
                         break;
                     case ClickableRange:
-                        entries[i] = new SgbGroupEntryClickableRange(coll, buffer, entryOffset);
+                        entries[i] = new SgbEntryClickableRange(coll, buffer, entryOffset);
                         break;
                     case SphereCastRange:
-                        entries[i] = new SgbGroupEntrySphereCastRange(coll, buffer, entryOffset);
+                        entries[i] = new SgbEntrySphereCastRange(coll, buffer, entryOffset);
                         break;
                     default:
                         log.warn("Unsupported sgb entry type:{}, value:{}, offset:{}, size:{}, path:{}", type, entryType, entryOffset, entrySize, parent.getFile().getPath());
@@ -199,14 +198,14 @@ public class SgbGroup implements ISgbData {
         entriesOffset = buffer.position();
 
         count = offset1CHeader.entryCount;
-        entries = new ISgbGroupEntry[count];
+        entries = new ISgbEntry[count];
 
         log.debug("headerSize:{}, entryCount:{}, entrySize:{}, ptr:{}", entriesOffset - offset, count, count * 24, entriesOffset);
 
         for (var i = 0; i < count; i++) {
             try {
                 var entryOffset = entriesOffset + (i * 24);
-                entries[i] = new SgbGroupEntry1C(coll, buffer, entryOffset);
+                entries[i] = new SgbEntry1C(coll, buffer, entryOffset);
                 break;
             } catch (Exception e) {
                 log.error("", e);

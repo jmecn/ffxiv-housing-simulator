@@ -12,11 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import java.nio.ByteBuffer;
 
 @Slf4j
-public class SgbGroupEntrySound implements ISgbGroupEntry {
+public class SgbEntrySound implements ISgbEntry {
 
     // size 0xCC = 202 bytes
     @Getter
-    private SgbGroupEntryType type;
+    private SgbEntryType type;
     @Getter
     private int gimmickId;
     private int nameOffset;
@@ -54,11 +54,11 @@ public class SgbGroupEntrySound implements ISgbGroupEntry {
     @Getter
     private ScdFile scdFile;
 
-    public SgbGroupEntrySound(PackCollection packs, ByteBuffer buffer, int offset) {
+    public SgbEntrySound(PackCollection packs, ByteBuffer buffer, int offset) {
         buffer.position(offset);
 
         // read data
-        type = SgbGroupEntryType.of(buffer.getInt());
+        type = SgbEntryType.of(buffer.getInt());
         gimmickId = buffer.getInt();
         nameOffset = buffer.getInt();
         translation = new Vector3(buffer);

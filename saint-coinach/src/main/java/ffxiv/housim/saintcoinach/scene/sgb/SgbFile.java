@@ -27,7 +27,7 @@ public class SgbFile {
         int unknow = buffer.getInt();
         int magic2 = buffer.getInt();// SCN1
 
-        if (magic1 != 0x31424753 || magic2 != 0x314E4353) {    // LGB1 & SCN1
+        if (magic1 != 0x31424753 || magic2 != 0x314E4353) {    // SGB1 & SCN1
             throw new IllegalArgumentException("Not sgb file");
         }
 

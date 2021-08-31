@@ -7,11 +7,11 @@ import lombok.Getter;
 
 import java.nio.ByteBuffer;
 
-public class SgbGroupEntryTargetMarker implements ISgbGroupEntry {
+public class SgbEntryClickableRange implements ISgbEntry {
 
-    // size 0x38 = 56 bytes
+    // size 0x40 = 64 bytes
     @Getter
-    private SgbGroupEntryType type;
+    private SgbEntryType type;
     @Getter
     private int gimmickId;
     private int nameOffset;
@@ -22,29 +22,30 @@ public class SgbGroupEntryTargetMarker implements ISgbGroupEntry {
     @Getter
     private Vector3 scale;
     private int unknonw1;
-    private int unknonw2;
+    private short unknonw2;
+    private short unknonw3;
 
+    // following 8 bytes 0x00
 
     @Getter
     private final String name;
 
-    public SgbGroupEntryTargetMarker(PackCollection packs, ByteBuffer buffer, int offset) {
+    public SgbEntryClickableRange(PackCollection packs, ByteBuffer buffer, int offset) {
         buffer.position(offset);
 
-        type = SgbGroupEntryType.of(buffer.getInt());
+        // read data
+        type = SgbEntryType.of(buffer.getInt());
         gimmickId = buffer.getInt();
         nameOffset = buffer.getInt();
         translation = new Vector3(buffer);
         rotation = new Vector3(buffer);
         scale = new Vector3(buffer);
         unknonw1 = buffer.getInt();
-        unknonw2 = buffer.getInt();
+        unknonw2 = buffer.getShort();
+        unknonw3 = buffer.getShort();
 
+        // read name
         name = ByteBufferStr.getString(buffer, offset + nameOffset);
     }
 
-    @Override
-    public SgbGroupEntryType getType() {
-        return type;
-    }
 }

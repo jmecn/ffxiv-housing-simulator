@@ -41,13 +41,13 @@ public class ModelFactory {
         int models = 0;
         int chairs = 0;
         int targets = 0;
-        for (ISgbGroupEntry e : data.getEntries()) {
+        for (ISgbEntry e : data.getEntries()) {
 
-            if (e instanceof SgbGroupEntryModel me) {
+            if (e instanceof SgbEntryModel me) {
                 build(root, me, models++);
-            } else if (e instanceof SgbGroupEntryChairMarker ce) {
+            } else if (e instanceof SgbEntryChairMarker ce) {
                 build(root, ce, chairs++);
-            } else if (e instanceof SgbGroupEntryTargetMarker te) {
+            } else if (e instanceof SgbEntryTargetMarker te) {
                 build(root, te, targets++);
             } else {
                 log.warn("unsupported entry:{}", e);
@@ -57,7 +57,7 @@ public class ModelFactory {
         return root;
     }
 
-    private static void build(Node root, SgbGroupEntryTargetMarker tc, int targets) {
+    private static void build(Node root, SgbEntryTargetMarker tc, int targets) {
 
         ColorRGBA color = new ColorRGBA(0f, 1f, 0f, 1f);
 
@@ -77,7 +77,7 @@ public class ModelFactory {
         //root.attachChild(mark);
     }
 
-    private static void build(Node root, SgbGroupEntryChairMarker ce, int chairs) {
+    private static void build(Node root, SgbEntryChairMarker ce, int chairs) {
         ColorRGBA color = new ColorRGBA(1.0f, 0f, 0f, 1f);
 
         Geometry mark = new Geometry("ChairMarker#" + chairs);
@@ -96,7 +96,7 @@ public class ModelFactory {
         root.attachChild(mark);
     }
 
-    private static void build(Node root, SgbGroupEntryModel me, int models) {
+    private static void build(Node root, SgbEntryModel me, int models) {
         build(root, me.getModel(), models);
     }
 
@@ -110,7 +110,7 @@ public class ModelFactory {
         Vector3 trans = transformedModel.getTranslation();
         Vector3 rotate = transformedModel.getRotation();
         Vector3 scale = transformedModel.getScale();
-        log.info("trans:{}, rotate:{}, scale:{}", trans, rotate, scale);
+        log.debug("trans:{}, rotate:{}, scale:{}", trans, rotate, scale);
 
         thisNode.setLocalTranslation(trans.x, trans.y, trans.z);
         thisNode.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
@@ -118,8 +118,6 @@ public class ModelFactory {
 
         // model
         ModelDefinition modelDefinition = transformedModel.getModel();
-        log.info("qualities:{}", modelDefinition.getAvailableQualities());
-
         Model model = modelDefinition.getModel(ModelQuality.High);
 
         int i = 0;

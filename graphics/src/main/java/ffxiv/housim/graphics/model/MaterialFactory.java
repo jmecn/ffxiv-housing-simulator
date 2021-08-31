@@ -82,6 +82,7 @@ public class MaterialFactory {
         } else if ("water.shpk".equals(shader)) {
             return water(m);
         } else {
+            log.warn("unknown shader:{}", shader);
             return colorMaterial(ColorRGBA.randomColor());
         }
     }

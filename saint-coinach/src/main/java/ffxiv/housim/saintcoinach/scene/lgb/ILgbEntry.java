@@ -6,5 +6,6 @@ package ffxiv.housim.saintcoinach.scene.lgb;
  * @author yanmaoyuan
  * @date 2021/8/31
  */
-public class ILgbEntry {
+public interface ILgbEntry {
+    LgbEntryType getType();
 }

@@ -69,7 +69,9 @@ public class XivSheet<T extends IXivRow> implements IXivSheet<T> {
         }
 
         if (!source.containsRow(row)) {
-            log.warn("No such row: {}#{}", source.getName(), row);
+            if (row != 0) {
+                log.warn("No such row: {}#{}", source.getName(), row);
+            }
             return null;
         }
 

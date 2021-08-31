@@ -4,13 +4,14 @@ import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.math.Vector2;
 import ffxiv.housim.saintcoinach.math.Vector3;
 import ffxiv.housim.saintcoinach.utils.ByteBufferStr;
+import lombok.Getter;
 
 import java.nio.ByteBuffer;
 
-public class SgbGroupEntryLight implements ISgbGroupEntry {
+public class SgbEntryLight implements ISgbEntry {
 
-    public SgbGroupEntryType type;
-    public int unknownId;
+    public SgbEntryType type;
+    public int gimmickId;
     public int nameOffset;
     public Vector3 translation;
     public Vector3 rotation;
@@ -29,17 +30,21 @@ public class SgbGroupEntryLight implements ISgbGroupEntry {
     public Vector2 entry5;
     // + unknowns
 
+    @Getter
     private final String name;
+    @Getter
     private final String entry2Name;
+    @Getter
     private final String entry3Name;
+    @Getter
     private SgbFile gimmick;
 
-    public SgbGroupEntryLight(PackCollection packs, ByteBuffer buffer, int offset) {
+    public SgbEntryLight(PackCollection packs, ByteBuffer buffer, int offset) {
         buffer.position(offset);
 
         // read data
-        type = SgbGroupEntryType.of(buffer.getInt());
-        unknownId = buffer.getInt();
+        type = SgbEntryType.of(buffer.getInt());
+        gimmickId = buffer.getInt();
         nameOffset = buffer.getInt();
         translation = new Vector3(buffer);
         rotation = new Vector3(buffer);
@@ -65,7 +70,7 @@ public class SgbGroupEntryLight implements ISgbGroupEntry {
     }
 
     @Override
-    public SgbGroupEntryType getType() {
+    public SgbEntryType getType() {
         return type;
     }
 }

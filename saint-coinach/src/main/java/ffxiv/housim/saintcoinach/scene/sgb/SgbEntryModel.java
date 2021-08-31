@@ -11,9 +11,9 @@ import lombok.Getter;
 
 import java.nio.ByteBuffer;
 
-public class SgbGroupEntryModel implements ISgbGroupEntry {
+public class SgbEntryModel implements ISgbEntry {
     // size 0x38 = 56 bytes
-    public SgbGroupEntryType type;
+    public SgbEntryType type;
     public int gimmickId;
     public int nameOffset;
     public Vector3 translation;
@@ -33,11 +33,11 @@ public class SgbGroupEntryModel implements ISgbGroupEntry {
     @Getter
     private PcbFile collisionFile;
 
-    public SgbGroupEntryModel(PackCollection coll, ByteBuffer buffer, int offset) {
+    public SgbEntryModel(PackCollection coll, ByteBuffer buffer, int offset) {
         buffer.position(offset);
 
         // read data
-        type = SgbGroupEntryType.of(buffer.getInt());
+        type = SgbEntryType.of(buffer.getInt());
         gimmickId = buffer.getInt();
         nameOffset = buffer.getInt();
         translation = new Vector3(buffer);
@@ -63,7 +63,7 @@ public class SgbGroupEntryModel implements ISgbGroupEntry {
     }
 
     @Override
-    public SgbGroupEntryType getType() {
+    public SgbEntryType getType() {
         return type;
     }
 }

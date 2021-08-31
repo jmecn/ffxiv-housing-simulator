@@ -14,8 +14,6 @@ import java.nio.ByteOrder;
 @Slf4j
 public class Terrain {
 
-    final static int CountOffset = 0x04;
-    final static int SizeOffset = 0x08;
     final static int BlockPositionsOffset = 0x34;
     final static int BlockPositionSize = 0x04;
 

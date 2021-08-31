@@ -1,9 +1,8 @@
-package ffxiv.housim.saintcoinach.db.xiv.entity.level;
+package ffxiv.housim.saintcoinach.db.xiv.entity.map;
 
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
-import ffxiv.housim.saintcoinach.db.xiv.XivSubRow;
 
 /**
  * Class enabling the prediction of weather in Eorzea.

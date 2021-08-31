@@ -5,7 +5,7 @@ import java.util.Map;
 
 //From old client constructors were in the format Client::LayoutEngine::Layer::BgPartsLayoutInstance::`vftable'
 
-public enum SgbGroupEntryType {
+public enum SgbEntryType {
     Unsupported(-1),
     None(0, 0x18),// offset 1C
     Model(1, 0x5C),// BgParts Keep this for backwards compatability
@@ -46,24 +46,24 @@ public enum SgbGroupEntryType {
     final int value;
     final int size;
 
-    SgbGroupEntryType(int value) {
+    SgbEntryType(int value) {
         this.value = value;
         this.size = -1;
     }
 
-    SgbGroupEntryType(int value, int size) {
+    SgbEntryType(int value, int size) {
         this.value = value;
         this.size = size;
     }
 
-    static Map<Integer, SgbGroupEntryType> CACHE = new HashMap<>();
+    static Map<Integer, SgbEntryType> CACHE = new HashMap<>();
     static {
-        for (SgbGroupEntryType e : values()) {
+        for (SgbEntryType e : values()) {
             CACHE.put(e.value, e);
         }
     }
 
-    public static SgbGroupEntryType of(int value) {
+    public static SgbEntryType of(int value) {
         return CACHE.getOrDefault(value, Unsupported);
     }
 }

@@ -1,17 +1,14 @@
-package ffxiv.housim.saintcoinach.db.xiv.entity.level;
+package ffxiv.housim.saintcoinach.db.xiv.entity.map;
 
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
 import ffxiv.housim.saintcoinach.db.xiv.XivName;
 import ffxiv.housim.saintcoinach.io.PackCollection;
-import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.scene.terrain.Territory;
 import ffxiv.housim.saintcoinach.texture.ImageFile;
 
 import java.lang.ref.WeakReference;
-
-// TODO need implements
 
 /**
  * Class representing a map.
@@ -107,7 +104,7 @@ public class XivMap extends XivRow {
 
     /**
      * Gets the {@link TerritoryType} for the current map.
-     * @return
+     * @return The {@link TerritoryType} for the current map.
      */
     public TerritoryType getTerritoryType() {
         return as(TerritoryType.class);
@@ -127,6 +124,7 @@ public class XivMap extends XivRow {
 
         return t;
     }
+
     public ImageFile getMediumImage() {
         if (mediumImage != null && mediumImage.get() != null) {
             return mediumImage.get();

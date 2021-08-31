@@ -1,25 +1,22 @@
 package ffxiv.housim.graphics.texture;
 
-import com.jme3.material.Materials;
 import com.jme3.math.ColorRGBA;
-import com.jme3.texture.Texture;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.material.Material;
 import ffxiv.housim.saintcoinach.material.MaterialDefinition;
 import ffxiv.housim.saintcoinach.material.MaterialTextureParameter;
 import ffxiv.housim.saintcoinach.material.shpk.Parameter;
-import ffxiv.housim.saintcoinach.material.shpk.ParameterType;
 import ffxiv.housim.saintcoinach.material.shpk.ShPkFile;
 import ffxiv.housim.saintcoinach.math.Vector3;
 import ffxiv.housim.saintcoinach.scene.model.Model;
 import ffxiv.housim.saintcoinach.scene.model.ModelDefinition;
 import ffxiv.housim.saintcoinach.scene.model.ModelQuality;
 import ffxiv.housim.saintcoinach.scene.model.TransformedModel;
-import ffxiv.housim.saintcoinach.scene.sgb.ISgbGroupEntry;
+import ffxiv.housim.saintcoinach.scene.sgb.ISgbEntry;
 import ffxiv.housim.saintcoinach.scene.sgb.SgbFile;
 import ffxiv.housim.saintcoinach.scene.sgb.SgbGroup;
-import ffxiv.housim.saintcoinach.scene.sgb.SgbGroupEntryModel;
+import ffxiv.housim.saintcoinach.scene.sgb.SgbEntryModel;
 import ffxiv.housim.saintcoinach.texture.ImageFile;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -79,13 +76,13 @@ public class TestMaterial {
         log.info("{}", path);
 
         int models = 0;
-        for (ISgbGroupEntry e : group.getEntries()) {
-            if (e instanceof SgbGroupEntryModel me) {
+        for (ISgbEntry e : group.getEntries()) {
+            if (e instanceof SgbEntryModel me) {
                 build(me, models++);
             }
         }
     }
-    private void build(SgbGroupEntryModel me, int models) {
+    private void build(SgbEntryModel me, int models) {
 
         TransformedModel transformedModel = me.getModel();
 

@@ -1,15 +1,16 @@
-package ffxiv.housim.saintcoinach.scene.sgb;
+package ffxiv.housim.saintcoinach.scene.lgb;
 
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.math.Vector3;
 import ffxiv.housim.saintcoinach.utils.ByteBufferStr;
+import lombok.Getter;
 
 import java.nio.ByteBuffer;
 
-public class SgbGroupEntryVfx implements ISgbGroupEntry {
-    public SgbGroupEntryType type;
-    public int unknownId;
+public class LgbEntryVfx implements ILgbEntry {
+    public LgbEntryType type;
+    public int gimmickId;
     public int nameOffset;
     public Vector3 translation;
     public Vector3 rotation;
@@ -22,16 +23,19 @@ public class SgbGroupEntryVfx implements ISgbGroupEntry {
     public Vector3 someVec3;
     // +unknowns
 
+    @Getter
     private String name;
+    @Getter
     private String avfxFilePath;
+    @Getter
     private PackFile avfxFile;
 
-    public SgbGroupEntryVfx(PackCollection packs, ByteBuffer buffer, int offset) {
+    public LgbEntryVfx(PackCollection packs, ByteBuffer buffer, int offset) {
         buffer.position(offset);
 
         // read data
-        type = SgbGroupEntryType.of(buffer.getInt());
-        unknownId = buffer.getInt();
+        type = LgbEntryType.of(buffer.getInt());
+        gimmickId = buffer.getInt();
         nameOffset = buffer.getInt();
         translation = new Vector3(buffer);
         rotation = new Vector3(buffer);
@@ -52,7 +56,7 @@ public class SgbGroupEntryVfx implements ISgbGroupEntry {
     }
 
     @Override
-    public SgbGroupEntryType getType() {
+    public LgbEntryType getType() {
         return type;
     }
 }
