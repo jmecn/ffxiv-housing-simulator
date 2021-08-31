@@ -31,7 +31,7 @@ public class HousingExterior extends XivRow {
     // 5 bgcommon/hou/dyna/opt/rf/%04d/asset/opt_rf_m%04d.sgb
     // 6 bgcommon/hou/dyna/opt/wl/%04d/asset/opt_wl_m%04d.sgb
     // 7 bgcommon/hou/dyna/opt/sg/%04d/asset/opt_sg_m%04d.sgb
-    // bgcommon/hou/dyna/%s/c_fnc/%04d/asset/%s_f_fnc%04da.sgb
+    // 8 bgcommon/hou/dyna/%s/c_fnc/%04d/asset/%s_f_fnc%04da.sgb
 
     public HousingExterior(IXivSheet sheet, IRelationalRow sourceRow) {
         super(sheet, sourceRow);

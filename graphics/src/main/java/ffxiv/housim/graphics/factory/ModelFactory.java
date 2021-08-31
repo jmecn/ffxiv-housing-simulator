@@ -292,10 +292,10 @@ public class ModelFactory {
         build(root, territory.getBg());
 
         // 市场牌子
-        // build(root, territory.getPlanmap());
+        build(root, territory.getPlanmap());
 
         // 活动相关内容
-        // build(root, territory.getPlanevent());
+        build(root, territory.getPlanevent());
 
         return root;
     }

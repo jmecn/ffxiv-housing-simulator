@@ -73,4 +73,9 @@ public class SgbEntryLight implements ISgbEntry {
     public SgbEntryType getType() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return type + "#" + translation;
+    }
 }

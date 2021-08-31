@@ -44,9 +44,15 @@ public class Mesh {
         this.vertexFormat = def.getVertexFormats()[index];
         this.material = def.getMaterials()[index];
 
+        MeshPartHeader[] partHeaders = def.getMeshPartHeaders();
+
         this.parts = new MeshPart[header.partCount];
         for (int i = 0; i < header.partCount; i++) {
-            this.parts[i] = new MeshPart(this, def.getMeshPartHeaders()[header.partOffset + i], indexBuffer);
+            try {
+                this.parts[i] = new MeshPart(this, partHeaders[header.partOffset + i], indexBuffer);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         readVertices(vertexBuffer);

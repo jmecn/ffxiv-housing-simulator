@@ -71,4 +71,8 @@ public class SgbEntryGimmick implements ISgbEntry {
     public SgbEntryType getType() {
         return type;
     }
+
+    public String toString() {
+        return type + "#" + gimmickFilePath;
+    }
 }

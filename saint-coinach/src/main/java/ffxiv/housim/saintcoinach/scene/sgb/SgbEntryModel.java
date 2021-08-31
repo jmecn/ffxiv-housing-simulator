@@ -66,4 +66,9 @@ public class SgbEntryModel implements ISgbEntry {
     public SgbEntryType getType() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return type + "#" + modelFilePath;
+    }
 }

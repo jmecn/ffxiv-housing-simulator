@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class TerritoryViewer extends SimpleApplication {
+public class HouseViewer extends SimpleApplication {
 
     private ARealmReversed ffxiv;
     private PackCollection packs;
@@ -48,12 +48,12 @@ public class TerritoryViewer extends SimpleApplication {
 
     private int index;
 
-    public TerritoryViewer() {
+    public HouseViewer() {
         super(new StatsAppState(), new FlyCamAppState(), new AudioListenerState(), new DebugKeysAppState(),
                 new ConstantVerifierState(), new DetailedProfilerState());
     }
 
-    private void initFurnitures()  {
+    private void initMap()  {
         String gameDir = System.getenv("FFXIV_HOME");
         try {
             ffxiv = new ARealmReversed(gameDir, Language.ChineseSimplified);
@@ -73,7 +73,11 @@ public class TerritoryViewer extends SimpleApplication {
             if (f.getTerritoryType() == null || f.getTerritoryType().getKey() == 0) {
                 continue;
             }
-            list.add(f);
+            String name = f.getPlaceName().getName();
+            if (name.contains("私人") || name.contains("个人") || name.contains("房间")) {
+                log.info("id:{}, name:{}, terr:{}", f.getId(), name, f.getTerritoryType().getName());
+                list.add(f);
+            }
         }
 
         index = 0;
@@ -87,7 +91,7 @@ public class TerritoryViewer extends SimpleApplication {
     public void simpleInitApp() {
         initScene();
 
-        initFurnitures();
+        initMap();
 
         initInput();
 
@@ -99,7 +103,7 @@ public class TerritoryViewer extends SimpleApplication {
         rootNode.attachChild(viewNode);
         guiNode.attachChild(mapNode);
 
-        index = 78;
+        index = 0;
         reload();
     }
 
@@ -171,18 +175,23 @@ public class TerritoryViewer extends SimpleApplication {
 
     private void reload() {
         new Thread(() ->{
+
             XivMap f = list.get(index);
-            log.info("load #{}, {} > {} > {}", f.getKey(), f.getRegionPlaceName(), f.getPlaceName(), f.getLocationPlaceName());
+
+            log.info("loading finished #{}, {} > {} > {}.", f.getKey(), f.getRegionPlaceName(), f.getPlaceName(), f.getLocationPlaceName());
+
+            long ms = System.currentTimeMillis();
             Node node = ModelFactory.load(f.getTerritory());
             Geometry geom = getMeduimMap();
 
-            log.info("finished.");
+            ms = System.currentTimeMillis() - ms;
+
+            log.info("load finished #{}, {} > {} > {} in {}ms.", f.getKey(), f.getRegionPlaceName(), f.getPlaceName(), f.getLocationPlaceName(), ms);
+
             enqueue(() -> {
                 viewNode.detachAllChildren();
                 if (node != null) {
                     viewNode.attachChild(node);
-                    Vector3f center = node.getWorldBound().getCenter();
-                    cam.setLocation(center);
                 }
                 mapNode.detachAllChildren();
                 if (geom != null) {
@@ -245,13 +254,13 @@ public class TerritoryViewer extends SimpleApplication {
         cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
         cam.setFov(60);
 
-        flyCam.setMoveSpeed(50);
+        flyCam.setMoveSpeed(20);
         flyCam.setDragToRotate(true);
     }
 
     public static void main(String[] args) {
         AppSettings setting = new AppSettings(true);
-        setting.setTitle("Final Fantasy XIV Terrain Viewer");
+        setting.setTitle("Final Fantasy XIV House Viewer");
         setting.setResolution(1280, 720);
         setting.setResizable(true);
         setting.setFrameRate(60);
@@ -260,7 +269,7 @@ public class TerritoryViewer extends SimpleApplication {
         // LWJGL-OpenGL2
         setting.setRenderer(AppSettings.LWJGL_OPENGL41);
 
-        TerritoryViewer app = new TerritoryViewer();
+        HouseViewer app = new HouseViewer();
         app.setSettings(setting);
         app.start();
     }

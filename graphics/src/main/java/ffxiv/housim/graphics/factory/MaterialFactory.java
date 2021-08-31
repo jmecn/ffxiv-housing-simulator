@@ -52,6 +52,7 @@ public class MaterialFactory {
     private static Material innerBuild(MaterialDefinition matDef) {
         log.info("load mtrl {}", matDef.getName());
         Material mat = buildLightingMat(matDef);
+        // Material mat = buildShowNormal(matDef);
         return mat;
     }
 
@@ -70,7 +71,7 @@ public class MaterialFactory {
         for (MaterialTextureParameter e : matParams) {
             Parameter param = shPk.getParameter(e.getParameterId());
             ImageFile image = textureFiles[e.getTextureIndex()];
-            log.info("param:{}, image:{}", param, image.getPath());
+            log.debug("param:{}, image:{}", param, image.getPath());
             if (param.getType() == ParameterType.Sampler) {
                 Texture texture = TextureFactory.get(image);
                 String name = param.getName().substring(2);
