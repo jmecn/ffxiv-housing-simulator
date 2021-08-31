@@ -68,13 +68,13 @@ public class Mesh {
         if (header.vertexBufferCount == 0) {
             vertices = new Vertex[0];
             log.warn("vertex buffer count is ZERO!!, VertexBuffer.length={}", data.length);
-            return;
+            //return;
         }
 
         if (header.vertexCount == 0) {
             vertices = new Vertex[0];
             log.warn("vertex count is ZERO!!, VertexBuffer.length={}", data.length);
-            return;
+            //return;
         }
 
         ByteBuffer buffer = ByteBuffer.wrap(data);
@@ -96,7 +96,7 @@ public class Mesh {
 
         if (header.indexCount == 0) {
             log.warn("index count is ZERO!!! IndexBuffer.length={}", data.length);
-            return;
+            //return;
         }
 
         ByteBuffer buffer = ByteBuffer.wrap(data);

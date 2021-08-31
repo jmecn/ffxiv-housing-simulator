@@ -17,7 +17,7 @@ public class EObj extends XivRow {
         super(sheet, sourceRow);
     }
 
-    public String getSgbPath() {
-        return asString("SgbPath");
+    public ExportedSG getSgbPath() {
+        return as(ExportedSG.class, "SgbPath");
     }
 }

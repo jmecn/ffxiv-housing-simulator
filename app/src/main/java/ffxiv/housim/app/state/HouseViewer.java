@@ -2,7 +2,9 @@ package ffxiv.housim.app.state;
 
 import com.jme3.app.*;
 import com.jme3.app.state.ConstantVerifierState;
-import com.jme3.audio.AudioListenerState;
+import com.jme3.asset.AssetInfo;
+import com.jme3.audio.*;
+import com.jme3.audio.plugins.OGGLoader;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.KeyInput;
@@ -30,13 +32,25 @@ import ffxiv.housim.graphics.factory.TextureFactory;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
+import ffxiv.housim.saintcoinach.db.xiv.entity.bgm.BGM;
+import ffxiv.housim.saintcoinach.db.xiv.entity.bgm.BGMSituation;
+import ffxiv.housim.saintcoinach.db.xiv.entity.map.TerritoryType;
 import ffxiv.housim.saintcoinach.db.xiv.entity.map.XivMap;
 import ffxiv.housim.saintcoinach.io.PackCollection;
+import ffxiv.housim.saintcoinach.io.PackFile;
+import ffxiv.housim.saintcoinach.scene.terrain.Territory;
+import ffxiv.housim.saintcoinach.sound.ScdEntry;
+import ffxiv.housim.saintcoinach.sound.ScdEntryHeader;
+import ffxiv.housim.saintcoinach.sound.ScdFile;
 import ffxiv.housim.saintcoinach.texture.ImageFile;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -44,7 +58,7 @@ public class HouseViewer extends SimpleApplication {
 
     private ARealmReversed ffxiv;
     private PackCollection packs;
-    private List<XivMap> list;
+    private List<TerritoryType> list;
 
     private int index;
 
@@ -62,30 +76,48 @@ public class HouseViewer extends SimpleApplication {
             System.exit(-1);
         }
         packs = ffxiv.getGameData().getPackCollection();
-        IXivSheet<XivMap> sheet = ffxiv.getGameData().getSheet(XivMap.class);
+        IXivSheet<TerritoryType> sheet = ffxiv.getGameData().getSheet(TerritoryType.class);
 
         list = new ArrayList<>(sheet.getCount());
 
-        for (XivMap f : sheet) {
+        for (TerritoryType f : sheet) {
             if (f.getKey() == 0) {
                 continue;
             }
-            if (f.getTerritoryType() == null || f.getTerritoryType().getKey() == 0) {
+            if (f.getBg() == null || f.getBg().isBlank()) {
                 continue;
             }
             String name = f.getPlaceName().getName();
-            if (name.contains("私人") || name.contains("个人") || name.contains("房间")) {
-                log.info("id:{}, name:{}, terr:{}", f.getId(), name, f.getTerritoryType().getName());
+            if (name.contains("私人") || name.contains("个人")) {
+                log.info("id:{}, name:{}, terr:{} > {} > {}", f.getKey(), f.getName(), f.getRegionPlaceName(), f.getPlaceName(), f.getZonePlaceName());
                 list.add(f);
             }
         }
 
+        list.sort((o1, o2) -> {
+            String name1 = o1.getRegionPlaceName().getName();
+            String name2 = o2.getRegionPlaceName().getName();
+
+            String name3 = o1.getPlaceName().getName();
+            String name4 = o2.getPlaceName().getName();
+
+            int key1 = o1.getKey();
+            int key2 = o2.getKey();
+            if (name1.equals(name2)) {
+                if (name3.equals(name4)) {
+                    return key1 - key2;
+                } else {
+                    return name3.compareTo(name4);
+                }
+            } else {
+                return name1.compareTo(name2);
+            }
+        });
         index = 0;
     }
 
     private Node viewNode = new Node("view");
-
-    private Node mapNode = new Node("map");
+    private AudioNode audioNode = new AudioNode();
 
     @Override
     public void simpleInitApp() {
@@ -96,12 +128,13 @@ public class HouseViewer extends SimpleApplication {
         initInput();
 
         ModelFactory.setPacks(packs);
+        ModelFactory.setXiv(ffxiv.getGameData());
         ModelFactory.setAssetManager(assetManager);
         MaterialFactory.setPacks(packs);
         MaterialFactory.setAssetManager(assetManager);
 
         rootNode.attachChild(viewNode);
-        guiNode.attachChild(mapNode);
+        rootNode.attachChild(audioNode);
 
         index = 0;
         reload();
@@ -110,7 +143,6 @@ public class HouseViewer extends SimpleApplication {
     private void initInput() {
         inputManager.addMapping("F_LEFT", new KeyTrigger(KeyInput.KEY_LEFT));
         inputManager.addMapping("F_RIGHT", new KeyTrigger(KeyInput.KEY_RIGHT));
-        inputManager.addMapping("F_MAP", new KeyTrigger(KeyInput.KEY_O));
         inputManager.addMapping("F_PICK", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addListener(new ActionListener() {
             @Override
@@ -138,18 +170,10 @@ public class HouseViewer extends SimpleApplication {
                             pick();
                             break;
                         }
-                        case "F_MAP": {
-                            if (mapNode.getParent() == guiNode) {
-                                mapNode.removeFromParent();
-                            } else {
-                                guiNode.attachChild(mapNode);
-                            }
-                            break;
-                        }
                     }
                 }
             }
-        }, "F_LEFT", "F_RIGHT", "F_PICK", "F_MAP");
+        }, "F_LEFT", "F_RIGHT", "F_PICK");
     }
 
     private void pick() {
@@ -176,62 +200,77 @@ public class HouseViewer extends SimpleApplication {
     private void reload() {
         new Thread(() ->{
 
-            XivMap f = list.get(index);
+            TerritoryType f = list.get(index);
 
-            log.info("loading finished #{}, {} > {} > {}.", f.getKey(), f.getRegionPlaceName(), f.getPlaceName(), f.getLocationPlaceName());
+            log.info("loading finished #{}, {} > {} > {}.", f.getKey(), f.getRegionPlaceName(), f.getPlaceName(), f.getZonePlaceName());
 
             long ms = System.currentTimeMillis();
-            Node node = ModelFactory.load(f.getTerritory());
-            Geometry geom = getMeduimMap();
-
+            Node node = ModelFactory.load(new Territory(f));
             ms = System.currentTimeMillis() - ms;
 
-            log.info("load finished #{}, {} > {} > {} in {}ms.", f.getKey(), f.getRegionPlaceName(), f.getPlaceName(), f.getLocationPlaceName(), ms);
-
+            log.info("load finished #{}, {} > {} > {} in {}ms.", f.getKey(), f.getRegionPlaceName(), f.getPlaceName(), f.getZonePlaceName(), ms);
             enqueue(() -> {
                 viewNode.detachAllChildren();
                 if (node != null) {
                     viewNode.attachChild(node);
                 }
-                mapNode.detachAllChildren();
-                if (geom != null) {
-                    mapNode.attachChild(geom);
-                }
             });
+
+
+            BGMSituation situation = f.getBGM();
+            if (situation != null && situation.getDaytime() != null) {
+                BGM bgm = situation.getDaytime();
+                String name = bgm.getFile().toLowerCase();
+                PackFile packFile = ffxiv.getGameData().getPackCollection().tryGetFile(name);
+                if (packFile == null) {
+                    log.warn("File not found:{}", name);
+                    return;
+                }
+
+                ScdFile scdFile = new ScdFile(packFile);
+                ScdEntry[] entries = scdFile.getEntries();
+                if (entries == null || entries.length < 1) {
+                    log.warn("Scd Entry is empty:{}", name);
+                    return;
+                }
+
+                ScdEntryHeader header = scdFile.getEntryHeaders()[0];
+                ScdEntry entry = entries[0];
+                log.info("size:{}, sampleOffset:{}, loopStartSample:{}, loopEndSample:{}", header.dataSize, header.samplesOffset, header.loopStartSample, header.loopEndSample);
+
+                AudioKey audioKey = new AudioKey(name, true, true);
+                OGGLoader loader = new OGGLoader();
+                AudioData audioData;
+                try {
+                    audioData = (AudioData) loader.load(new AssetInfo(null, audioKey) {
+                        @Override
+                        public InputStream openStream() {
+                            return new ByteArrayInputStream(entry.getDecoded());
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    log.error("Load OGG failed. {}", name, e);
+                    return;
+                }
+
+                log.info("AudioData, type:{}, duration:{}, channels:{}, bps:{}, rate:{}", audioData.getDataType(), audioData.getDuration(), audioData.getChannels(), audioData.getBitsPerSample(), audioData.getSampleRate());
+
+                enqueue(() -> {
+                    if (audioNode.getStatus() == AudioSource.Status.Playing)  {
+                        audioNode.stop();
+                        audioNode.removeFromParent();
+                    }
+                    audioNode = new AudioNode(audioData, audioKey);
+                    rootNode.attachChild(audioNode);
+                    audioNode.setPositional(false);
+                    audioNode.setLooping(true);
+                    audioNode.play();
+                });
+            }
+
         }).start();
 
-    }
-
-    private Geometry getMeduimMap() {
-        XivMap f = list.get(index);
-        log.info("load small map:{}", f.getId());
-        ImageFile image = f.getSmallImage();
-        ImageFile imageMask = f.getSmallImageMask();
-
-        Texture2D map = null;
-        Texture2D mask = null;
-        if (image != null) {
-            map = TextureFactory.get(image);
-        }
-        if (imageMask != null) {
-            mask = TextureFactory.get(imageMask);
-        }
-
-        if (map == null) {
-            log.info("map is null");
-            return null;
-        }
-
-        Picture picture = new Picture(f.getId());
-        picture.setTexture(assetManager, map, true);
-
-        float scaleW = cam.getWidth() / (float) image.getWidth();
-        float scaleH = cam.getHeight() / (float) image.getHeight();
-        float scale = Math.min(scaleH, scaleW);
-        picture.setWidth(image.getWidth() * scale);
-        picture.setHeight(image.getHeight() * scale);
-
-        return picture;
     }
 
     private void initScene() {

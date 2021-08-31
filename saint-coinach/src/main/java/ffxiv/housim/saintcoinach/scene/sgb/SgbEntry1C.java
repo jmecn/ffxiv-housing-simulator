@@ -33,11 +33,10 @@ public class SgbEntry1C implements ISgbEntry {
     private String name;
     private String modelFilePath;
 
-    private boolean isMdlInitialized = false;
+    private boolean isInitialized = false;
     private ModelFile mdlFile;
     private Model model;
 
-    private boolean isSgbInitialized = false;
     private SgbFile gimmick;
 
     private PackCollection packs;
@@ -66,16 +65,37 @@ public class SgbEntry1C implements ISgbEntry {
     }
 
     public Model getModel() {
+        if (!isInitialized) {
+            isInitialized = true;
+            load();
+        }
+        return model;
+    }
+
+    public SgbFile getGimmick() {
+        if (!isInitialized) {
+            isInitialized = true;
+            load();
+        }
+        return gimmick;
+    }
+
+    private void load() {
         if (!modelFilePath.isEmpty()) {
             if (modelFilePath.endsWith(".mdl")) {
                 PackFile file = packs.tryGetFile(modelFilePath);
                 if (file != null && file instanceof ModelFile mdlFile) {
                     model = mdlFile.getModelDefinition().getModel(ModelQuality.High);
                 }
+            } else if (modelFilePath.endsWith(".sgb")) {
+                PackFile file = packs.tryGetFile(modelFilePath);
+                if (file != null) {
+                    gimmick = new SgbFile(file);
+                }
             }
         }
-        return model;
     }
+
     @Override
     public SgbEntryType getType() {
         return header.type;

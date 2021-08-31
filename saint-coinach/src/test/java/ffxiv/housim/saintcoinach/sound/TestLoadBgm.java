@@ -8,7 +8,7 @@ import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.db.xiv.IXivRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivSubRow;
-import ffxiv.housim.saintcoinach.db.xiv.entity.BGM;
+import ffxiv.housim.saintcoinach.db.xiv.entity.bgm.BGM;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;

@@ -3,6 +3,7 @@ package ffxiv.housim.saintcoinach.scene.lgb;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivCollection;
 import ffxiv.housim.saintcoinach.db.xiv.entity.event.EObj;
+import ffxiv.housim.saintcoinach.db.xiv.entity.event.ExportedSG;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.math.Vector3;
@@ -72,7 +73,12 @@ public class LgbEntryEObj implements ILgbEntry {
                 return null;
             }
 
-            String path = row.getSgbPath();
+            ExportedSG sg= row.getSgbPath();
+            if (sg == null) {
+                return null;
+            }
+
+            String path = sg.getSgbPath();
             if (path == null || path.isEmpty()) {
                 return null;
             }

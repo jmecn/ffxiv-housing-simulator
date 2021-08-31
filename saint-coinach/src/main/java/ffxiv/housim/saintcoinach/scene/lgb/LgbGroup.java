@@ -56,15 +56,16 @@ public class LgbGroup {
         name = ByteBufferStr.getString(buffer, offset + nameOffset);
 
         // read entry offset
+        buffer.position(offset + entriesOffset);
         int[] entryOffsets = new int[entryCount];
         for (int i = 0; i < entryCount; i++) {
-            entryOffsets[i] = offset + entriesOffset + buffer.getInt();
+            entryOffsets[i] = buffer.getInt();
         }
 
         // read entries
         entries = new ILgbEntry[entryCount];
         for (int i = 0; i < entryCount; i++) {
-            int entryOffset = entryOffsets[i];
+            int entryOffset = offset + entriesOffset + entryOffsets[i];
             int entryType = buffer.getInt(entryOffset);
 
             LgbEntryType type = LgbEntryType.of(entryType);

@@ -10,6 +10,7 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.*;
 import com.jme3.scene.instancing.InstancedNode;
 import com.jme3.scene.shape.Sphere;
+import ffxiv.housim.saintcoinach.db.xiv.XivCollection;
 import ffxiv.housim.saintcoinach.math.Ubyte4;
 import ffxiv.housim.saintcoinach.scene.lgb.*;
 import ffxiv.housim.saintcoinach.scene.model.*;
@@ -33,6 +34,9 @@ public class ModelFactory {
     static PackCollection packs;
 
     @Setter
+    static XivCollection xiv;
+
+    @Setter
     static AssetManager assetManager;
 
     static Cache<Integer, Mesh> CACHE;
@@ -54,25 +58,38 @@ public class ModelFactory {
     }
 
     private static void build(Node root, SgbFile sgbFile) {
+        if (sgbFile == null) {
+            return;
+        }
 
-        SgbGroup data = (SgbGroup) sgbFile.getData()[0];
+        for (ISgbData group : sgbFile.getData()) {
+            SgbGroup data = (SgbGroup) group;
 
-        String name = data.getName();
-        log.info("build sgb:{}", name);
+            String name = data.getName();
+            log.info("build sgb:{}", name);
 
-        int models = 0;
-        int chairs = 0;
-        int targets = 0;
-        for (ISgbEntry e : data.getEntries()) {
+            int models = 0;
+            int chairs = 0;
+            int targets = 0;
+            for (ISgbEntry e : data.getEntries()) {
 
-            if (e instanceof SgbEntryModel me) {
-                build(root, me, models++);
-            } else if (e instanceof SgbEntryChairMarker ce) {
-                build(root, ce, chairs++);
-            } else if (e instanceof SgbEntryTargetMarker te) {
-                build(root, te, targets++);
-            } else {
-                log.warn("unsupported entry:{}", e);
+                if (e == null) {
+                    continue;
+                }
+
+                if (e instanceof SgbEntryModel me) {
+                    build(root, me, models++);
+                } else if (e instanceof SgbEntryChairMarker ce) {
+                    build(root, ce, chairs++);
+                } else if (e instanceof SgbEntryTargetMarker te) {
+                    build(root, te, targets++);
+                } else if (e instanceof SgbEntryGimmick te) {
+                    build(root, te, targets++);
+                } else if (e instanceof SgbEntry1C te) {
+                    build(root, te, targets++);
+                } else {
+                    log.warn("unsupported entry:{}", e);
+                }
             }
         }
     }
@@ -119,7 +136,24 @@ public class ModelFactory {
     private static void build(Node root, SgbEntryModel me, int models) {
         build(root, me.getModel(), models);
     }
+    private static void build(Node root, SgbEntryGimmick e, int models) {
+        SgbFile gimmick = e.getGimmick();
 
+        build(root, gimmick);
+    }
+
+    private static void build(Node root, SgbEntry1C e, int models) {
+        SgbFile gimmick = e.getGimmick();
+        Model model = e.getModel();
+
+        if (gimmick != null) {
+            build(root, gimmick);
+        }
+
+        if (model != null) {
+            build(root, model, models);
+        }
+    }
     private static void build(Node root, TransformedModel transformedModel, int index) {
         if (transformedModel == null) {
             return;
@@ -136,13 +170,22 @@ public class ModelFactory {
         thisNode.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
         thisNode.setLocalScale(scale.x, scale.y, scale.z);
 
+        root.attachChild(thisNode);
+
         // model
         ModelDefinition modelDefinition = transformedModel.getModel();
         Model model = modelDefinition.getModel(ModelQuality.High);
         thisNode.setName(model.getName() + "#" + index);
 
+        log.debug("load mdl:{}", modelDefinition.getFile().getPath());
+        build(thisNode, model, index);
+    }
+
+
+    private static void build(Node root, Model model, int index) {
+
         int i = 0;
-        for (ffxiv.housim.saintcoinach.scene.mesh.Mesh m : model.getMeshes()) {
+            for (ffxiv.housim.saintcoinach.scene.mesh.Mesh m : model.getMeshes()) {
             i++;
 
             // mesh
@@ -160,18 +203,16 @@ public class ModelFactory {
             geom.setMesh(mesh);
             geom.setMaterial(material);
             geom.setShadowMode(RenderQueue.ShadowMode.Cast);
-            thisNode.attachChild(geom);
+            root.attachChild(geom);
         }
 
-        root.attachChild(thisNode);
     }
-
     private static Mesh build(ffxiv.housim.saintcoinach.scene.mesh.Mesh m) {
         VertexFormat vertexFormat = m.getVertexFormat();
 
         short[] indices = m.getIndices();
         Vertex[] vertices = m.getVertices();
-        int vertCount = m.getVertices().length;
+        int vertCount = vertices.length;
 
         Mesh mesh = new Mesh();
         mesh.setBuffer(VertexBuffer.Type.Index, 1, indices);
@@ -353,22 +394,70 @@ public class ModelFactory {
                 log.info("ignore {}", name);
                 continue;
             }
+            log.info("build lgb group:{}", name);
             int models = 0;
             for (ILgbEntry e : data.getEntries()) {
                 if (e == null) {
                     continue;
                 }
                 if (e instanceof LgbEntryModel me) {
-                    build(root, me.getModel(), models++);
+                    build(root, me, models++);
                 } else if (e instanceof LgbEntryGimmick g) {
-                    SgbFile sgbFile = g.getGimmick();
-                    if (sgbFile != null) {
-                        build(root, sgbFile);
-                    }
+                    build(root, g, models++);
+                } else if (e instanceof LgbEntryEObj eo) {
+                    build(root, eo, models++);
                 } else {
                     log.warn("unsupported entry:{}", e);
                 }
             }
         }
+    }
+
+
+    private static void build(Node root, LgbEntryModel e, int models) {
+
+        build(root, e.getModel(), models);
+
+    }
+
+
+    private static void build(Node root, LgbEntryGimmick e, int models) {
+        SgbFile sgbFile = e.getGimmick();
+        Node thisNode = new Node("lgbGimmick#" + e.getName());
+
+        // transform
+        Vector3 trans = e.translation;
+        Vector3 rotate = e.rotation;
+        Vector3 scale = e.scale;
+
+        thisNode.setLocalTranslation(trans.x, trans.y, trans.z);
+        thisNode.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
+        thisNode.setLocalScale(scale.x, scale.y, scale.z);
+
+        if (sgbFile != null) {
+            build(thisNode, sgbFile);
+        }
+        root.attachChild(thisNode);
+    }
+
+
+    private static void build(Node root, LgbEntryEObj e, int models) {
+        Node thisNode = new Node("lgbModel#" + e.getName());
+
+        // transform
+        Vector3 trans = e.translation;
+        Vector3 rotate = e.rotation;
+        Vector3 scale = e.scale;
+
+        thisNode.setLocalTranslation(trans.x, trans.y, trans.z);
+        thisNode.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
+        thisNode.setLocalScale(scale.x, scale.y, scale.z);
+
+        root.attachChild(thisNode);
+
+        SgbFile gimmick = e.getGimmick(xiv);
+
+        build(thisNode, gimmick);
+
     }
 }

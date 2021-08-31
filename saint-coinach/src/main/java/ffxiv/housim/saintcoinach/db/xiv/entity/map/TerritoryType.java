@@ -3,6 +3,7 @@ package ffxiv.housim.saintcoinach.db.xiv.entity.map;
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
+import ffxiv.housim.saintcoinach.db.xiv.entity.bgm.BGMSituation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -75,6 +76,9 @@ public class TerritoryType extends XivRow {
         return as(PlaceName.class, "PlaceName{Zone}");
     }
 
+    public BGMSituation getBGM() {
+        return as(BGMSituation.class, "BGM");
+    }
     public WeatherRate getWeatherRate() {
         if (weatherRate != null) {
             return weatherRate;
