@@ -1,16 +1,17 @@
-package ffxiv.housim.graphics.model;
+package ffxiv.housim.graphics.factory;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.Node;
-import com.jme3.scene.VertexBuffer;
+import com.jme3.scene.*;
+import com.jme3.scene.instancing.InstancedNode;
 import com.jme3.scene.shape.Sphere;
 import ffxiv.housim.saintcoinach.math.Ubyte4;
+import ffxiv.housim.saintcoinach.scene.lgb.*;
 import ffxiv.housim.saintcoinach.scene.model.*;
 import ffxiv.housim.saintcoinach.scene.sgb.*;
 import ffxiv.housim.saintcoinach.io.PackCollection;
@@ -22,21 +23,42 @@ import ffxiv.housim.saintcoinach.scene.terrain.Territory;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+import java.util.concurrent.ExecutionException;
+
 @Slf4j
 public class ModelFactory {
 
     @Setter
     static PackCollection packs;
+
     @Setter
     static AssetManager assetManager;
 
-    public static Node load(String sgbPath) {
+    static Cache<Integer, Mesh> CACHE;
+    static {
+        CACHE = CacheBuilder.newBuilder()
+                .expireAfterAccess(Duration.ofSeconds(3600))
+                .softValues()
+                .build();
+    }
 
+    public static Node load(String sgbPath) {
         PackFile file = packs.tryGetFile(sgbPath);
         SgbFile sgbFile = new SgbFile(file);
-
         Node root = new Node(sgbFile.getFile().getPath());
+
+        build(root, sgbFile);
+
+        return root;
+    }
+
+    private static void build(Node root, SgbFile sgbFile) {
+
         SgbGroup data = (SgbGroup) sgbFile.getData()[0];
+
+        String name = data.getName();
+        log.info("build sgb:{}", name);
 
         int models = 0;
         int chairs = 0;
@@ -53,8 +75,6 @@ public class ModelFactory {
                 log.warn("unsupported entry:{}", e);
             }
         }
-
-        return root;
     }
 
     private static void build(Node root, SgbEntryTargetMarker tc, int targets) {
@@ -100,12 +120,12 @@ public class ModelFactory {
         build(root, me.getModel(), models);
     }
 
-    private static void build(Node root, TransformedModel transformedModel, int models) {
+    private static void build(Node root, TransformedModel transformedModel, int index) {
         if (transformedModel == null) {
             return;
         }
 
-        Node thisNode = new Node("#" + models);
+        Node thisNode = new Node();
         // transform
         Vector3 trans = transformedModel.getTranslation();
         Vector3 rotate = transformedModel.getRotation();
@@ -119,17 +139,24 @@ public class ModelFactory {
         // model
         ModelDefinition modelDefinition = transformedModel.getModel();
         Model model = modelDefinition.getModel(ModelQuality.High);
+        thisNode.setName(model.getName() + "#" + index);
 
         int i = 0;
         for (ffxiv.housim.saintcoinach.scene.mesh.Mesh m : model.getMeshes()) {
             i++;
+
             // mesh
-            Mesh mesh = build(m);
+            Mesh mesh;
+            try {
+                mesh = CACHE.get(m.getHash(), () -> build(m));
+            } catch (ExecutionException e) {
+                mesh = build(m);
+            }
 
             // material
             Material material = MaterialFactory.build(m.getMaterial());
 
-            Geometry geom = new Geometry("#" + models + ":" + i);
+            Geometry geom = new Geometry(model.getName() + "#" + index + ":" + i);
             geom.setMesh(mesh);
             geom.setMaterial(material);
             geom.setShadowMode(RenderQueue.ShadowMode.Cast);
@@ -255,9 +282,20 @@ public class ModelFactory {
         if (territory == null) {
             return null;
         }
+
         Node root = new Node(territory.getName());
 
+        // 基础的地形
         build(root, territory.getTerrain());
+
+        // 植被、树木之类的
+        build(root, territory.getBg());
+
+        // 市场牌子
+        // build(root, territory.getPlanmap());
+
+        // 活动相关内容
+        // build(root, territory.getPlanevent());
 
         return root;
     }
@@ -271,6 +309,66 @@ public class ModelFactory {
 
         for (int i=0; i<models.length; i++) {
             build(root, models[i], i);
+        }
+
+    }
+
+    public static void build(Node root, LgbFile lgb) {
+        for (LgbGroup data : lgb.getGroups()) {
+            String name = data.getName();
+
+            if (name.startsWith("copy_")) {
+                log.info("ignore {}", name);
+                continue;
+            }
+            if (name.startsWith("QST")) {
+                log.info("ignore {}", name);
+                continue;
+            }
+            if (name.endsWith("2016_00")) {
+                log.info("ignore {}", name);
+                continue;
+            }
+            if (name.endsWith("2017_00")) {
+                log.info("ignore {}", name);
+                continue;
+            }
+            if (name.endsWith("2018_00")) {
+                log.info("ignore {}", name);
+                continue;
+            }
+            if (name.endsWith("2019_00")) {
+                log.info("ignore {}", name);
+                continue;
+            }
+            if (name.endsWith("2020_00")) {
+                log.info("ignore {}", name);
+                continue;
+            }
+            if (name.endsWith("2021_00")) {
+                log.info("ignore {}", name);
+                continue;
+            }
+            if (name.endsWith("2022_00")) {
+                log.info("ignore {}", name);
+                continue;
+            }
+            int models = 0;
+            for (ILgbEntry e : data.getEntries()) {
+                if (e == null) {
+                    continue;
+                }
+                if (e instanceof LgbEntryModel me) {
+                    build(root, me.getModel(), models++);
+                } else if (e instanceof LgbEntryGimmick g) {
+                    SgbFile sgbFile = g.getGimmick();
+                    if (sgbFile != null) {
+                        build(root, sgbFile);
+                    }
+                } else {
+                    log.warn("unsupported entry:{}", e);
+                }
+            }
         }
     }
 }

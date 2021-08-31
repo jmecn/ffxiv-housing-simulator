@@ -29,6 +29,7 @@ public class LgbFile {
     private int groupCount;
     private int[] groupOffsets;
 
+    @Getter
     private LgbGroup[] groups;
 
     public LgbFile(PackFile file) {

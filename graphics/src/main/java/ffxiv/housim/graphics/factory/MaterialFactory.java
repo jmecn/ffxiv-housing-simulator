@@ -1,13 +1,14 @@
-package ffxiv.housim.graphics.model;
+package ffxiv.housim.graphics.factory;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.material.Materials;
-import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
-import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
-import ffxiv.housim.graphics.texture.TextureFactory;
+import com.jme3.texture.Texture2D;
+import ffxiv.housim.saintcoinach.io.Hash;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.material.MaterialDefinition;
 import ffxiv.housim.saintcoinach.material.MaterialTextureParameter;
@@ -15,10 +16,11 @@ import ffxiv.housim.saintcoinach.material.shpk.Parameter;
 import ffxiv.housim.saintcoinach.material.shpk.ParameterType;
 import ffxiv.housim.saintcoinach.material.shpk.ShPkFile;
 import ffxiv.housim.saintcoinach.texture.ImageFile;
-import ffxiv.housim.saintcoinach.texture.ImageFormat;
-import ffxiv.housim.saintcoinach.utils.HalfHelper;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+
+import java.time.Duration;
+import java.util.concurrent.ExecutionException;
 
 @Slf4j
 public class MaterialFactory {
@@ -28,8 +30,29 @@ public class MaterialFactory {
     @Setter
     static AssetManager assetManager;
 
+
+    static Cache<Integer, Material> CACHE;
+    static {
+        CACHE = CacheBuilder.newBuilder()
+                .expireAfterAccess(Duration.ofSeconds(3600))
+                .softValues()
+                .build();
+    }
+
     public static Material build(MaterialDefinition matDef) {
-        return buildLightingMat(matDef);
+        int hash = Hash.compute(matDef.getName());
+        try {
+            return CACHE.get(hash, () -> innerBuild(matDef));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return innerBuild(matDef);
+        }
+    }
+
+    private static Material innerBuild(MaterialDefinition matDef) {
+        log.info("load mtrl {}", matDef.getName());
+        Material mat = buildLightingMat(matDef);
+        return mat;
     }
 
     public static Material buildShowNormal(MaterialDefinition matDef) {
@@ -103,7 +126,7 @@ public class MaterialFactory {
             ImageFile image = textureFiles[e.getTextureIndex()];
             log.debug("param:{}, image:{}", param, image.getPath());
             if (param.getType() == ParameterType.Sampler) {
-                Texture texture = TextureFactory.get(image);
+                Texture2D texture = TextureFactory.get(image);
                 String name = param.getName().substring(2);
                 if (name.endsWith("ColorMap0")) {
                     mat.setTexture("DiffuseMap", texture);
@@ -148,7 +171,7 @@ public class MaterialFactory {
             ImageFile image = textureFiles[e.getTextureIndex()];
             log.debug("param:{}, image:{}", param, image.getPath());
             if (param.getType() == ParameterType.Sampler) {
-                Texture texture = TextureFactory.get(image);
+                Texture2D texture = TextureFactory.get(image);
                 String name = param.getName().substring(2);
                 if (name.endsWith("WaveMap")) {
                     mat.setTexture("DiffuseMap", texture);
@@ -186,7 +209,7 @@ public class MaterialFactory {
             ImageFile image = textureFiles[e.getTextureIndex()];
             log.debug("param:{}, image:{}", param, image.getPath());
             if (param.getType() == ParameterType.Sampler) {
-                Texture texture = TextureFactory.get(image);
+                Texture2D texture = TextureFactory.get(image);
                 String name = param.getName().substring(2);
                 if (name.endsWith("ColorMap0")) {
                     mat.setTexture("DiffuseMap", texture);

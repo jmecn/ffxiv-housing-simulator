@@ -20,8 +20,11 @@ public class Territory {
     @Getter
     private List<LgbFile> lgbFiles;
 
+    @Getter
     private LgbFile bg;
+    @Getter
     private LgbFile planmap;
+    @Getter
     private LgbFile planevent;
 
     /**

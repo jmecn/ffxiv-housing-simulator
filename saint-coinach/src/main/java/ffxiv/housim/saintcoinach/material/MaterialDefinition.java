@@ -5,6 +5,7 @@ import ffxiv.housim.saintcoinach.scene.model.ModelDefinition;
 import ffxiv.housim.saintcoinach.scene.model.ModelVariantIdentifier;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -88,8 +89,12 @@ public class MaterialDefinition {
 
     private PackCollection packs;
 
+    @Getter
     private ModelDefinition definition;
+
+    @Getter
     private String name;
+
     private int index;
 
     public MaterialDefinition(ModelDefinition definition, int index) {
@@ -99,7 +104,7 @@ public class MaterialDefinition {
         name = definition.getMaterialName(index);
         packs = definition.getFile().getPack().getCollection();
 
-        if (packs.filsExists(name)) {
+        if (packs.fileExists(name)) {
             defaultPath = name;
             variantsAvailable = false;
             stainedPathFormat = pathFormat = null;

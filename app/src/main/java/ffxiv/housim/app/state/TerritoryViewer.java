@@ -10,6 +10,9 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -20,11 +23,10 @@ import com.jme3.texture.Texture2D;
 import com.jme3.ui.Picture;
 import com.jme3.util.SkyFactory;
 import com.jme3.util.TempVars;
-import ffxiv.housim.graphics.model.MaterialFactory;
-import ffxiv.housim.graphics.model.ModelFactory;
+import ffxiv.housim.graphics.factory.MaterialFactory;
+import ffxiv.housim.graphics.factory.ModelFactory;
 import ffxiv.housim.graphics.state.CheckerBoardState;
-import ffxiv.housim.graphics.state.LightState;
-import ffxiv.housim.graphics.texture.TextureFactory;
+import ffxiv.housim.graphics.factory.TextureFactory;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
@@ -225,7 +227,16 @@ public class TerritoryViewer extends SimpleApplication {
 
     private void initScene() {
         stateManager.attach(new CheckerBoardState());
-        stateManager.attach(new LightState());
+
+        viewPort.setBackgroundColor(new ColorRGBA(0.75f, 0.8f, 0.9f, 1f));
+
+        // 环境光
+        AmbientLight al = new AmbientLight(new ColorRGBA(0.5f, 0.5f, 0.5f, 1.0f));
+        DirectionalLight dl = new DirectionalLight(
+                new Vector3f(-4, -10, -5).normalizeLocal(),
+                new ColorRGBA(0.7f, 0.7f, 0.7f, 0.7f));
+        rootNode.addLight(al);
+        viewNode.addLight(dl);
 
         Spatial sky = SkyFactory.createSky(assetManager, "sky/env1.hdr", SkyFactory.EnvMapType.EquirectMap);
         rootNode.attachChild(sky);
@@ -234,7 +245,7 @@ public class TerritoryViewer extends SimpleApplication {
         cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
         cam.setFov(60);
 
-        flyCam.setMoveSpeed(40f);
+        flyCam.setMoveSpeed(50);
         flyCam.setDragToRotate(true);
     }
 

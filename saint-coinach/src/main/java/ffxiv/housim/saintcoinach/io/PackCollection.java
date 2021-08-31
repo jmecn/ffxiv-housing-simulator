@@ -22,7 +22,7 @@ public class PackCollection {
         this.dataDirectory = dataDirectory;
     }
 
-    public boolean filsExists(String path) {
+    public boolean fileExists(String path) {
         Pack pack = tryGetPack(path);
         if (pack != null) {
             return pack.fileExists(path);

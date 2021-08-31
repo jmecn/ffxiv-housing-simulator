@@ -3,6 +3,7 @@ package ffxiv.housim.saintcoinach.scene.mesh;
 import ffxiv.housim.saintcoinach.material.MaterialDefinition;
 import ffxiv.housim.saintcoinach.scene.model.*;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.ByteBuffer;
@@ -28,6 +29,10 @@ public class Mesh {
     private MeshPart[] parts;
     @Getter
     private MaterialDefinition material;
+
+    @Getter
+    @Setter
+    private int hash;
 
     public Mesh(Model model, int index, byte[] vertexBuffer, byte[] indexBuffer) {
         this.model = model;
@@ -95,4 +100,5 @@ public class Mesh {
             this.indices[i] = buffer.getShort();
         }
     }
+
 }

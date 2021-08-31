@@ -1,9 +1,7 @@
 package ffxiv.housim.saintcoinach.scene.lgb;
 
 import ffxiv.housim.saintcoinach.io.PackCollection;
-import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.math.Vector3;
-import ffxiv.housim.saintcoinach.scene.sgb.SgbFile;
 import ffxiv.housim.saintcoinach.utils.ByteBufferStr;
 import lombok.Getter;
 

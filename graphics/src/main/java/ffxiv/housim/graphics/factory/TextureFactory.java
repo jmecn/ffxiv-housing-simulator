@@ -1,33 +1,44 @@
-package ffxiv.housim.graphics.texture;
+package ffxiv.housim.graphics.factory;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.jme3.texture.image.ColorSpace;
 import com.jme3.util.BufferUtils;
+import ffxiv.housim.saintcoinach.io.Hash;
 import ffxiv.housim.saintcoinach.texture.ImageFile;
 import ffxiv.housim.saintcoinach.texture.ImageHeader;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.Duration;
+import java.util.concurrent.ExecutionException;
 
 @Slf4j
 public class TextureFactory {
 
-    static Map<Integer, WeakReference<Texture2D>> cache = new HashMap<>();
+    static Cache<Integer, Texture2D> CACHE;
+    static {
+        CACHE = CacheBuilder.newBuilder()
+                .expireAfterAccess(Duration.ofSeconds(3600))
+                .softValues()
+                .build();
+    }
 
     public static Texture2D get(@NonNull ImageFile imageFile) {
-        int hash = imageFile.getPath().hashCode();
-
-        WeakReference<Texture2D> ref = cache.get(hash);
-        if (ref != null && ref.get() != null) {
-            return ref.get();
+        int hash = Hash.compute(imageFile.getPath());
+        try {
+            return CACHE.get(hash, () -> innerGet(imageFile));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return innerGet(imageFile);
         }
+    }
 
+    private static Texture2D innerGet(@NonNull ImageFile imageFile) {
         Image image = null;
 
         switch(imageFile.getFormat()) {
@@ -74,8 +85,6 @@ public class TextureFactory {
         if (numMipmaps > 1) {
             texture.setMinFilter(Texture.MinFilter.BilinearNearestMipMap);
         }
-
-        cache.put(hash, new WeakReference<>(texture));
 
         return texture;
     }

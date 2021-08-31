@@ -2,6 +2,7 @@ package ffxiv.housim.saintcoinach.scene.lgb;
 
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.utils.ByteBufferStr;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.ByteBuffer;
@@ -39,7 +40,9 @@ public class LgbGroup {
     private int unknown11;
 
     private LgbFile parent;
+    @Getter
     private String name;
+    @Getter
     private ILgbEntry[] entries;
 
     public LgbGroup(LgbFile parent, ByteBuffer buffer, int offset) {
@@ -96,8 +99,7 @@ public class LgbGroup {
             }
         }
 
-
-        log.info("load lgb group:{}, entries:{}", name, entries);
+        log.info("load lgb group:{}", name);
     }
 
     private void readHeader(ByteBuffer buffer) {

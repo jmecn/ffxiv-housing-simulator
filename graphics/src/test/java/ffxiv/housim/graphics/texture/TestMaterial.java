@@ -51,7 +51,7 @@ public class TestMaterial {
     public void testSgb() {
         for (int i = 0; i < 1240; i++) {
             String path = String.format(FORMAT, i, i);
-            if (packs.filsExists(path)) {
+            if (packs.fileExists(path)) {
                 testFurniture(path);
             }
         }
