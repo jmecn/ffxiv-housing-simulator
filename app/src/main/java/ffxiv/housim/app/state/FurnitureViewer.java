@@ -15,6 +15,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import com.jme3.util.SkyFactory;
 import com.jme3.util.TempVars;
+import ffxiv.housim.app.Constants;
 import ffxiv.housim.graphics.factory.MaterialFactory;
 import ffxiv.housim.graphics.state.CheckerBoardState;
 import ffxiv.housim.graphics.factory.ModelFactory;
@@ -43,8 +44,8 @@ public class FurnitureViewer extends SimpleApplication {
         super();
     }
 
-    private void initFurnitures()  {
-        String gameDir = System.getenv("FFXIV_HOME");
+    private void initFurniture()  {
+        String gameDir = settings.getString(Constants.GAME_DIR);
         try {
             ffxiv = new ARealmReversed(gameDir, Language.ChineseSimplified);
         } catch (IOException e) {
@@ -71,14 +72,14 @@ public class FurnitureViewer extends SimpleApplication {
         index = 0;
     }
 
-    private Node viewNode = new Node("furnuture");
+    private Node viewNode = new Node("furniture");
 
     @Override
     public void simpleInitApp() {
         stateManager.attach(new CheckerBoardState());
         initScene();
 
-        initFurnitures();
+        initFurniture();
 
         initInput();
 

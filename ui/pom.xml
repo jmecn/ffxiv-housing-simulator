@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ffxiv-housing-simulator</artifactId>
+        <groupId>ffxiv.housim</groupId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ui</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.simsilica</groupId>
+            <artifactId>lemur</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.simsilica</groupId>
+            <artifactId>lemur-proto</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.simsilica</groupId>
+            <artifactId>lemur-props</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>3.0.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-jsr223</artifactId>
+            <version>3.0.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.stephengold</groupId>
+            <artifactId>jme-ttf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jmonkeyengine</groupId>
+            <artifactId>jme3-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ffxiv.housim</groupId>
+            <artifactId>saint-coinach</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- for test case -->
+        <dependency>
+            <groupId>org.jmonkeyengine</groupId>
+            <artifactId>jme3-desktop</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jmonkeyengine</groupId>
+            <artifactId>jme3-lwjgl</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+     </dependencies>
+</project>

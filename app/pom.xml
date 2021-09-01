@@ -11,6 +11,12 @@
     </parent>
 
     <artifactId>app</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -19,43 +25,19 @@
         </dependency>
 
         <dependency>
-            <groupId>com.simsilica</groupId>
-            <artifactId>lemur</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.simsilica</groupId>
-            <artifactId>lemur-proto</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.simsilica</groupId>
-            <artifactId>lemur-props</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy</artifactId>
-            <version>3.0.8</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-jsr223</artifactId>
-            <version>3.0.8</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.stephengold</groupId>
-            <artifactId>jme-ttf</artifactId>
+            <groupId>org.jmonkeyengine</groupId>
+            <artifactId>jme3-core</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.jmonkeyengine</groupId>
-            <artifactId>jme3-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jmonkeyengine</groupId>
             <artifactId>jme3-desktop</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.jmonkeyengine</groupId>
             <artifactId>jme3-lwjgl</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.jmonkeyengine</groupId>
@@ -65,6 +47,12 @@
         <dependency>
             <groupId>ffxiv.housim</groupId>
             <artifactId>graphics</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ffxiv.housim</groupId>
+            <artifactId>ui</artifactId>
             <version>${project.version}</version>
         </dependency>
      </dependencies>

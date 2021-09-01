@@ -10,9 +10,11 @@
 
     <modules>
         <module>bom</module>
-        <module>app</module>
         <module>saint-coinach</module>
+        <module>app</module>
         <module>graphics</module>
+        <module>ui</module>
+        <module>db</module>
         <module>toolkit</module>
     </modules>
 
