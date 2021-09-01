@@ -53,48 +53,48 @@ public class MainMenu extends BaseAppState implements SceneProcessor {
         menuBar.setLocation(0, cam.getHeight());
 
         // File Menu
-        Menu fileMenu = menuBar.add(new Menu("File"));
+        Menu fileMenu = menuBar.add(new Menu("文件"));
 
         // File -> New
-        Menu newMenu = fileMenu.add(new Menu("New >"));
+        Menu newMenu = fileMenu.add(new Menu("新建 >"));
 
-        MenuItem newIndoor = newMenu.add(new MenuItem("Indoor Blueprint"));
+        MenuItem newIndoor = newMenu.add(new MenuItem("家具装修蓝图"));
         newIndoor.addClickCommand(source -> newIndoor());
 
-        MenuItem newOutdoor = newMenu.add(new MenuItem("Outdoor Blueprint"));
+        MenuItem newOutdoor = newMenu.add(new MenuItem("庭具装修蓝图"));
         newOutdoor.addClickCommand(source -> newOutdoor());
         newOutdoor.setEnabled(false);
 
         // File -> Open
-        MenuItem openMenuItem = fileMenu.add(new MenuItem("Open .."));
+        MenuItem openMenuItem = fileMenu.add(new MenuItem("打开..."));
         openMenuItem.addClickCommand(source -> open());
 
-        Menu openRecentMenu = fileMenu.add(new Menu("Open Recent >"));
+        Menu openRecentMenu = fileMenu.add(new Menu("打开最近 >"));
         setRecentMenu(openRecentMenu);
 
-        MenuItem save = fileMenu.add(new MenuItem("Save .."));
+        MenuItem save = fileMenu.add(new MenuItem("保存..."));
         save.addClickCommand(source -> save());
         save.setEnabled(false);
 
-        MenuItem saveAs = fileMenu.add(new MenuItem("Save As .."));
+        MenuItem saveAs = fileMenu.add(new MenuItem("另存为..."));
         saveAs.addClickCommand(source -> saveAs());
         saveAs.setEnabled(false);
 
         fileMenu.add(new MenuSeparator());
 
         // File -> Exit
-        MenuItem exitMenuItem = fileMenu.add(new MenuItem("Exit"));
+        MenuItem exitMenuItem = fileMenu.add(new MenuItem("退出"));
         exitMenuItem.addClickCommand(source -> exit());
 
         // Edit Menu
-        Menu editMenu = menuBar.add(new Menu("Config"));
+        Menu editMenu = menuBar.add(new Menu("设置"));
 
         // Edit -> Checkbox
         CheckboxMenuItem checkboxMenuItem = editMenu.add(new CheckboxMenuItem("TODO"));
 
         // Help
-        Menu helpMenu = menuBar.add(new Menu("Help"));
-        MenuItem aboutMenuItem = helpMenu.add(new MenuItem("About..."));
+        Menu helpMenu = menuBar.add(new Menu("帮助"));
+        MenuItem aboutMenuItem = helpMenu.add(new MenuItem("关于..."));
 
         // finally
         // remove this line if you don't want it stretched.

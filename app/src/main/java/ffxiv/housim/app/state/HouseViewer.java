@@ -1,5 +1,6 @@
 package ffxiv.housim.app.state;
 
+import com.google.common.collect.Sets;
 import com.jme3.app.*;
 import com.jme3.app.state.ConstantVerifierState;
 import com.jme3.asset.AssetInfo;
@@ -49,9 +50,7 @@ import org.checkerframework.checker.units.qual.A;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 public class HouseViewer extends SimpleApplication {
@@ -80,6 +79,11 @@ public class HouseViewer extends SimpleApplication {
 
         list = new ArrayList<>(sheet.getCount());
 
+        Set<String> map = Sets.newHashSet("s1i1", "s1i2", "s1i3", "s1i4",
+                "f1i1", "f1i2", "f1i3", "f1i4",
+                "w1i1", "w1i2", "w1i3", "w1i4",
+                "e1i1", "e1i2", "e1i3", "e1i4");
+
         for (TerritoryType f : sheet) {
             if (f.getKey() == 0) {
                 continue;
@@ -87,28 +91,21 @@ public class HouseViewer extends SimpleApplication {
             if (f.getBg() == null || f.getBg().isBlank()) {
                 continue;
             }
-            String name = f.getPlaceName().getName();
-            if (name.contains("私人") || name.contains("个人")) {
+            String name = f.getName();
+            if (map.contains(name)) {
                 log.info("id:{}, name:{}, terr:{} > {} > {}", f.getKey(), f.getName(), f.getRegionPlaceName(), f.getPlaceName(), f.getZonePlaceName());
                 list.add(f);
             }
         }
 
         list.sort((o1, o2) -> {
-            String name1 = o1.getRegionPlaceName().getName();
-            String name2 = o2.getRegionPlaceName().getName();
-
-            String name3 = o1.getPlaceName().getName();
-            String name4 = o2.getPlaceName().getName();
+            String name1 = o1.getName();
+            String name2 = o2.getName();
 
             int key1 = o1.getKey();
             int key2 = o2.getKey();
             if (name1.equals(name2)) {
-                if (name3.equals(name4)) {
-                    return key1 - key2;
-                } else {
-                    return name3.compareTo(name4);
-                }
+                return key1 - key2;
             } else {
                 return name1.compareTo(name2);
             }

@@ -335,7 +335,7 @@ public final class SettingsDialog extends JFrame {
         if (gameDir == null) {
             gameDir = "";
         }
-        gameDirText = new JTextField(30);
+        gameDirText = new JTextField(40);
         gameDirText.setEditable(false);
         gameDirText.setText(gameDir);
 

@@ -1,6 +1,7 @@
 package ffxiv.housim.app;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.font.BitmapFont;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SkyFactory;
@@ -51,9 +52,12 @@ public class App extends SimpleApplication {
         rootNode.attachChild(sky);
 
         // init lemur
+        BitmapFont font = assetManager.loadFont("Font/indoor.fnt");
+
         GuiGlobals.initialize(this);
         BaseStyles.loadGlassStyle();
         GuiGlobals.getInstance().getStyles().setDefaultStyle(BaseStyles.GLASS);
+        GuiGlobals.getInstance().getStyles().setDefault(font);
 
         // init state
         stateManager.attach(new CheckerBoardState());
