@@ -232,7 +232,7 @@ public class HbqjFurnitureViewer extends SimpleApplication {
         stateManager.attach(new CheckerBoardState());
         stateManager.attach(new LightState());
 
-        Spatial sky = SkyFactory.createSky(assetManager, "sky/inside.hdr", SkyFactory.EnvMapType.EquirectMap);
+        Spatial sky = SkyFactory.createSky(assetManager, "sky/env1.hdr", SkyFactory.EnvMapType.EquirectMap);
         rootNode.attachChild(sky);
 
         cam.setLocation(new Vector3f(0f, 5f, 10f));
