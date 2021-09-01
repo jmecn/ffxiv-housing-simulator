@@ -1,6 +1,8 @@
 package ffxiv.housim.app;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.environment.EnvironmentCamera;
+import com.jme3.environment.LightProbeFactory;
 import com.jme3.font.BitmapFont;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
@@ -11,6 +13,7 @@ import ffxiv.housim.app.state.MainMenu;
 import ffxiv.housim.graphics.factory.MaterialFactory;
 import ffxiv.housim.graphics.factory.ModelFactory;
 import ffxiv.housim.graphics.state.CheckerBoardState;
+import ffxiv.housim.graphics.state.LightState;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.io.PackCollection;
@@ -51,6 +54,7 @@ public class App extends SimpleApplication {
         Spatial sky = SkyFactory.createSky(assetManager, "sky/env1.hdr", SkyFactory.EnvMapType.EquirectMap);
         rootNode.attachChild(sky);
 
+
         // init lemur
         BitmapFont font = assetManager.loadFont("Font/indoor.fnt");
 
@@ -61,7 +65,10 @@ public class App extends SimpleApplication {
 
         // init state
         stateManager.attach(new CheckerBoardState());
+        stateManager.attach(new LightState());
         stateManager.attach(new MainMenu());
+        stateManager.attach(new EnvironmentCamera());
+
 
         // init camera
         cam.setLocation(new Vector3f(0f, 3f, 10f));
@@ -70,5 +77,15 @@ public class App extends SimpleApplication {
 
         flyCam.setMoveSpeed(10f);
         flyCam.setDragToRotate(true);
+    }
+
+    int frame = 0;
+    public void simpleUpdate(float tpf) {
+
+        if (frame == 1) {
+            EnvironmentCamera envCam = stateManager.getState(EnvironmentCamera.class);
+            LightProbeFactory.makeProbe(envCam, rootNode);
+        }
+        frame ++;
     }
 }

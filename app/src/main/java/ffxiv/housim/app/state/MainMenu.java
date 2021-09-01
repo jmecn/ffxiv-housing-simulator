@@ -2,6 +2,7 @@ package ffxiv.housim.app.state;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.post.SceneProcessor;
 import com.jme3.profile.AppProfiler;
@@ -11,6 +12,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.texture.FrameBuffer;
+import ffxiv.housim.app.indoor.state.IndoorState;
 import ffxiv.housim.ui.lemur.menubar.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +34,8 @@ public class MainMenu extends BaseAppState implements SceneProcessor {
 
     private Application app;
 
+    private AppStateManager stateManager;
+
     private LemurMenuBar menuBar;
 
     @Override
@@ -39,6 +43,7 @@ public class MainMenu extends BaseAppState implements SceneProcessor {
 
         this.app = app;
         this.cam = app.getCamera();
+        this.stateManager = app.getStateManager();
 
         if (app instanceof SimpleApplication simpleApp) {
             guiNode = simpleApp.getGuiNode();
@@ -162,6 +167,12 @@ public class MainMenu extends BaseAppState implements SceneProcessor {
 
     private void newIndoor() {
         // TODO
+        IndoorState state = stateManager.getState(IndoorState.class);
+        if (state == null) {
+            state = new IndoorState();
+            stateManager.attach(state);
+        }
+
     }
 
     private void newOutdoor() {

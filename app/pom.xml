@@ -36,6 +36,10 @@
         </dependency>
         <dependency>
             <groupId>org.jmonkeyengine</groupId>
+            <artifactId>jme3-plugins</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jmonkeyengine</groupId>
             <artifactId>jme3-lwjgl</artifactId>
             <scope>runtime</scope>
         </dependency>
