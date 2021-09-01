@@ -1,6 +1,8 @@
 package ffxiv.housim.saintcoinach;
 
 import com.google.common.io.Files;
+import com.google.common.io.Resources;
+import com.google.common.reflect.ClassPath;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -15,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
@@ -152,24 +155,25 @@ public class ARealmReversed {
     }
 
     private RelationDefinition readDefinition() throws IOException {
-        File folder = new File("Definitions");
 
-        File versionFile = Paths.get("Definitions", "game.ver").toFile();
-        if (!versionFile.exists()) {
-            log.error("Definitions/game.ver not exist. {}", versionFile.getAbsolutePath());
-            throw new FileNotFoundException("Definitions/game.ver must exist.");
-        }
-
-        String version = Files.asCharSource(versionFile, StandardCharsets.UTF_8).read();
+        // read def version
+        URL ver = Resources.getResource(this.getClass(), "/ffxiv/defs/game.ver");
+        String version = Resources.asCharSource(ver, StandardCharsets.UTF_8).read();
 
         RelationDefinition def = new RelationDefinition();
         def.setVersion(version);
 
-        File[] files = folder.listFiles((dir, name) -> name.endsWith(".json"));
-
         JsonParser parser = new JsonParser();
-        for (File sheetFileName : files) {
-            String json = Files.asCharSource(sheetFileName, StandardCharsets.UTF_8).read();
+
+        // read definitions
+        ClassPath cp = ClassPath.from(this.getClass().getClassLoader());
+        for (ClassPath.ResourceInfo ri : cp.getResources()) {
+            String name = ri.getResourceName();
+            if (!name.startsWith("ffxiv/defs/") || !name.endsWith(".json")) {
+                continue;
+            }
+            String json = ri.asCharSource(StandardCharsets.UTF_8).read();
+
             JsonElement root = parser.parse(json);
 
             SheetDefinition sheetDef = SheetDefinition.fromJson((JsonObject) root);

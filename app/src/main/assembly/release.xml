@@ -1,0 +1,40 @@
+<assembly>
+
+    <id>release</id>
+
+    <formats>
+        <format>dir</format>
+    </formats>
+
+    <dependencySets>
+        <!-- 把依赖拷贝到libs目录 -->
+        <dependencySet>
+            <useProjectArtifact>true</useProjectArtifact>
+            <outputDirectory>libs</outputDirectory>
+            <scope>runtime</scope>
+        </dependencySet>
+    </dependencySets>
+
+    <fileSets>
+
+        <!-- 把编译后的jar拷贝到lib目录 -->
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <outputDirectory>libs</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>
+
+        <!-- 把README和notice拷贝到目录下 -->
+        <fileSet>
+            <directory>..</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>README.md</include>
+                <include>LICENSE</include>
+            </includes>
+        </fileSet>
+
+    </fileSets>
+</assembly>

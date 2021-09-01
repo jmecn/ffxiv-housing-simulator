@@ -1,13 +1,8 @@
-package ffxiv.housim.app.gui;
+package com.jayfella.lemur.window;
 
-import com.jayfella.lemur.window.JmeDialog;
-import com.jayfella.lemur.window.JmeWindow;
-import com.jayfella.lemur.window.SimpleWindowManager;
-import com.jayfella.lemur.window.Window;
 import com.jme3.app.SimpleApplication;
 import com.jme3.math.Vector3f;
 import com.simsilica.lemur.GuiGlobals;
-import com.simsilica.lemur.Label;
 import com.simsilica.lemur.ListBox;
 import com.simsilica.lemur.style.BaseStyles;
 

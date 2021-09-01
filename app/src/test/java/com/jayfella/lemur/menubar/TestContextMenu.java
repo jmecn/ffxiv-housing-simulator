@@ -1,9 +1,5 @@
-package ffxiv.housim.app.gui;
+package com.jayfella.lemur.menubar;
 
-import com.jayfella.lemur.menubar.LemurMenuBar;
-import com.jayfella.lemur.menubar.Menu;
-import com.jayfella.lemur.menubar.MenuItem;
-import com.jayfella.lemur.menubar.MenuSeparator;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
@@ -17,10 +13,10 @@ import com.simsilica.lemur.event.CursorEventControl;
 import com.simsilica.lemur.event.DefaultCursorListener;
 import com.simsilica.lemur.style.BaseStyles;
 
-public class TestMenuBar extends SimpleApplication {
+public class TestContextMenu extends SimpleApplication {
 
     public static void main(String[] args) {
-        TestMenuBar app = new TestMenuBar();
+        TestContextMenu app = new TestContextMenu();
         app.start();
     }
 
@@ -89,8 +85,11 @@ public class TestMenuBar extends SimpleApplication {
                     contextMenu.setLocation(event.getX(), event.getY());
 
                 }
+
             }
+
         });
+
     }
 
 }

@@ -31,17 +31,14 @@
             <artifactId>lemur-props</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.jayfella</groupId>
-            <artifactId>lemur-window</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.jayfella</groupId>
-            <artifactId>lemur-menubar</artifactId>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>3.0.8</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <type>pom</type>
+            <artifactId>groovy-jsr223</artifactId>
+            <version>3.0.8</version>
         </dependency>
         <dependency>
             <groupId>com.github.stephengold</groupId>
@@ -85,9 +82,14 @@
                             <mainClass>ffxiv.housim.app.Main</mainClass>
                         </manifest>
                     </archive>
+                    <!--
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    -->
+                    <descriptors>
+                        <descriptor>src/main/assembly/release.xml</descriptor>
+                    </descriptors>
                 </configuration>
                 <executions>
                     <execution>
