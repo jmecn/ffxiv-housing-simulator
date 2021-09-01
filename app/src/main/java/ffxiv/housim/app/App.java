@@ -4,6 +4,9 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SkyFactory;
+import com.simsilica.lemur.GuiGlobals;
+import com.simsilica.lemur.style.BaseStyles;
+import ffxiv.housim.app.state.MainMenu;
 import ffxiv.housim.graphics.factory.MaterialFactory;
 import ffxiv.housim.graphics.factory.ModelFactory;
 import ffxiv.housim.graphics.state.CheckerBoardState;
@@ -47,8 +50,14 @@ public class App extends SimpleApplication {
         Spatial sky = SkyFactory.createSky(assetManager, "sky/env1.hdr", SkyFactory.EnvMapType.EquirectMap);
         rootNode.attachChild(sky);
 
-        // init checker
+        // init lemur
+        GuiGlobals.initialize(this);
+        BaseStyles.loadGlassStyle();
+        GuiGlobals.getInstance().getStyles().setDefaultStyle(BaseStyles.GLASS);
+
+        // init state
         stateManager.attach(new CheckerBoardState());
+        stateManager.attach(new MainMenu());
 
         // init camera
         cam.setLocation(new Vector3f(0f, 3f, 10f));
