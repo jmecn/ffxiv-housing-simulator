@@ -47,12 +47,13 @@ public class Mesh {
         MeshPartHeader[] partHeaders = def.getMeshPartHeaders();
 
         this.parts = new MeshPart[header.partCount];
-        for (int i = 0; i < header.partCount; i++) {
-            try {
+        try {
+            for (int i = 0; i < header.partCount; i++) {
                 this.parts[i] = new MeshPart(this, partHeaders[header.partOffset + i], indexBuffer);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("failed read mesh part. model:{}, partCount:{}, partHeaders:{}, partOffset:{}", model.getName(), header.partCount, partHeaders.length, header.partOffset, e);
         }
 
         readVertices(vertexBuffer);

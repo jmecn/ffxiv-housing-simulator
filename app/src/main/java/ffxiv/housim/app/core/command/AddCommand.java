@@ -1,6 +1,6 @@
-package ffxiv.housim.app.command;
+package ffxiv.housim.app.core.command;
 
-import ffxiv.housim.saintcoinach.math.Vector3;
+import com.jme3.math.Vector3f;
 
 /**
  * desc:
@@ -8,12 +8,13 @@ import ffxiv.housim.saintcoinach.math.Vector3;
  * @author yanmaoyuan
  * @date 2021/9/1
  */
-public class RemoveCommand implements ICommand {
+public class AddCommand implements ICommand {
+
     private Long id;
 
     private Integer objId;
 
-    private Vector3 translation;
+    private Vector3f translation;
 
     private float rotateY;
 

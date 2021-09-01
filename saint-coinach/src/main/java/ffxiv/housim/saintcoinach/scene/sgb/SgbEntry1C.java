@@ -48,25 +48,11 @@ public class SgbEntry1C implements ISgbEntry {
         name = ByteBufferStr.getString(buffer, offset + header.nameOffset + 4 + 1);
         modelFilePath = ByteBufferStr.getString(buffer, offset + header.modelFileOffset + 4 + 1);
 
-        if (!modelFilePath.isEmpty()) {
-            if (modelFilePath.endsWith(".mdl")) {
-                PackFile file = packs.tryGetFile(modelFilePath);
-                if (file != null && file instanceof ModelFile) {
-                    mdlFile = (ModelFile) file;
-                    model = mdlFile.getModelDefinition().getModel(ModelQuality.High);
-                }
-            } else if (modelFilePath.endsWith(".sgb")) {
-                PackFile file = packs.tryGetFile(modelFilePath);
-                if (file != null) {
-                    gimmick = new SgbFile(file);
-                }
-            }
-        }
+        load();
     }
 
     public Model getModel() {
         if (!isInitialized) {
-            isInitialized = true;
             load();
         }
         return model;
@@ -74,13 +60,13 @@ public class SgbEntry1C implements ISgbEntry {
 
     public SgbFile getGimmick() {
         if (!isInitialized) {
-            isInitialized = true;
             load();
         }
         return gimmick;
     }
 
     private void load() {
+        isInitialized = true;
         if (!modelFilePath.isEmpty()) {
             if (modelFilePath.endsWith(".mdl")) {
                 PackFile file = packs.tryGetFile(modelFilePath);

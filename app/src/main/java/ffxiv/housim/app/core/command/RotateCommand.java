@@ -1,6 +1,4 @@
-package ffxiv.housim.app.command;
-
-import com.jme3.math.Vector3f;
+package ffxiv.housim.app.core.command;
 
 /**
  * desc:
@@ -8,13 +6,13 @@ import com.jme3.math.Vector3f;
  * @author yanmaoyuan
  * @date 2021/9/1
  */
-public class MoveCommand implements ICommand {
+public class RotateCommand implements ICommand{
 
     private Long id;
 
     private Integer objId;
 
-    private Vector3f translation;
+    private float rotateY;// in rad
 
     @Override
     public void execute() {

@@ -1,4 +1,6 @@
-package ffxiv.housim.app.indoor;
+package ffxiv.housim.app.core.indoor;
+
+import ffxiv.housim.app.core.command.ICommand;
 
 import java.util.LinkedList;
 import java.util.UUID;
@@ -35,4 +37,7 @@ public class Blueprint {
 
     private LinkedList<Furniture> list = new LinkedList<>();
 
+    private LinkedList<ICommand> history = new LinkedList<>();
+
+    private LinkedList<ICommand> redo = new LinkedList<>();
 }

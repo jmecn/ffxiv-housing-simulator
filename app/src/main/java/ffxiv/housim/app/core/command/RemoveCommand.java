@@ -1,4 +1,6 @@
-package ffxiv.housim.app.command;
+package ffxiv.housim.app.core.command;
+
+import ffxiv.housim.saintcoinach.math.Vector3;
 
 /**
  * desc:
@@ -6,15 +8,14 @@ package ffxiv.housim.app.command;
  * @author yanmaoyuan
  * @date 2021/9/1
  */
-public class DyeCommand implements ICommand {
-
+public class RemoveCommand implements ICommand {
     private Long id;
 
     private Integer objId;
 
-    private Integer stainNew;
+    private Vector3 translation;
 
-    private Integer stainOld;
+    private float rotateY;
 
     @Override
     public void execute() {

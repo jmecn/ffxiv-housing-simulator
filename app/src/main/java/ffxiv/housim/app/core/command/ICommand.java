@@ -1,4 +1,4 @@
-package ffxiv.housim.app.command;
+package ffxiv.housim.app.core.command;
 
 /**
  * desc:
