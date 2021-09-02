@@ -15,9 +15,12 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
@@ -55,8 +58,7 @@ public class HouseViewer extends SimpleApplication {
     private int index;
 
     public HouseViewer() {
-        super(new StatsAppState(), new FlyCamAppState(), new AudioListenerState(), new DebugKeysAppState(),
-                new ConstantVerifierState(), new DetailedProfilerState());
+        super(new StatsAppState(), new FlyCamAppState());
     }
 
     private void initMap()  {
@@ -198,67 +200,117 @@ public class HouseViewer extends SimpleApplication {
             Node node = ModelFactory.load(new Territory(f));
             ms = System.currentTimeMillis() - ms;
 
+            int fId = FastMath.nextRandomInt(1, 45);
+            int wId = FastMath.nextRandomInt(1, 45);
+            String fl_mtrl = String.format("bgcommon/hou/dyna/mat/fl/%04d/material/rom_fl_2%04da.mtrl", fId, fId);
+            String wl_mtrl = String.format("bgcommon/hou/dyna/mat/fl/%04d/material/rom_fl_2%04da.mtrl", wId, wId);
+
+            Material fl_mat = MaterialFactory.build(fl_mtrl);
+            Material wl_mat = MaterialFactory.build(wl_mtrl);
+            String name = f.getName();
+
             log.info("load finished #{}, {} > {} > {} in {}ms.", f.getKey(), f.getRegionPlaceName(), f.getPlaceName(), f.getZonePlaceName(), ms);
             enqueue(() -> {
                 viewNode.detachAllChildren();
                 if (node != null) {
                     viewNode.attachChild(node);
+
+                    Geometry fl_base;
+                    Geometry fl_1st;
+                    Geometry fl_2nd;
+                    Geometry wl_base;
+                    Geometry wl_1st;
+                    Geometry wl_2nd;
+
+                    if (name.endsWith("4")) {
+                        fl_1st = (Geometry) assetManager.loadModel("Model/House/w1i4_fl_1st.j3o");
+                        fl_1st.setMaterial(fl_mat);
+                        wl_1st = (Geometry) assetManager.loadModel("Model/House/w1i4_wl_1st.j3o");
+                        wl_1st.setMaterial(wl_mat);
+                        viewNode.attachChild(fl_1st);
+                        viewNode.attachChild(wl_1st);
+                    }
+
+                    if (name.endsWith("1")) {
+                        fl_base = (Geometry) assetManager.loadModel("Model/House/w1i1_fl_base.j3o");
+                        fl_base.setMaterial(fl_mat);
+                        wl_base = (Geometry) assetManager.loadModel("Model/House/w1i1_wl_base.j3o");
+                        wl_base.setMaterial(wl_mat);
+
+                        viewNode.attachChild(fl_base);
+                        viewNode.attachChild(wl_base);
+                        fl_base.move(2, -7, 4);
+                        wl_base.move(2, -7, 4);
+
+                        fl_1st = (Geometry) assetManager.loadModel("Model/House/w1i1_fl_1st.j3o");
+                        fl_1st.setMaterial(fl_mat);
+                        wl_1st = (Geometry) assetManager.loadModel("Model/House/w1i1_wl_1st.j3o");
+                        wl_1st.setMaterial(wl_mat);
+                        viewNode.attachChild(fl_1st);
+                        viewNode.attachChild(wl_1st);
+                    }
+
+                    if (name.endsWith("2")) {
+                        fl_base = (Geometry) assetManager.loadModel("Model/House/w1i2_fl_base.j3o");
+                        fl_base.setMaterial(fl_mat);
+                        wl_base = (Geometry) assetManager.loadModel("Model/House/w1i2_wl_base.j3o");
+                        wl_base.setMaterial(wl_mat);
+
+
+                        viewNode.attachChild(fl_base);
+                        viewNode.attachChild(wl_base);
+                        fl_base.move(0, -7, 0);
+                        wl_base.move(0, -7, 0);
+
+                        fl_1st = (Geometry) assetManager.loadModel("Model/House/w1i2_fl_1st.j3o");
+                        fl_1st.setMaterial(fl_mat);
+                        wl_1st = (Geometry) assetManager.loadModel("Model/House/w1i2_wl_1st.j3o");
+                        wl_1st.setMaterial(wl_mat);
+                        viewNode.attachChild(fl_1st);
+                        viewNode.attachChild(wl_1st);
+
+                        fl_2nd = (Geometry) assetManager.loadModel("Model/House/w1i2_fl_2nd.j3o");
+                        fl_2nd.setMaterial(fl_mat);
+                        wl_2nd = (Geometry) assetManager.loadModel("Model/House/w1i2_wl_2nd.j3o");
+                        wl_2nd.setMaterial(wl_mat);
+
+                        fl_2nd.move(0, 7, 0);
+                        wl_2nd.move(0, 7, 0);
+                        viewNode.attachChild(fl_2nd);
+                        viewNode.attachChild(wl_2nd);
+                    }
+                    if (name.endsWith("3")) {
+                        fl_base = (Geometry) assetManager.loadModel("Model/House/w1i3_fl_base.j3o");
+                        fl_base.setMaterial(fl_mat);
+                        wl_base = (Geometry) assetManager.loadModel("Model/House/w1i3_wl_base.j3o");
+                        wl_base.setMaterial(wl_mat);
+
+
+                        viewNode.attachChild(fl_base);
+                        viewNode.attachChild(wl_base);
+                        fl_base.move(0, -7, 0);
+                        wl_base.move(0, -7, 0);
+
+                        fl_1st = (Geometry) assetManager.loadModel("Model/House/w1i3_fl_1st.j3o");
+                        fl_1st.setMaterial(fl_mat);
+                        wl_1st = (Geometry) assetManager.loadModel("Model/House/w1i3_wl_1st.j3o");
+                        wl_1st.setMaterial(wl_mat);
+                        viewNode.attachChild(fl_1st);
+                        viewNode.attachChild(wl_1st);
+
+                        fl_2nd = (Geometry) assetManager.loadModel("Model/House/w1i3_fl_2nd.j3o");
+                        fl_2nd.setMaterial(fl_mat);
+                        wl_2nd = (Geometry) assetManager.loadModel("Model/House/w1i3_wl_2nd.j3o");
+                        wl_2nd.setMaterial(wl_mat);
+
+                        fl_2nd.move(0, 7, 0);
+                        wl_2nd.move(0, 7, 0);
+                        viewNode.attachChild(fl_2nd);
+                        viewNode.attachChild(wl_2nd);
+                    }
                 }
             });
 
-
-            BGMSituation situation = f.getBGM();
-            log.info("situation#{}: daytime={}, night={}, twilight={}, daybreak={}", situation.getKey(), situation.getDaytime(), situation.getNight(), situation.getTwilight(), situation.getDaybreak());
-            if (situation != null && situation.getDaytime() != null) {
-                BGM bgm = situation.getDaytime();
-                String name = bgm.getFile().toLowerCase();
-                PackFile packFile = ffxiv.getGameData().getPackCollection().tryGetFile(name);
-                if (packFile == null) {
-                    log.warn("File not found:{}", name);
-                    return;
-                }
-
-                ScdFile scdFile = new ScdFile(packFile);
-                ScdEntry[] entries = scdFile.getEntries();
-                if (entries == null || entries.length < 1) {
-                    log.warn("Scd Entry is empty:{}", name);
-                    return;
-                }
-
-                ScdEntryHeader header = scdFile.getEntryHeaders()[0];
-                ScdEntry entry = entries[0];
-                log.info("size:{}, sampleOffset:{}, loopStartSample:{}, loopEndSample:{}", header.dataSize, header.samplesOffset, header.loopStartSample, header.loopEndSample);
-
-                AudioKey audioKey = new AudioKey(name, true, true);
-                OGGLoader loader = new OGGLoader();
-                AudioData audioData;
-                try {
-                    audioData = (AudioData) loader.load(new AssetInfo(null, audioKey) {
-                        @Override
-                        public InputStream openStream() {
-                            return new ByteArrayInputStream(entry.getDecoded());
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    log.error("Load OGG failed. {}", name, e);
-                    return;
-                }
-
-                log.info("AudioData, type:{}, duration:{}, channels:{}, bps:{}, rate:{}", audioData.getDataType(), audioData.getDuration(), audioData.getChannels(), audioData.getBitsPerSample(), audioData.getSampleRate());
-
-                enqueue(() -> {
-                    if (audioNode.getStatus() == AudioSource.Status.Playing)  {
-                        audioNode.stop();
-                        audioNode.removeFromParent();
-                    }
-                    audioNode = new AudioNode(audioData, audioKey);
-                    rootNode.attachChild(audioNode);
-                    audioNode.setPositional(false);
-                    audioNode.setLooping(true);
-                    audioNode.play();
-                });
-            }
 
         }).start();
 

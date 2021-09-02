@@ -10,8 +10,10 @@ import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import ffxiv.housim.saintcoinach.io.Hash;
 import ffxiv.housim.saintcoinach.io.PackCollection;
+import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.material.MaterialDefinition;
 import ffxiv.housim.saintcoinach.material.MaterialTextureParameter;
+import ffxiv.housim.saintcoinach.material.imc.ImcVariant;
 import ffxiv.housim.saintcoinach.material.shpk.Parameter;
 import ffxiv.housim.saintcoinach.material.shpk.ParameterType;
 import ffxiv.housim.saintcoinach.material.shpk.ShPkFile;
@@ -39,6 +41,16 @@ public class MaterialFactory {
                 .build();
     }
 
+
+    public static Material build(String name) {
+        int hash = Hash.compute(name);
+        try {
+            return CACHE.get(hash, () -> innerBuild(name));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return innerBuild(name);
+        }
+    }
     public static Material build(MaterialDefinition matDef) {
         int hash = Hash.compute(matDef.getName());
         try {
@@ -47,6 +59,15 @@ public class MaterialFactory {
             e.printStackTrace();
             return innerBuild(matDef);
         }
+    }
+
+    private static Material innerBuild(String name) {
+        log.info("load mtrl {}", name);
+        PackFile file = packs.tryGetFile(name);
+        if (file != null) {
+            return buildLightingMat(new ffxiv.housim.saintcoinach.material.Material(null, file, ImcVariant.DEFAULT));
+        }
+        return null;
     }
 
     private static Material innerBuild(MaterialDefinition matDef) {
@@ -89,7 +110,10 @@ public class MaterialFactory {
     }
 
     public static Material buildLightingMat(MaterialDefinition matDef) {
-        ffxiv.housim.saintcoinach.material.Material m = matDef.get();
+        return buildLightingMat(matDef.get());
+    }
+
+    public static Material buildLightingMat(ffxiv.housim.saintcoinach.material.Material m) {
 
         ShPkFile shPk = m.getShPk();
         String shader = m.getShader();
