@@ -1,4 +1,4 @@
-package ffxiv.housim.app.state;
+package ffxiv.housim.app.state.misc;
 
 import com.google.gson.*;
 import com.jme3.app.SimpleApplication;

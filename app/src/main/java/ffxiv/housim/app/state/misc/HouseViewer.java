@@ -1,4 +1,4 @@
-package ffxiv.housim.app.state;
+package ffxiv.housim.app.state.misc;
 
 import com.google.common.collect.Sets;
 import com.jme3.app.*;
@@ -18,34 +18,27 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
-import com.jme3.texture.Texture2D;
-import com.jme3.ui.Picture;
 import com.jme3.util.SkyFactory;
 import com.jme3.util.TempVars;
 import ffxiv.housim.graphics.factory.MaterialFactory;
 import ffxiv.housim.graphics.factory.ModelFactory;
 import ffxiv.housim.graphics.state.CheckerBoardState;
-import ffxiv.housim.graphics.factory.TextureFactory;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.entity.bgm.BGM;
 import ffxiv.housim.saintcoinach.db.xiv.entity.bgm.BGMSituation;
 import ffxiv.housim.saintcoinach.db.xiv.entity.map.TerritoryType;
-import ffxiv.housim.saintcoinach.db.xiv.entity.map.XivMap;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.scene.terrain.Territory;
 import ffxiv.housim.saintcoinach.sound.ScdEntry;
 import ffxiv.housim.saintcoinach.sound.ScdEntryHeader;
 import ffxiv.housim.saintcoinach.sound.ScdFile;
-import ffxiv.housim.saintcoinach.texture.ImageFile;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -215,6 +208,7 @@ public class HouseViewer extends SimpleApplication {
 
 
             BGMSituation situation = f.getBGM();
+            log.info("situation#{}: daytime={}, night={}, twilight={}, daybreak={}", situation.getKey(), situation.getDaytime(), situation.getNight(), situation.getTwilight(), situation.getDaybreak());
             if (situation != null && situation.getDaytime() != null) {
                 BGM bgm = situation.getDaytime();
                 String name = bgm.getFile().toLowerCase();

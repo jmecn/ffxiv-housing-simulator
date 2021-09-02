@@ -1,4 +1,4 @@
-package ffxiv.housim.app.state;
+package ffxiv.housim.app.state.misc;
 
 import com.jme3.asset.AssetInfo;
 import com.jme3.audio.*;

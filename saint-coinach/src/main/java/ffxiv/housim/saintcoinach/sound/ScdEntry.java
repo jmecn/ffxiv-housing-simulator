@@ -1,8 +1,12 @@
 package ffxiv.housim.saintcoinach.sound;
 
+import lombok.Getter;
+
 public abstract class ScdEntry {
 
     protected ScdFile file;
+
+    @Getter
     protected ScdEntryHeader header;
 
     protected ScdEntry(ScdFile file, ScdEntryHeader header) {

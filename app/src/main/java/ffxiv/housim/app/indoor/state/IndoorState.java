@@ -13,6 +13,8 @@ import com.jme3.material.Materials;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import ffxiv.housim.ui.gui.FurnitureCatalog;
+import ffxiv.housim.ui.lemur.window.SimpleWindowManager;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -26,8 +28,10 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public class IndoorState extends BaseAppState {
 
+    private SimpleWindowManager windowManager;
     private AssetManager assetManager;
     private Node rootNode;
+
     @Override
     protected void initialize(Application app) {
 
@@ -36,6 +40,28 @@ public class IndoorState extends BaseAppState {
         if (app instanceof SimpleApplication simpleApp) {
             rootNode = simpleApp.getRootNode();
         }
+        windowManager = app.getStateManager().getState(SimpleWindowManager.class);
+
+        addGui();
+    }
+
+    @Override
+    protected void cleanup(Application app) {
+
+    }
+
+    @Override
+    protected void onEnable() {
+
+    }
+
+    @Override
+    protected void onDisable() {
+
+    }
+
+
+    private void addRobot() {
 
         Material mat = new Material(assetManager, Materials.LIGHTING);
         mat.setColor("Diffuse", new ColorRGBA(0.5f, 0.5f, 0.5f, 1f));
@@ -63,18 +89,9 @@ public class IndoorState extends BaseAppState {
         }
     }
 
-    @Override
-    protected void cleanup(Application app) {
+    private void addGui() {
+        FurnitureCatalog window = new FurnitureCatalog();
 
-    }
-
-    @Override
-    protected void onEnable() {
-
-    }
-
-    @Override
-    protected void onDisable() {
-
+        windowManager.add(window);
     }
 }

@@ -1,7 +1,6 @@
 package ffxiv.housim.app;
 
 import com.jme3.system.AppSettings;
-import ffxiv.housim.app.state.FurnitureViewer;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import lombok.extern.slf4j.Slf4j;
@@ -91,15 +90,20 @@ public class Main {
     }
 
     private static void startGame(AppSettings settings) {
+        // init game dir
+        ARealmReversed ffxiv;
         String gameDir = settings.getString(Constants.GAME_DIR);
-
         try {
-            ARealmReversed ffxiv = new ARealmReversed(gameDir, Language.ChineseSimplified);
+            ffxiv = new ARealmReversed(gameDir, Language.ChineseSimplified);
         } catch (IOException e) {
             e.printStackTrace();
+            log.error("Initialize ffxiv failed", e);
+            JOptionPane.showMessageDialog(null, "模拟器启动失败!");
+            return;
         }
 
-        App app = new App();
+        App app = new App(ffxiv);
+
         app.setSettings(settings);
         app.setShowSettings(false);
         app.start();

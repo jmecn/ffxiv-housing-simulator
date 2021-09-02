@@ -1,24 +1,24 @@
 package ffxiv.housim.app;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.environment.EnvironmentCamera;
-import com.jme3.environment.LightProbeFactory;
 import com.jme3.font.BitmapFont;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SkyFactory;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.style.BaseStyles;
+import ffxiv.housim.app.plugins.SqpackLoader;
+import ffxiv.housim.app.plugins.SqpackLocator;
+import ffxiv.housim.app.plugins.SqpackRegister;
+import ffxiv.housim.app.state.BgmState;
 import ffxiv.housim.app.state.MainMenu;
 import ffxiv.housim.graphics.factory.MaterialFactory;
 import ffxiv.housim.graphics.factory.ModelFactory;
 import ffxiv.housim.graphics.state.CheckerBoardState;
 import ffxiv.housim.graphics.state.LightState;
 import ffxiv.housim.saintcoinach.ARealmReversed;
-import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.io.PackCollection;
-
-import java.io.IOException;
+import ffxiv.housim.ui.lemur.window.SimpleWindowManager;
 
 /**
  * desc: 主界面
@@ -31,17 +31,15 @@ public class App extends SimpleApplication {
     private PackCollection packs;
     private ARealmReversed ffxiv;
 
+    public App(ARealmReversed ffxiv) {
+        this.ffxiv = ffxiv;
+        this.packs = ffxiv.getGameData().getPackCollection();
+    }
+
     @Override
     public void simpleInitApp() {
-        // init game dir
         String gameDir = settings.getString(Constants.GAME_DIR);
-        try {
-            ffxiv = new ARealmReversed(gameDir, Language.ChineseSimplified);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-        packs = ffxiv.getGameData().getPackCollection();
+        SqpackRegister.register(assetManager, gameDir);
 
         // init factories
         ModelFactory.setPacks(packs);
@@ -54,7 +52,6 @@ public class App extends SimpleApplication {
         Spatial sky = SkyFactory.createSky(assetManager, "sky/env1.hdr", SkyFactory.EnvMapType.EquirectMap);
         rootNode.attachChild(sky);
 
-
         // init lemur
         BitmapFont font = assetManager.loadFont("Font/indoor.fnt");
 
@@ -64,11 +61,11 @@ public class App extends SimpleApplication {
         GuiGlobals.getInstance().getStyles().setDefault(font);
 
         // init state
+        stateManager.attach(new BgmState());
+        stateManager.attach(new MainMenu());
         stateManager.attach(new CheckerBoardState());
         stateManager.attach(new LightState());
-        stateManager.attach(new MainMenu());
-        stateManager.attach(new EnvironmentCamera());
-
+        stateManager.attach(new SimpleWindowManager());
 
         // init camera
         cam.setLocation(new Vector3f(0f, 3f, 10f));
@@ -81,10 +78,8 @@ public class App extends SimpleApplication {
 
     int frame = 0;
     public void simpleUpdate(float tpf) {
-
         if (frame == 1) {
-            EnvironmentCamera envCam = stateManager.getState(EnvironmentCamera.class);
-            LightProbeFactory.makeProbe(envCam, rootNode);
+            // TODO
         }
         frame ++;
     }

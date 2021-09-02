@@ -1,6 +1,8 @@
-package ffxiv.housim.app.state;
+package ffxiv.housim.app.state.misc;
 
-import com.jme3.app.SimpleApplication;
+import com.jme3.app.*;
+import com.jme3.app.state.ConstantVerifierState;
+import com.jme3.audio.AudioListenerState;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.KeyInput;
@@ -15,7 +17,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import com.jme3.util.SkyFactory;
 import com.jme3.util.TempVars;
-import ffxiv.housim.app.Constants;
 import ffxiv.housim.graphics.factory.MaterialFactory;
 import ffxiv.housim.graphics.state.CheckerBoardState;
 import ffxiv.housim.graphics.factory.ModelFactory;
@@ -24,7 +25,7 @@ import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
-import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingFurniture;
+import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingYardObject;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -32,20 +33,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class FurnitureViewer extends SimpleApplication {
+public class YardObjectViewer extends SimpleApplication {
 
     private ARealmReversed ffxiv;
     private PackCollection packs;
-    private List<HousingFurniture> list;
+    private List<HousingYardObject> list;
 
     private int index;
 
-    public FurnitureViewer() {
-        super();
+    public YardObjectViewer() {
+        super(new StatsAppState(), new FlyCamAppState(), new AudioListenerState(), new DebugKeysAppState(),
+                new ConstantVerifierState(), new DetailedProfilerState());
     }
 
-    private void initFurniture()  {
-        String gameDir = settings.getString(Constants.GAME_DIR);
+    private void initFurnitures()  {
+        String gameDir = System.getenv("FFXIV_HOME");
         try {
             ffxiv = new ARealmReversed(gameDir, Language.ChineseSimplified);
         } catch (IOException e) {
@@ -53,17 +55,17 @@ public class FurnitureViewer extends SimpleApplication {
             System.exit(-1);
         }
         packs = ffxiv.getGameData().getPackCollection();
-        IXivSheet<HousingFurniture> sheet = ffxiv.getGameData().getSheet(HousingFurniture.class);
+        IXivSheet<HousingYardObject> sheet = ffxiv.getGameData().getSheet(HousingYardObject.class);
 
         list = new ArrayList<>(sheet.getCount());
 
-        for (HousingFurniture f : sheet) {
+        for (HousingYardObject f : sheet) {
             if (f.getSgbPath() == null || f.getSgbPath().isBlank()) {
-                log.info("ignore HousingFurniture #{}, {}", f.getModelKey(), f.getItem());
+                log.info("ignore HousingYardObject #{}, {}", f.getModelKey(), f.getItem());
                 continue;
             }
             if (f.getItem() == null || f.getItem().getName().isBlank()) {
-                log.info("ignore HousingFurniture #{}, {}", f.getModelKey(), f.getSgbPath());
+                log.info("ignore HousingYardObject #{}, {}", f.getModelKey(), f.getSgbPath());
                 continue;
             }
             list.add(f);
@@ -72,14 +74,13 @@ public class FurnitureViewer extends SimpleApplication {
         index = 0;
     }
 
-    private Node viewNode = new Node("furniture");
+    private Node viewNode = new Node("yard_object");
 
     @Override
     public void simpleInitApp() {
-        stateManager.attach(new CheckerBoardState());
         initScene();
 
-        initFurniture();
+        initFurnitures();
 
         initInput();
 
@@ -151,7 +152,7 @@ public class FurnitureViewer extends SimpleApplication {
 
     private void reload() {
         enqueue(() -> {
-            HousingFurniture f = list.get(index);
+            HousingYardObject f = list.get(index);
             log.info("load #{}, {}, {}", f.getModelKey(), f.getItem(), f.getSgbPath());
             Node node = ModelFactory.load(f.getSgbPath());
             viewNode.detachAllChildren();
@@ -168,6 +169,7 @@ public class FurnitureViewer extends SimpleApplication {
 
         cam.setLocation(new Vector3f(0f, 5f, 10f));
         cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+        cam.setFov(60);
 
         flyCam.setMoveSpeed(10f);
         flyCam.setDragToRotate(true);
@@ -175,7 +177,7 @@ public class FurnitureViewer extends SimpleApplication {
 
     public static void main(String[] args) {
         AppSettings setting = new AppSettings(true);
-        setting.setTitle("Final Fantasy XIV Housing Furniture Viewer");
+        setting.setTitle("Final Fantasy XIV Housing Yard Object Viewer");
         setting.setResolution(1280, 720);
         setting.setResizable(true);
         setting.setFrameRate(60);
@@ -184,7 +186,7 @@ public class FurnitureViewer extends SimpleApplication {
         // LWJGL-OpenGL2
         setting.setRenderer(AppSettings.LWJGL_OPENGL41);
 
-        FurnitureViewer app = new FurnitureViewer();
+        YardObjectViewer app = new YardObjectViewer();
         app.setSettings(setting);
         app.start();
     }

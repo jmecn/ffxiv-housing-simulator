@@ -13,7 +13,6 @@ public class BGMSituation extends XivRow {
         return as(BGM.class, "DaytimeID");
     }
 
-
     public BGM getNight() {
         return as(BGM.class, "NightID");
     }

@@ -39,6 +39,11 @@ public abstract class PackFile {
         this.commonHeader = commonHeader;
     }
 
+    @Override
+    public String toString() {
+        return path;
+    }
+
     public abstract byte[] getData();
 
     protected FileChannel getSourceStream() throws IOException {
