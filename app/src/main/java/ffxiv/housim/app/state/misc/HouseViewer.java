@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.jme3.app.*;
 import com.jme3.app.state.ConstantVerifierState;
 import com.jme3.asset.AssetInfo;
+import com.jme3.asset.AssetKey;
 import com.jme3.audio.*;
 import com.jme3.audio.plugins.OGGLoader;
 import com.jme3.collision.CollisionResult;
@@ -222,57 +223,38 @@ public class HouseViewer extends SimpleApplication {
                     Geometry wl_1st;
                     Geometry wl_2nd;
 
-                    if (name.endsWith("4")) {
-                        fl_1st = (Geometry) assetManager.loadModel("Model/House/w1i4_fl_1st.j3o");
-                        fl_1st.setMaterial(fl_mat);
-                        wl_1st = (Geometry) assetManager.loadModel("Model/House/w1i4_wl_1st.j3o");
-                        wl_1st.setMaterial(wl_mat);
-                        viewNode.attachChild(fl_1st);
-                        viewNode.attachChild(wl_1st);
-                    }
-
                     if (name.endsWith("1")) {
-                        fl_base = (Geometry) assetManager.loadModel("Model/House/w1i1_fl_base.j3o");
-                        fl_base.setMaterial(fl_mat);
-                        wl_base = (Geometry) assetManager.loadModel("Model/House/w1i1_wl_base.j3o");
-                        wl_base.setMaterial(wl_mat);
-
-                        viewNode.attachChild(fl_base);
-                        viewNode.attachChild(wl_base);
+                        fl_base = load(name, "fl", "base");
+                        wl_base = load(name, "wl", "base");
                         fl_base.move(2, -7, 4);
                         wl_base.move(2, -7, 4);
 
-                        fl_1st = (Geometry) assetManager.loadModel("Model/House/w1i1_fl_1st.j3o");
-                        fl_1st.setMaterial(fl_mat);
-                        wl_1st = (Geometry) assetManager.loadModel("Model/House/w1i1_wl_1st.j3o");
-                        wl_1st.setMaterial(wl_mat);
+                        viewNode.attachChild(fl_base);
+                        viewNode.attachChild(wl_base);
+
+                        fl_1st = load(name, "fl", "1st");
+                        wl_1st = load(name, "wl", "1st");
                         viewNode.attachChild(fl_1st);
                         viewNode.attachChild(wl_1st);
                     }
 
                     if (name.endsWith("2")) {
-                        fl_base = (Geometry) assetManager.loadModel("Model/House/w1i2_fl_base.j3o");
-                        fl_base.setMaterial(fl_mat);
-                        wl_base = (Geometry) assetManager.loadModel("Model/House/w1i2_wl_base.j3o");
-                        wl_base.setMaterial(wl_mat);
 
-
-                        viewNode.attachChild(fl_base);
-                        viewNode.attachChild(wl_base);
+                        fl_base = load(name, "fl", "base");
+                        wl_base = load(name, "wl", "base");
                         fl_base.move(0, -7, 0);
                         wl_base.move(0, -7, 0);
 
-                        fl_1st = (Geometry) assetManager.loadModel("Model/House/w1i2_fl_1st.j3o");
-                        fl_1st.setMaterial(fl_mat);
-                        wl_1st = (Geometry) assetManager.loadModel("Model/House/w1i2_wl_1st.j3o");
-                        wl_1st.setMaterial(wl_mat);
+                        viewNode.attachChild(fl_base);
+                        viewNode.attachChild(wl_base);
+
+                        fl_1st = load(name, "fl", "1st");
+                        wl_1st = load(name, "wl", "1st");
                         viewNode.attachChild(fl_1st);
                         viewNode.attachChild(wl_1st);
 
-                        fl_2nd = (Geometry) assetManager.loadModel("Model/House/w1i2_fl_2nd.j3o");
-                        fl_2nd.setMaterial(fl_mat);
-                        wl_2nd = (Geometry) assetManager.loadModel("Model/House/w1i2_wl_2nd.j3o");
-                        wl_2nd.setMaterial(wl_mat);
+                        fl_2nd = load(name,"fl", "2nd");
+                        wl_2nd = load(name,"wl", "2nd");
 
                         fl_2nd.move(0, 7, 0);
                         wl_2nd.move(0, 7, 0);
@@ -280,33 +262,40 @@ public class HouseViewer extends SimpleApplication {
                         viewNode.attachChild(wl_2nd);
                     }
                     if (name.endsWith("3")) {
-                        fl_base = (Geometry) assetManager.loadModel("Model/House/w1i3_fl_base.j3o");
-                        fl_base.setMaterial(fl_mat);
-                        wl_base = (Geometry) assetManager.loadModel("Model/House/w1i3_wl_base.j3o");
-                        wl_base.setMaterial(wl_mat);
 
-
-                        viewNode.attachChild(fl_base);
-                        viewNode.attachChild(wl_base);
+                        fl_base = load(name, "fl", "base");
+                        wl_base = load(name, "wl", "base");
                         fl_base.move(0, -7, 0);
                         wl_base.move(0, -7, 0);
 
-                        fl_1st = (Geometry) assetManager.loadModel("Model/House/w1i3_fl_1st.j3o");
-                        fl_1st.setMaterial(fl_mat);
-                        wl_1st = (Geometry) assetManager.loadModel("Model/House/w1i3_wl_1st.j3o");
-                        wl_1st.setMaterial(wl_mat);
+                        viewNode.attachChild(fl_base);
+                        viewNode.attachChild(wl_base);
+
+                        fl_1st = load(name, "fl", "1st");
+                        wl_1st = load(name, "wl", "1st");
                         viewNode.attachChild(fl_1st);
                         viewNode.attachChild(wl_1st);
 
-                        fl_2nd = (Geometry) assetManager.loadModel("Model/House/w1i3_fl_2nd.j3o");
-                        fl_2nd.setMaterial(fl_mat);
-                        wl_2nd = (Geometry) assetManager.loadModel("Model/House/w1i3_wl_2nd.j3o");
-                        wl_2nd.setMaterial(wl_mat);
+                        fl_2nd = load(name,"fl", "2nd");
+                        wl_2nd = load(name,"wl", "2nd");
 
                         fl_2nd.move(0, 7, 0);
                         wl_2nd.move(0, 7, 0);
                         viewNode.attachChild(fl_2nd);
                         viewNode.attachChild(wl_2nd);
+                    }
+
+                    if (name.endsWith("4")) {
+                        fl_1st = (Geometry) assetManager.loadModel("Model/House/w1i4_fl_1st.j3o");
+                        fl_1st.setMaterial(fl_mat);
+                        wl_1st = (Geometry) assetManager.loadModel("Model/House/w1i4_wl_1st.j3o");
+                        wl_1st.setMaterial(wl_mat);
+
+                        load(name, "fl", "1st");
+                        load(name, "wl", "1st");
+
+                        viewNode.attachChild(fl_1st);
+                        viewNode.attachChild(wl_1st);
                     }
                 }
             });
@@ -316,6 +305,44 @@ public class HouseViewer extends SimpleApplication {
 
     }
 
+    private Geometry load(String place, String part, String floor) {
+        String fl = String.format("Model/House/%s_%s_%s.j3o", place, part, floor);
+        if (assetManager.locateAsset(new AssetKey<>(fl)) == null) {
+            // 默认用高脚孤丘的
+            if (place.endsWith("1")) {
+                place = "w1i1";
+            }
+            if (place.endsWith("2")) {
+                place = "w1i2";
+            }
+            if (place.endsWith("3")) {
+                place = "w1i3";
+            }
+            if (place.endsWith("4")) {
+                place = "w1i4";
+            }
+            fl = String.format("Model/House/%s_%s_%s.j3o", place, part, floor);
+        }
+
+        Geometry geom = (Geometry) assetManager.loadModel(fl);
+
+        if (part.equals("fl")) {
+            int fId = FastMath.nextRandomInt(1, 45);
+            String fl_mtrl = String.format("bgcommon/hou/dyna/mat/fl/%04d/material/rom_fl_2%04da.mtrl", fId, fId);
+            Material fl_mat = MaterialFactory.build(fl_mtrl);
+            geom.setMaterial(fl_mat);
+
+        } else if (part.equals("wl")) {
+            int wId = FastMath.nextRandomInt(1, 45);
+            String wl_mtrl = String.format("bgcommon/hou/dyna/mat/fl/%04d/material/rom_fl_2%04da.mtrl", wId, wId);
+            Material wl_mat = MaterialFactory.build(wl_mtrl);
+            geom.setMaterial(wl_mat);
+        } else {
+            geom.setMaterial(MaterialFactory.colorMaterial(ColorRGBA.Black));
+        }
+
+        return geom;
+    }
     private void initScene() {
         stateManager.attach(new CheckerBoardState());
 

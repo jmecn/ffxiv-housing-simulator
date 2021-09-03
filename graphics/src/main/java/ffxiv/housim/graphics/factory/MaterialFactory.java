@@ -67,7 +67,7 @@ public class MaterialFactory {
         if (file != null) {
             return buildLightingMat(new ffxiv.housim.saintcoinach.material.Material(null, file, ImcVariant.DEFAULT));
         }
-        return null;
+        return colorMaterial(ColorRGBA.Blue);
     }
 
     private static Material innerBuild(MaterialDefinition matDef) {
