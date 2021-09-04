@@ -1,6 +1,8 @@
 package ffxiv.housim.app;
 
 import com.jme3.system.AppSettings;
+import ffxiv.housim.db.DBHelper;
+import ffxiv.housim.db.XivDatabase;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +57,13 @@ public class Main {
             throw new IllegalStateException("Cannot show dialog in headless environment");
         }
 
+        try {
+            String lookAndFeel = UIManager.getSystemLookAndFeelClassName();
+            UIManager.setLookAndFeel(lookAndFeel);
+        } catch (Exception e) {
+            // doesn't matter
+        }
+
         final AtomicBoolean done = new AtomicBoolean();
         final AtomicInteger result = new AtomicInteger();
         final Object lock = new Object();
@@ -90,9 +99,10 @@ public class Main {
     }
 
     private static void startGame(AppSettings settings) {
+        String gameDir = settings.getString(Constants.GAME_DIR);
+
         // init game dir
         ARealmReversed ffxiv;
-        String gameDir = settings.getString(Constants.GAME_DIR);
         try {
             ffxiv = new ARealmReversed(gameDir, Language.ChineseSimplified);
         } catch (IOException e) {
@@ -102,8 +112,16 @@ public class Main {
             return;
         }
 
-        App app = new App(ffxiv);
+        // init database
+        if (DBHelper.initialized()) {
+            DBHelper.initDatabase();
+        }
 
+        XivDatabase db = new XivDatabase(ffxiv);
+        db.init();
+
+        // start game
+        App app = new App(ffxiv);
         app.setSettings(settings);
         app.setShowSettings(false);
         app.start();

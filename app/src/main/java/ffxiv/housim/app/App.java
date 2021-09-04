@@ -11,6 +11,7 @@ import ffxiv.housim.app.plugins.SqpackLoader;
 import ffxiv.housim.app.plugins.SqpackLocator;
 import ffxiv.housim.app.plugins.SqpackRegister;
 import ffxiv.housim.app.state.BgmState;
+import ffxiv.housim.app.state.IconState;
 import ffxiv.housim.app.state.MainMenu;
 import ffxiv.housim.graphics.factory.MaterialFactory;
 import ffxiv.housim.graphics.factory.ModelFactory;
@@ -66,6 +67,8 @@ public class App extends SimpleApplication {
         stateManager.attach(new CheckerBoardState());
         stateManager.attach(new LightState());
         stateManager.attach(new SimpleWindowManager());
+
+        stateManager.attach(new IconState(packs));
 
         // init camera
         cam.setLocation(new Vector3f(0f, 3f, 10f));

@@ -9,7 +9,7 @@ public final class IconHelper {
 
     final static String IconFileFormat = "ui/icon/%03d000/%s%06d.tex";
 
-    public static ImageFile GetIcon(PackCollection pack, int nr) {
+    public static ImageFile getIcon(PackCollection pack, int nr) {
         return getIcon(pack, "", nr);
     }
 

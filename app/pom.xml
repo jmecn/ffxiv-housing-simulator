@@ -50,6 +50,12 @@
 
         <dependency>
             <groupId>ffxiv.housim</groupId>
+            <artifactId>db</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ffxiv.housim</groupId>
             <artifactId>graphics</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -1,4 +1,4 @@
-package ffxiv.housim.graphics.texture;
+package ffxiv.housim.graphics.shape;
 
 import com.jme3.math.ColorRGBA;
 import ffxiv.housim.saintcoinach.io.PackCollection;
