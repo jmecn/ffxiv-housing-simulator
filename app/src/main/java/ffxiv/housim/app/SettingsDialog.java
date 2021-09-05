@@ -74,7 +74,7 @@ public final class SettingsDialog extends JFrame {
             CANCEL_SELECTION = 2;
     
     // Resource bundle for i18n.
-    ResourceBundle resourceBundle = ResourceBundle.getBundle("ffxiv.housim.app/SettingsDialog");
+    ResourceBundle i18n = ResourceBundle.getBundle("ffxiv.housim.i18n/SettingsDialog");
     
     // connection to properties file.
     private final AppSettings source;
@@ -320,16 +320,16 @@ public final class SettingsDialog extends JFrame {
             safeSetIconImages( Arrays.asList((BufferedImage[]) source.getIcons()) );
         }
 
-        setTitle(MessageFormat.format(resourceBundle.getString("frame.title"), source.getTitle()));
+        setTitle(MessageFormat.format(i18n.getString("frame.title"), source.getTitle()));
         
         // The buttons...
-        ok = new JButton(resourceBundle.getString("button.ok"));
-        JButton cancel = new JButton(resourceBundle.getString("button.cancel"));
+        ok = new JButton(i18n.getString("button.ok"));
+        JButton cancel = new JButton(i18n.getString("button.cancel"));
 
         icon = new JLabel(imageFile != null ? new ImageIcon(imageFile) : null);
 
         JPanel pathPanel = new JPanel(new GridBagLayout());
-        pathPanel.setBorder(BorderFactory.createTitledBorder(resourceBundle.getString("game.dir")));
+        pathPanel.setBorder(BorderFactory.createTitledBorder(i18n.getString("game.dir")));
 
         String gameDir = source.getString(Constants.GAME_DIR);
         if (gameDir == null) {
@@ -347,7 +347,7 @@ public final class SettingsDialog extends JFrame {
             ok.setEnabled(false);
         }
 
-        JButton gameDirBtn = new JButton(resourceBundle.getString("button.browser"));
+        JButton gameDirBtn = new JButton(i18n.getString("button.browser"));
         gameDirBtn.addActionListener(e -> setGameDir());
 
         KeyListener aListener = new KeyAdapter() {
@@ -375,13 +375,13 @@ public final class SettingsDialog extends JFrame {
         displayFreqCombo.addKeyListener(aListener);
         antialiasCombo = new JComboBox<>();
         antialiasCombo.addKeyListener(aListener);
-        fullscreenBox = new JCheckBox(resourceBundle.getString("checkbox.fullscreen"));
+        fullscreenBox = new JCheckBox(i18n.getString("checkbox.fullscreen"));
         fullscreenBox.setSelected(source.isFullscreen());
         fullscreenBox.addActionListener(e -> updateResolutionChoices());
-        vsyncBox = new JCheckBox(resourceBundle.getString("checkbox.vsync"));
+        vsyncBox = new JCheckBox(i18n.getString("checkbox.vsync"));
         vsyncBox.setSelected(source.isVSync());
         
-        gammaBox = new JCheckBox(resourceBundle.getString("checkbox.gamma"));
+        gammaBox = new JCheckBox(i18n.getString("checkbox.gamma"));
         gammaBox.setSelected(source.isGammaCorrection());
 
         gbc = new GridBagConstraints();
@@ -442,7 +442,7 @@ public final class SettingsDialog extends JFrame {
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.weightx = 0.5;
-        mainPanel.add(new JLabel(resourceBundle.getString("label.resolutions")), gbc);
+        mainPanel.add(new JLabel(i18n.getString("label.resolutions")), gbc);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 3;
@@ -453,7 +453,7 @@ public final class SettingsDialog extends JFrame {
         gbc.gridx = 2;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.EAST;
-        mainPanel.add(new JLabel(resourceBundle.getString("label.colordepth")), gbc);
+        mainPanel.add(new JLabel(i18n.getString("label.colordepth")), gbc);
         gbc = new GridBagConstraints();
         gbc.weightx = 0.5;
         gbc.gridx = 3;
@@ -466,7 +466,7 @@ public final class SettingsDialog extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.EAST;
-        mainPanel.add(new JLabel(resourceBundle.getString("label.refresh")), gbc);
+        mainPanel.add(new JLabel(i18n.getString("label.refresh")), gbc);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 4;
@@ -477,7 +477,7 @@ public final class SettingsDialog extends JFrame {
         gbc.gridx = 2;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.EAST;
-        mainPanel.add(new JLabel(resourceBundle.getString("label.antialias")), gbc);
+        mainPanel.add(new JLabel(i18n.getString("label.antialias")), gbc);
         gbc = new GridBagConstraints();
         gbc.weightx = 0.5;
         gbc.gridx = 3;
@@ -605,7 +605,7 @@ public final class SettingsDialog extends JFrame {
 
         String aaString = (String) antialiasCombo.getSelectedItem();
         int multisample = -1;
-        if (aaString.equals(resourceBundle.getString("antialias.disabled"))) {
+        if (aaString.equals(i18n.getString("antialias.disabled"))) {
             multisample = 0;
         } else {
             multisample = Integer.parseInt(aaString.substring(0, aaString.indexOf('x')));
@@ -655,7 +655,7 @@ public final class SettingsDialog extends JFrame {
         } else {
             showError(
                     this,
-                    resourceBundle.getString("error.unsupportedmode"));
+                    i18n.getString("error.unsupportedmode"));
         }
 
         return valid;
@@ -734,7 +734,7 @@ public final class SettingsDialog extends JFrame {
             colorDepthCombo.setModel(new DefaultComboBoxModel<>(new String[]{
                         "24 bpp", "16 bpp"}));
             displayFreqCombo.setModel(new DefaultComboBoxModel<>(
-                    new String[]{resourceBundle.getString("refresh.na")}));
+                    new String[]{i18n.getString("refresh.na")}));
             displayFreqCombo.setEnabled(false);
         } else {
             displayResCombo.setModel(new DefaultComboBoxModel<>(
@@ -750,7 +750,7 @@ public final class SettingsDialog extends JFrame {
     private void updateAntialiasChoices() {
         // maybe in the future will add support for determining this info
         // through pbuffer
-        String[] choices = new String[]{resourceBundle.getString("antialias.disabled"), "2x", "4x", "6x", "8x", "16x"};
+        String[] choices = new String[]{i18n.getString("antialias.disabled"), "2x", "4x", "6x", "8x", "16x"};
         antialiasCombo.setModel(new DefaultComboBoxModel<>(choices));
         antialiasCombo.setSelectedItem(choices[Math.min(source.getSamples()/2,5)]);
     }

@@ -1,8 +1,7 @@
 package ffxiv.housim.app;
 
+import com.google.common.io.Resources;
 import com.jme3.system.AppSettings;
-import ffxiv.housim.db.DBHelper;
-import ffxiv.housim.db.XivDatabase;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +19,7 @@ import java.util.prefs.BackingStoreException;
 
 @Slf4j
 public class Main {
+
     public static void main(String[] args) {
         AppSettings settings = getSettings(args);
 
@@ -76,8 +76,7 @@ public class Main {
             }
         };
 
-        // URL image = Resources.getResource("ffxiv/housim/app/Monkey.png");
-        URL image = null;
+        URL image = Resources.getResource("ffxiv/housim/app/Monkey.png");
         SwingUtilities.invokeLater(() -> {
             synchronized (lock) {
                 SettingsDialog dialog = new SettingsDialog(settings, image, false);
@@ -112,16 +111,8 @@ public class Main {
             return;
         }
 
-        // init database
-        if (DBHelper.initialized()) {
-            DBHelper.initDatabase();
-        }
-
-        XivDatabase db = new XivDatabase(ffxiv);
-        db.init();
-
         // start game
-        App app = new App(ffxiv);
+        HousingSimulator app = new HousingSimulator(ffxiv);
         app.setSettings(settings);
         app.setShowSettings(false);
         app.start();

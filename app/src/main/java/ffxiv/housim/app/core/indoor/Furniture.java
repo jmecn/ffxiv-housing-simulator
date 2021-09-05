@@ -1,4 +1,4 @@
-package ffxiv.housim.app.indoor;
+package ffxiv.housim.app.core.indoor;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;

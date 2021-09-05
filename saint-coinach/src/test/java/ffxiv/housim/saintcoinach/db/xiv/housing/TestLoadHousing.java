@@ -35,13 +35,13 @@ public class TestLoadHousing {
     }
 
     @Test
-    public void testHousingPileLimit() {
-        foreach(HousingPileLimit.class);
+    public void testHouseRetainerPose() {
+        foreach(HouseRetainerPose.class);
     }
 
     @Test
-    public void testHouseRetainerPose() {
-        foreach(HouseRetainerPose.class);
+    public void testHousingPileLimit() {
+        foreach(HousingPileLimit.class);
     }
 
     @Test

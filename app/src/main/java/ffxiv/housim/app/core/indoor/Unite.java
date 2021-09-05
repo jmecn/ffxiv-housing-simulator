@@ -1,4 +1,4 @@
-package ffxiv.housim.app.indoor;
+package ffxiv.housim.app.core.indoor;
 
 import lombok.NonNull;
 

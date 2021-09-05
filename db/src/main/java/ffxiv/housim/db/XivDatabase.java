@@ -2,8 +2,15 @@ package ffxiv.housim.db;
 
 import com.google.common.collect.Sets;
 import ffxiv.housim.saintcoinach.ARealmReversed;
+import ffxiv.housim.saintcoinach.db.ex.IRow;
+import ffxiv.housim.saintcoinach.db.ex.Language;
+import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
+import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalSheet;
+import ffxiv.housim.saintcoinach.db.ex.relational.RelationalColumn;
+import ffxiv.housim.saintcoinach.db.ex.relational.RelationalHeader;
 import ffxiv.housim.saintcoinach.db.xiv.IXivRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
+import ffxiv.housim.saintcoinach.db.xiv.XivSubRow;
 import ffxiv.housim.saintcoinach.db.xiv.entity.Item;
 import ffxiv.housim.saintcoinach.db.xiv.entity.Stain;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.*;
@@ -11,6 +18,7 @@ import ffxiv.housim.saintcoinach.db.xiv.entity.map.TerritoryType;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * desc:
@@ -46,15 +54,19 @@ public class XivDatabase {
     }
 
     public void init() {
+        initTerritoryType();
+
         initItems();
+
+        initLoadingImage();
     }
 
     public void initItems() {
+
         IXivSheet<Item> items = ffxiv.getGameData().getSheet(Item.class);
 
         for (Item e : items) {
             if (e.getFilterGroup() == 0) {
-                // 14 Housing 15 Stain
                 continue;
             }
             if (e.getFilterGroup() != 14 && e.getFilterGroup() != 15) {
@@ -67,7 +79,7 @@ public class XivDatabase {
                 // 27 TripleTriadCard 九宫幻卡
                 // 28 AirshipExplorationPart 飞空艇
                 // 36 SubmarinePart 潜水艇
-                //continue;
+                continue;
             }
 
             IXivRow row = e.getAdditionalData();
@@ -154,7 +166,7 @@ public class XivDatabase {
             }
             var category = e.getCategory();
             HousingItemCategory hcat = HousingItemCategory.of(category.getHousingItemCategory());
-            log.info("#{}:{}, 类别:{}->{}, 排序:{}", fur.getModelKey(), item.getName(), hcat.getName(), category.getCategory(), category.getOrder());
+            // log.info("#{}:{}, 类别:{}->{}, 排序:{}", fur.getModelKey(), item.getName(), hcat.getName(), category.getCategory(), category.getOrder());
         }
 
         IXivSheet<YardCatalogItemList> yardCatalogItemLists = ffxiv.getGameData().getSheet(YardCatalogItemList.class);
@@ -172,18 +184,44 @@ public class XivDatabase {
             }
             var category = e.getCategory();
             HousingItemCategory hcat = HousingItemCategory.of(category.getHousingItemCategory());
-            log.info("#{}:{}, 类别:{}->{}, 排序:{}", obj.getModelKey(), item.getName(), hcat.getName(), category.getCategory(), category.getOrder());
+            // log.info("#{}:{}, 类别:{}->{}, 排序:{}", obj.getModelKey(), item.getName(), hcat.getName(), category.getCategory(), category.getOrder());
         }
     }
 
-    public void initFurniture() {
+    public void initLoadingImage() {
+        IRelationalSheet<?> sheet = ffxiv.getGameData().getSheet("LoadingImage");
+
+        RelationalHeader header = sheet.getHeader();
+        RelationalColumn[] columns = header.getColumns();
+        String[] types = new String[columns.length];
+        for (int i = 0; i < columns.length; i++) {
+            types[i] = columns[i].getValueType();
+        }
+        log.info("{}: {}", sheet.getName(), types);
+
+        for (IRelationalRow xivRow : sheet) {
+            if (xivRow.getKey() == 0) {
+                continue;
+            }
+            Object[] values = new Object[columns.length];
+            for (int i = 0; i < columns.length; i++) {
+                values[i] = xivRow.get(columns[i].getIndex());
+            }
+
+            if (xivRow instanceof XivSubRow xivSubRow) {
+                log.info("#{}: {}", xivSubRow.getFullKey(), values);
+            } else if (xivRow != null) {
+                log.info("#{}: {}", xivRow.getKey(), values);
+            }
+        }
+
+        log.info("row count: {}", sheet.getCount());
+    }
+    public void initTerritoryType() {
         IXivSheet<TerritoryType> sheet = ffxiv.getGameData().getSheet(TerritoryType.class);
 
-        Set<String> map = Sets.newHashSet("s1i1", "s1i2", "s1i3", "s1i4",
-                "f1i1", "f1i2", "f1i3", "f1i4",
-                "w1i1", "w1i2", "w1i3", "w1i4",
-                "e1i1", "e1i2", "e1i3", "e1i4");
-
+        TreeMap<String, TerritoryType> map = new TreeMap<>();
+        Pattern pattern = Pattern.compile("^[a-z]1i[1-4](_2)?$");
         for (TerritoryType territoryType : sheet) {
             if (territoryType.getKey() == 0) {
                 continue;
@@ -192,10 +230,20 @@ public class XivDatabase {
                 continue;
             }
             String name = territoryType.getName();
-            if (map.contains(name)) {
-                log.info("id:{}, name:{}, terr:{} > {} > {}", territoryType.getKey(), territoryType.getName(), territoryType.getRegionPlaceName(), territoryType.getPlaceName(), territoryType.getZonePlaceName());
-                // TODO territoryType
+            if (pattern.matcher(name).find()) {
+                map.put(name, territoryType);
             }
         }
+
+        map.values().forEach(territoryType -> {
+            log.info("id:{}, name:{}, terr:{} > {} > {}, icon:{}, icon:{}", territoryType.getKey(), territoryType.getName(), territoryType.getRegionPlaceName(), territoryType.getPlaceName(), territoryType.getZonePlaceName(), territoryType.getPlaceNameIcon(), territoryType.getPlaceNameRegionIcon());
+        });
+    }
+
+    public static void main(String[] args) throws Exception {
+        String gameDir = System.getenv("FFXIV_HOME");
+        ARealmReversed ffxiv = new ARealmReversed(gameDir, Language.ChineseSimplified);
+        XivDatabase db = new XivDatabase(ffxiv);
+        db.init();
     }
 }

@@ -1,4 +1,4 @@
-package ffxiv.housim.app.indoor.state;
+package ffxiv.housim.app.state.indoor;
 
 import ch.qos.logback.classic.Logger;
 import com.jme3.anim.AnimComposer;

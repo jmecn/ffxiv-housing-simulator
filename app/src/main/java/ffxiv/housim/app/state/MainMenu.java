@@ -12,12 +12,13 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.texture.FrameBuffer;
-import ffxiv.housim.app.indoor.state.IndoorState;
+import ffxiv.housim.app.state.indoor.IndoorState;
 import ffxiv.housim.ui.lemur.menubar.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * desc:
@@ -27,6 +28,9 @@ import java.util.List;
  */
 @Slf4j
 public class MainMenu extends BaseAppState implements SceneProcessor {
+
+    // Resource bundle for i18n.
+    ResourceBundle i18n = ResourceBundle.getBundle("ffxiv.housim.i18n/MainMenu");
 
     private Node guiNode;
 
@@ -58,48 +62,48 @@ public class MainMenu extends BaseAppState implements SceneProcessor {
         menuBar.setLocation(0, cam.getHeight());
 
         // File Menu
-        Menu fileMenu = menuBar.add(new Menu("文件"));
+        Menu fileMenu = menuBar.add(new Menu(i18n.getString("file")));
 
         // File -> New
-        Menu newMenu = fileMenu.add(new Menu("新建 >"));
+        Menu newMenu = fileMenu.add(new Menu(i18n.getString("file.new")));
 
-        MenuItem newIndoor = newMenu.add(new MenuItem("家具装修蓝图"));
+        MenuItem newIndoor = newMenu.add(new MenuItem(i18n.getString("file.new.indoor")));
         newIndoor.addClickCommand(source -> newIndoor());
 
-        MenuItem newOutdoor = newMenu.add(new MenuItem("庭具装修蓝图"));
+        MenuItem newOutdoor = newMenu.add(new MenuItem(i18n.getString("file.new.outdoor")));
         newOutdoor.addClickCommand(source -> newOutdoor());
         newOutdoor.setEnabled(false);
 
         // File -> Open
-        MenuItem openMenuItem = fileMenu.add(new MenuItem("打开..."));
+        MenuItem openMenuItem = fileMenu.add(new MenuItem(i18n.getString("file.open")));
         openMenuItem.addClickCommand(source -> open());
 
-        Menu openRecentMenu = fileMenu.add(new Menu("打开最近 >"));
+        Menu openRecentMenu = fileMenu.add(new Menu(i18n.getString("file.openRecent")));
         setRecentMenu(openRecentMenu);
 
-        MenuItem save = fileMenu.add(new MenuItem("保存..."));
+        MenuItem save = fileMenu.add(new MenuItem(i18n.getString("file.save")));
         save.addClickCommand(source -> save());
         save.setEnabled(false);
 
-        MenuItem saveAs = fileMenu.add(new MenuItem("另存为..."));
+        MenuItem saveAs = fileMenu.add(new MenuItem(i18n.getString("file.saveAs")));
         saveAs.addClickCommand(source -> saveAs());
         saveAs.setEnabled(false);
 
         fileMenu.add(new MenuSeparator());
 
         // File -> Exit
-        MenuItem exitMenuItem = fileMenu.add(new MenuItem("退出"));
+        MenuItem exitMenuItem = fileMenu.add(new MenuItem(i18n.getString("file.exit")));
         exitMenuItem.addClickCommand(source -> exit());
 
         // Edit Menu
-        Menu editMenu = menuBar.add(new Menu("设置"));
+        Menu editMenu = menuBar.add(new Menu(i18n.getString("cfg")));
 
         // Edit -> Checkbox
-        CheckboxMenuItem checkboxMenuItem = editMenu.add(new CheckboxMenuItem("TODO"));
+        CheckboxMenuItem checkboxMenuItem = editMenu.add(new CheckboxMenuItem(i18n.getString("cfg.bgm")));
 
         // Help
-        Menu helpMenu = menuBar.add(new Menu("帮助"));
-        MenuItem aboutMenuItem = helpMenu.add(new MenuItem("关于..."));
+        Menu helpMenu = menuBar.add(new Menu(i18n.getString("help")));
+        MenuItem aboutMenuItem = helpMenu.add(new MenuItem(i18n.getString("help.about")));
 
         // finally
         // remove this line if you don't want it stretched.

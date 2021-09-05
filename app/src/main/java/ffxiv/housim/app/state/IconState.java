@@ -12,7 +12,6 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
 import com.jme3.material.Materials;
-import com.jme3.math.FastMath;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Quad;
@@ -63,7 +62,7 @@ public class IconState extends BaseAppState {
             rootNode.attachChild(thisRoot);
         }
 
-        index = 62000;
+        index = 130000;
         for (int y = 0; y < row; y++) {
             for (int x = 0; x < col; x++) {
                 int n = x + y * col;
@@ -125,26 +124,25 @@ public class IconState extends BaseAppState {
     }
 
     private void reload() {
-        log.info("loading: {}", index);
-        app.enqueue(() -> {
+        Runnable runnable = () -> {
+            log.info("loading: {}", index);
             for (int y = 0; y < row; y++) {
                 for (int x = 0; x < col; x++) {
                     int n = x + y * col;
-                    try {
-                        ImageFile imageFile = IconHelper.getIcon(packs, index + n);
-                        if (imageFile == null) {
-                            mats[n].setTexture("ColorMap", null);
-                        } else {
-                            Texture2D tex = TextureFactory.get(imageFile);
-                            tex.setMagFilter(Texture.MagFilter.Bilinear);
-                            mats[n].setTexture("ColorMap", tex);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        ;
+                    ImageFile imageFile = IconHelper.getIcon(packs, index + n);
+                    Texture2D tex;
+                    if (imageFile != null) {
+                        tex = TextureFactory.get(imageFile);
+                        tex.setMagFilter(Texture.MagFilter.Bilinear);
+                    } else {
+                        tex = null;
                     }
+                    app.enqueue(() -> {
+                        mats[n].setTexture("ColorMap", tex);
+                    });
                 }
             }
-        });
+        };
+        new Thread(runnable).start();
     }
 }

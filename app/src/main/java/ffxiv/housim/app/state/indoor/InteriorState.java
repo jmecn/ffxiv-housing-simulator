@@ -1,4 +1,4 @@
-package ffxiv.housim.app.indoor.state;
+package ffxiv.housim.app.state.indoor;
 
 /**
  * desc:
