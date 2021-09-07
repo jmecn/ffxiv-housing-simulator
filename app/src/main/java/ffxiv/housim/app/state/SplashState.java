@@ -27,6 +27,8 @@ import com.jme3.scene.shape.Quad;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.Texture2D;
 import com.jme3.util.SkyFactory;
+import com.simsilica.es.EntityData;
+import com.simsilica.es.base.DefaultEntityData;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.style.BaseStyles;
 import ffxiv.housim.app.plugins.SqpackRegister;
@@ -244,7 +246,10 @@ public class SplashState extends BaseAppState implements SceneProcessor {
         GuiGlobals.getInstance().getStyles().setDefaultStyle(BaseStyles.GLASS);
         GuiGlobals.getInstance().getStyles().setDefault(font);
 
+        EntityData ed = new DefaultEntityData();
         // init state
+        stateManager.attach(new EntityDataState(ed));
+        stateManager.attach(new ViewState(ed));
         stateManager.attach(new BgmState());
         stateManager.attach(new MainMenu());
         stateManager.attach(new CheckerBoardState());
