@@ -4,6 +4,15 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.app.state.BaseAppState;
+import com.jme3.collision.CollisionResult;
+import com.jme3.collision.CollisionResults;
+import com.jme3.input.InputManager;
+import com.jme3.input.MouseInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.math.Ray;
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
 import com.jme3.post.SceneProcessor;
 import com.jme3.profile.AppProfiler;
 import com.jme3.renderer.Camera;
@@ -12,10 +21,13 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.texture.FrameBuffer;
+import com.jme3.util.TempVars;
 import ffxiv.housim.app.state.indoor.IndoorState;
 import ffxiv.housim.ui.lemur.menubar.*;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.swing.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -27,12 +39,14 @@ import java.util.ResourceBundle;
  * @date 2021/9/1
  */
 @Slf4j
-public class MainMenu extends BaseAppState implements SceneProcessor {
+public class MainMenu extends BaseAppState {
 
     // Resource bundle for i18n.
     ResourceBundle i18n = ResourceBundle.getBundle("ffxiv.housim.i18n/MainMenu");
 
     private Node guiNode;
+
+    private Node rootNode;
 
     private Camera cam;
 
@@ -40,6 +54,7 @@ public class MainMenu extends BaseAppState implements SceneProcessor {
 
     private AppStateManager stateManager;
 
+    private InputManager inputManager;
     private LemurMenuBar menuBar;
 
     @Override
@@ -48,18 +63,81 @@ public class MainMenu extends BaseAppState implements SceneProcessor {
         this.app = app;
         this.cam = app.getCamera();
         this.stateManager = app.getStateManager();
+        this.inputManager = app.getInputManager();
 
         if (app instanceof SimpleApplication simpleApp) {
             guiNode = simpleApp.getGuiNode();
+            rootNode = simpleApp.getRootNode();
         }
 
-        app.getViewPort().addProcessor(this);
-        final boolean horizontal = true;
+        createContextMenu();
+        initInput();
+    }
+
+    private void initInput() {
+        inputManager.addMapping("RIGHT_CLICK", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
+        inputManager.addMapping("LEFT_CLICK", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addListener(new ActionListener() {
+            @Override
+            public void onAction(String name, boolean isPressed, float tpf) {
+
+                if (isPressed) {
+                    switch (name) {
+                        case "RIGHT_CLICK": {
+                            rightClick();
+                            break;
+                        }
+                        case "LEFT_CLICK": {
+                            hide();
+                            break;
+                        }
+                    }
+                }
+            }
+        }, "RIGHT_CLICK", "LEFT_CLICK");
+    }
+
+    private void hide() {
+        // if the context menu is already visible remove any submenus that may be active.
+        if (menuBar.getSpatial().getParent() != null) {
+            menuBar.hideAllMenus();
+            menuBar.getSpatial().removeFromParent();
+        }
+    }
+
+    private void rightClick() {
+
+        TempVars vars = TempVars.get();
+
+        Vector2f cursor = inputManager.getCursorPosition();
+
+        Vector3f dir = cam.getWorldCoordinates(cursor, 1f, vars.vect1);
+        dir.subtractLocal(cam.getLocation());
+        Ray ray = new Ray(cam.getLocation(), dir);
+
+        CollisionResults results = vars.collisionResults;
+        results.clear();
+
+        rootNode.collideWith(ray, results);
+
+        CollisionResult result = results.getClosestCollision();
+        if (result != null) {
+            log.info("geom:{}", result.getGeometry().getName());
+        }
+
+        // if the context menu is already visible remove any submenus that may be active.
+        if (menuBar.getSpatial().getParent() == null) {
+            guiNode.attachChild(menuBar.getSpatial());
+        }
+        // set the location to the position that was clicked.
+        menuBar.setLocation(cursor.getX(), cursor.getY());
+
+        vars.release();
+    }
+    private void createContextMenu() {
+        final boolean horizontal = false;
 
         menuBar = new LemurMenuBar(100, horizontal, cam);
-        guiNode.attachChild(menuBar.getSpatial());
-
-        menuBar.setLocation(0, cam.getHeight());
 
         // File Menu
         Menu fileMenu = menuBar.add(new Menu(i18n.getString("file")));
@@ -89,12 +167,6 @@ public class MainMenu extends BaseAppState implements SceneProcessor {
         saveAs.addClickCommand(source -> saveAs());
         saveAs.setEnabled(false);
 
-        fileMenu.add(new MenuSeparator());
-
-        // File -> Exit
-        MenuItem exitMenuItem = fileMenu.add(new MenuItem(i18n.getString("file.exit")));
-        exitMenuItem.addClickCommand(source -> exit());
-
         // Edit Menu
         Menu editMenu = menuBar.add(new Menu(i18n.getString("cfg")));
 
@@ -105,11 +177,12 @@ public class MainMenu extends BaseAppState implements SceneProcessor {
         Menu helpMenu = menuBar.add(new Menu(i18n.getString("help")));
         MenuItem aboutMenuItem = helpMenu.add(new MenuItem(i18n.getString("help.about")));
 
-        // finally
-        // remove this line if you don't want it stretched.
-        menuBar.setPreferredWidth(cam.getWidth());
-    }
+        menuBar.add(new MenuSeparator());
 
+        // File -> Exit
+        MenuItem exitMenuItem = menuBar.add(new MenuItem(i18n.getString("file.exit")));
+        exitMenuItem.addClickCommand(source -> exit());
+    }
     /**
      * load recent blueprint
      *
@@ -148,28 +221,8 @@ public class MainMenu extends BaseAppState implements SceneProcessor {
         menuBar.getSpatial().removeFromParent();
     }
 
-    @Override
-    public void initialize(RenderManager rm, ViewPort vp) { }
-
-    @Override
-    public void reshape(ViewPort vp, int w, int h) {
-        menuBar.setLocation(0, h);
-        menuBar.setPreferredWidth(w);
-    }
-
-    @Override
-    public void preFrame(float tpf) { }
-
-    @Override
-    public void postQueue(RenderQueue rq) { }
-
-    @Override
-    public void postFrame(FrameBuffer out) { }
-
-    @Override
-    public void setProfiler(AppProfiler profiler) {  }
-
     private void newIndoor() {
+        hide();
         // TODO
         IndoorState state = stateManager.getState(IndoorState.class);
         if (state == null) {
@@ -180,26 +233,58 @@ public class MainMenu extends BaseAppState implements SceneProcessor {
     }
 
     private void newOutdoor() {
+        hide();
         // TODO
     }
 
+    JFileChooser openDialog;
+    private JFileChooser getOpenDialog() {
+        if (openDialog == null) {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setMultiSelectionEnabled(false);
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+            // TODO set filters
+
+            openDialog = chooser;
+        }
+        return openDialog;
+    }
+
     private void open() {
+        hide();
         // TODO open file dialog
+        SwingUtilities.invokeLater(() -> {
+            JFileChooser chooser = getOpenDialog();
+            int ret = chooser.showOpenDialog(null);
+            if (JFileChooser.APPROVE_OPTION == ret) {
+                File file = chooser.getSelectedFile();
+                // TODO
+            }
+        });
     }
 
     private void open(String path) {
+        hide();
         // TODO open recent blueprint
     }
 
     private void save() {
+        hide();
         // TODO open file dialog
+        SwingUtilities.invokeLater(() -> {
+            JFileChooser chooser = new JFileChooser();
+            chooser.showSaveDialog(null);
+        });
     }
 
     private void saveAs() {
+        hide();
         // TODO open file dialog
     }
 
     private void exit() {
+        hide();
         app.stop();
     }
 }
