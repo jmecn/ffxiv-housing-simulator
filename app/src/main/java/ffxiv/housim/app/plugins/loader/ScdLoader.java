@@ -4,10 +4,19 @@ import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetLoader;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioBuffer;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
+import com.jme3.audio.plugins.CachedOggStream;
 import com.jme3.audio.plugins.OGGLoader;
+import com.jme3.audio.plugins.UncachedOggStream;
 import com.jme3.audio.plugins.WAVLoader;
+import com.jme3.util.BufferUtils;
+import de.jarnbjo.ogg.EndOfOggStreamException;
+import de.jarnbjo.ogg.LogicalOggStream;
+import de.jarnbjo.vorbis.CommentHeader;
+import de.jarnbjo.vorbis.IdentificationHeader;
+import de.jarnbjo.vorbis.VorbisStream;
 import ffxiv.housim.app.plugins.SqpackAssetInfo;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.sound.*;
@@ -15,8 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.units.qual.A;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 /**
  * desc:
@@ -58,19 +69,13 @@ public class ScdLoader implements AssetLoader {
 
         for (ScdEntry entry : entries) {
             ScdEntryHeader header = entry.getHeader();
-            log.info("codec:{}, size:{}, sampleOffset:{}, frequency:{}, loopStartSample:{}, loopEndSample:{}", header.codec, header.dataSize, header.samplesOffset, header.frequency, header.loopStartSample, header.loopEndSample);
 
             if (entry instanceof ScdOggEntry ogg) {
-                AudioData data = loadOGG(ogg, audioKey);
-                if (data != null) {
-                    log.info("Bit/Sample:{}, SampleRate:{}, Duration:{}", data.getBitsPerSample(), data.getSampleRate(), data.getDuration());
-                    audioData = new ScdAudioData(data, ogg);
-                }
+                audioData = loadOGG(ogg, audioKey);
             } else if (entry instanceof ScdAdpcmEntry wav) {
                 AudioData data = loadWAV(wav, audioKey);
                 if (data != null) {
-                    log.info("Bit/Sample:{}, SampleRate:{}, Duration:{}", data.getBitsPerSample(), data.getSampleRate(), data.getDuration());
-                    audioData = new ScdAudioData(data, wav);
+                    audioData = new ScdAudioData(data);
                 }
             }
 
@@ -82,22 +87,99 @@ public class ScdLoader implements AssetLoader {
         return audioData;
     }
 
-    private AudioData loadOGG(ScdOggEntry entry, AudioKey audioKey) {
+    private ScdAudioData loadOGG(ScdOggEntry entry, AudioKey audioKey) {
 
-        OGGLoader loader = new OGGLoader();
-        AudioData audioData = null;
+        ByteArrayInputStream bi = new ByteArrayInputStream(entry.getDecoded());
         try {
-            audioData = (AudioData) loader.load(new AssetInfo(null, audioKey) {
-                @Override
-                public InputStream openStream() {
-                    return new ByteArrayInputStream(entry.getDecoded());
-                }
-            });
+            CachedOggStream oggStream = new CachedOggStream(bi);
+            LogicalOggStream loStream = oggStream.getLogicalStreams().iterator().next();
+            VorbisStream vorbisStream = new VorbisStream(loStream);
+
+            IdentificationHeader streamHdr = vorbisStream.getIdentificationHeader();
+
+            int channels = streamHdr.getChannels();
+            int sampleRate = streamHdr.getSampleRate();
+            int numSamples = (int) oggStream.getLastOggPage().getAbsoluteGranulePosition();
+
+            // Number of Samples * Number of Channels * Bytes Per Sample
+            int totalBytes = numSamples * channels * 2;
+
+            log.info("Sample Rate: {}", sampleRate);
+            log.info("Channels: {}", channels);
+            log.info("Stream Length: {}", numSamples);
+            log.info("Duration: {}", numSamples / (float) sampleRate);
+            log.info("Bytes Calculated: {}", totalBytes);
+
+            ByteBuffer buffer = readToBuffer(vorbisStream, totalBytes);
+
+            // Get loop parameters
+            CommentHeader commentHdr = vorbisStream.getCommentHeader();
+            String loopStart = commentHdr.getComment("LoopStart");
+            String loopEnd = commentHdr.getComment("LoopEnd");
+
+            Integer loopStartSample = null;
+            Integer loopEndSample = null;
+            if (loopStart != null) {
+                loopStartSample = Integer.parseInt(loopStart);
+                log.info("LoopStart sample: {}", loopStartSample);
+            }
+            if (loopEnd != null) {
+                loopEndSample = Integer.parseInt(loopEnd);
+                log.info("LoopEnd sample: {}", loopEndSample);
+            }
+
+            AudioBuffer audioBuffer = new AudioBuffer();
+            audioBuffer.setupFormat(channels, 16, sampleRate);
+            audioBuffer.updateData(buffer);
+
+            oggStream.close();
+            loStream.close();
+            vorbisStream.close();
+
+            return new ScdAudioData(audioBuffer, loopStartSample, loopEndSample);
         } catch (IOException e) {
             e.printStackTrace();
             log.error("Load OGG failed. {}", audioKey.getName(), e);
+            return null;
         }
-        return audioData;
+
+    }
+
+    private ByteBuffer readToBuffer(VorbisStream vorbisStream, int totalBytes) throws IOException{
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        byte[] buf = new byte[512];
+        int read = 0;
+
+        try {
+            while ( (read = vorbisStream.readPcm(buf, 0, buf.length)) > 0){
+                baos.write(buf, 0, read);
+            }
+        } catch (EndOfOggStreamException ex){
+        }
+
+        byte[] dataBytes = baos.toByteArray();
+        swapBytes(dataBytes, 0, dataBytes.length);
+
+        log.info("Bytes Available:  {}", dataBytes.length);
+
+        // Take the minimum of the number of bytes available
+        // and the expected duration of the audio.
+        int bytesToCopy =  Math.min(totalBytes, dataBytes.length );
+
+        ByteBuffer data = BufferUtils.createByteBuffer(bytesToCopy);
+        data.put(dataBytes, 0, bytesToCopy).flip();
+
+        return data;
+    }
+
+    private static void swapBytes(byte[] b, int off, int len) {
+        byte tempByte;
+        for (int i = off; i < (off+len); i+=2) {
+            tempByte = b[i];
+            b[i] = b[i+1];
+            b[i+1] = tempByte;
+        }
     }
 
     private AudioData loadWAV(ScdAdpcmEntry entry, AudioKey audioKey) {
