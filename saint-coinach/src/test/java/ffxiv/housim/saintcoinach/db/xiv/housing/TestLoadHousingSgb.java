@@ -15,6 +15,7 @@ import ffxiv.housim.saintcoinach.scene.sgb.ISgbData;
 import ffxiv.housim.saintcoinach.scene.sgb.SgbFile;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -96,19 +97,25 @@ public class TestLoadHousingSgb {
     }
 
     @Test
+    @Ignore
     public void testExterior() {
         PackCollection packs = aRealmReversed.getGameData().getPackCollection();
 
-        Pack p01 = packs.tryGetPack(new PackIdentifier(1, 0, 0));
-        Pack p02 = packs.tryGetPack(new PackIdentifier(2, 0, 0));
-
-        travePack(p01);
-        travePack(p02);
-
+        for (int exp = 0; exp <= 0; exp++){
+            for (int i = 0; i <= 0; i++) {
+                Pack pack = packs.tryGetPack(new PackIdentifier(1, exp, i));
+                if (pack != null) {
+                    travePack(pack);
+                }
+            }
+        }
     }
     private void travePack(Pack pack) {
-        System.out.println(pack);
+        log.info("current pack:{}", pack);
         IndexSource is = (IndexSource) pack.getSource();
+        if (is == null || is.getIndex() == null) {
+            return;
+        }
         Map<Integer, IndexDirectory> map = is.getIndex().getDirectories();
 
         map.forEach((dirKey, dir) -> {

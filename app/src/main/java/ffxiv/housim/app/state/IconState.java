@@ -62,7 +62,7 @@ public class IconState extends BaseAppState {
             rootNode.attachChild(thisRoot);
         }
 
-        index = 130000;
+        index = 50800;
         for (int y = 0; y < row; y++) {
             for (int x = 0; x < col; x++) {
                 int n = x + y * col;
