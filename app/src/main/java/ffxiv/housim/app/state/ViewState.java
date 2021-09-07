@@ -40,7 +40,7 @@ public class ViewState extends BaseAppState {
             rootNode.attachChild(viewRoot);
         }
 
-        ed.getEntities(Model.class, Position.class, Rotation.class);
+        entities = ed.getEntities(Model.class, Position.class, Rotation.class);
     }
 
     @Override
