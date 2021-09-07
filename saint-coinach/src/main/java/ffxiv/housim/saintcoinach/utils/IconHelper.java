@@ -44,6 +44,9 @@ public final class IconHelper {
                 file = null;
             }
         }
+        if (file instanceof ImageFile image) {
+            image.setId(nr);
+        }
         return (ImageFile) file;
     }
 }

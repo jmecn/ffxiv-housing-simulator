@@ -9,6 +9,10 @@ public class HousingFurniture extends HousingItem {
         super(sheet, sourceRow);
     }
 
+    public int getHousingItemCategory() {
+        return asInt16("HousingItemCategory");
+    }
+
     public String getSgbPath() {
         int modelKey = getModelKey();
         return String.format(FORMAT, modelKey, modelKey);

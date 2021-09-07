@@ -18,6 +18,12 @@ public final class FileFactory {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            try {
+                channel.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         switch (header.getFileType()) {

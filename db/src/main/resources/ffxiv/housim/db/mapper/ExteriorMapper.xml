@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ffxiv.housim.db.mapper.ExteriorMapper">
+
+    <resultMap id="BaseResultMap" type="ffxiv.housim.db.entity.Exterior">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="item_id" jdbcType="INTEGER" property="itemId"/>
+        <result column="category" jdbcType="INTEGER" property="category"/>
+        <result column="order" jdbcType="INTEGER" property="order"/>
+        <result column="size" jdbcType="INTEGER" property="size"/>
+        <result column="path" jdbcType="VARCHAR" property="path"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="is_united" jdbcType="INTEGER" property="isUnited"/>
+    </resultMap>
+
+    <insert id="saveAll">
+        INSERT OR REPLACE INTO exterior(`id`,`name`,`item_id`,`category`,`order`,`size`,`path`,`icon`,`is_united`)
+        VALUES
+        <foreach collection="list" item="it" separator=",">
+            (#{it.id},#{it.name},#{it.itemId},#{it.category},#{it.order},#{it.size},#{it.path},#{it.icon},#{it.isUnited})
+        </foreach>
+    </insert>
+</mapper>

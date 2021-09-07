@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ffxiv.housim.db.mapper.PreferenceMapper">
+
+    <resultMap id="BaseResultMap" type="ffxiv.housim.db.entity.Preference">
+        <result column="key" jdbcType="VARCHAR" property="key"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+    </resultMap>
+
+    <select id="get" resultType="java.lang.String">
+        SELECT `content` FROM preference where key = #{key}
+    </select>
+
+    <insert id="put">
+        insert or replace into preference(`key`, `content`) values (#{key}, #{value})
+    </insert>
+</mapper>

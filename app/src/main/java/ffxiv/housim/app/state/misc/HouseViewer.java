@@ -204,7 +204,7 @@ public class HouseViewer extends SimpleApplication {
             int fId = FastMath.nextRandomInt(1, 45);
             int wId = FastMath.nextRandomInt(1, 45);
             String fl_mtrl = String.format("bgcommon/hou/dyna/mat/fl/%04d/material/rom_fl_2%04da.mtrl", fId, fId);
-            String wl_mtrl = String.format("bgcommon/hou/dyna/mat/fl/%04d/material/rom_fl_2%04da.mtrl", wId, wId);
+            String wl_mtrl = String.format("bgcommon/hou/dyna/mat/wl/%04d/material/rom_wl_2%04da.mtrl", wId, wId);
 
             Material fl_mat = MaterialFactory.build(fl_mtrl);
             Material wl_mat = MaterialFactory.build(wl_mtrl);
@@ -334,7 +334,7 @@ public class HouseViewer extends SimpleApplication {
 
         } else if (part.equals("wl")) {
             int wId = FastMath.nextRandomInt(1, 45);
-            String wl_mtrl = String.format("bgcommon/hou/dyna/mat/fl/%04d/material/rom_fl_2%04da.mtrl", wId, wId);
+            String wl_mtrl = String.format("bgcommon/hou/dyna/mat/wl/%04d/material/rom_wl_2%04da.mtrl", wId, wId);
             Material wl_mat = MaterialFactory.build(wl_mtrl);
             geom.setMaterial(wl_mat);
         } else {

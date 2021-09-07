@@ -81,6 +81,7 @@ public class MaterialDefinition {
         return null;
     }
 
+    @Getter
     private String defaultPath;
     private String pathFormat;
     private String stainedPathFormat;

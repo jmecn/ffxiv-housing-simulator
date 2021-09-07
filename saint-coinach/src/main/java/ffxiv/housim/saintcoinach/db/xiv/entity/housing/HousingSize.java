@@ -12,6 +12,7 @@ public enum HousingSize {
     l(2, "Large"),
     ;
 
+    @Getter
     short value;
 
     @Getter
@@ -33,4 +34,5 @@ public enum HousingSize {
     public static HousingSize of(short value) {
         return CACHE.get(value);
     }
+
 }

@@ -29,7 +29,6 @@
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
         </dependency>
-
         <dependency>
             <groupId>ffxiv.housim</groupId>
             <artifactId>saint-coinach</artifactId>

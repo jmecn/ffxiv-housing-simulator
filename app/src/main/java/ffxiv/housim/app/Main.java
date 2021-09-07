@@ -33,7 +33,7 @@ public class Main {
 
         setting.setTitle(Constants.TITLE);
         setting.setResolution(1280, 720);
-        setting.setResizable(true);
+        setting.setResizable(false);
         setting.setFrameRate(60);
         setting.setSamples(4);
         setting.setGammaCorrection(true);

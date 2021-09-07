@@ -3,7 +3,6 @@ package ffxiv.housim.app.state;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
-import com.jme3.app.StatsView;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.asset.AssetManager;
@@ -12,7 +11,6 @@ import com.jme3.input.InputManager;
 import com.jme3.material.Material;
 import com.jme3.material.Materials;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
@@ -20,13 +18,10 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
-import com.jme3.texture.Texture2D;
-import com.jme3.ui.Picture;
 import com.jme3.util.SkyFactory;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.style.BaseStyles;
 import ffxiv.housim.app.plugins.SqpackRegister;
-import ffxiv.housim.db.DBHelper;
 import ffxiv.housim.db.XivDatabase;
 import ffxiv.housim.graphics.factory.MaterialFactory;
 import ffxiv.housim.graphics.factory.ModelFactory;
@@ -149,12 +144,8 @@ public class SplashState extends BaseAppState {
     private void initialize() {
 
         // init database
-        if (DBHelper.initialized()) {
-            DBHelper.initDatabase();
-        }
-
-        XivDatabase db = new XivDatabase(ffxiv);
-        db.init();
+        XivDatabase database = new XivDatabase(ffxiv);
+        database.init();
 
         SqpackRegister.register(assetManager, ffxiv.getGameDirectory().getPath());
 
@@ -184,7 +175,7 @@ public class SplashState extends BaseAppState {
         stateManager.attach(new LightState());
         stateManager.attach(new SimpleWindowManager());
 
-        stateManager.attach(new IconState(packs));
+        // stateManager.attach(new IconState(packs));
 
         // init camera
         cam.setLocation(new Vector3f(0f, 3f, 10f));

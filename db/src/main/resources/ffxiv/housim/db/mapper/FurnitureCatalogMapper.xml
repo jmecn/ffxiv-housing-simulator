@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ffxiv.housim.db.mapper.FurnitureCatalogMapper">
+
+    <resultMap id="BaseResultMap" type="ffxiv.housim.db.entity.FurnitureCatalog">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="category" jdbcType="INTEGER" property="category"/>
+        <result column="order" jdbcType="INTEGER" property="order"/>
+    </resultMap>
+
+    <insert id="saveAll">
+        INSERT OR REPLACE INTO furniture_catalog(`id`, `name`, `category`, `order`)
+        VALUES
+        <foreach collection="list" item="it" separator=",">
+            (#{it.id}, #{it.name}, #{it.category}, #{it.order})
+        </foreach>
+    </insert>
+</mapper>

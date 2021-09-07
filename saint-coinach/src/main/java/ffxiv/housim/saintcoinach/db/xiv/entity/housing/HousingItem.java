@@ -10,6 +10,10 @@ public abstract class HousingItem extends XivRow {
         super(sheet, sourceRow);
     }
 
+    public int getHousingItemCategory() {
+        return asInt16("HousingItemCategory");
+    }
+
     public int getModelKey() {
         return asInt16("ModelKey");
     }

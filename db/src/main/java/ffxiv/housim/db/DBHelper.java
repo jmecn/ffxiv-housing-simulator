@@ -10,11 +10,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
+import java.util.*;
 
 import com.google.common.io.Resources;
+import com.google.common.reflect.ClassPath;
+import ffxiv.housim.db.annotations.Schema;
 import ffxiv.housim.db.entity.Version;
 import ffxiv.housim.db.mapper.VersionMapper;
+import lombok.NonNull;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
@@ -26,31 +29,29 @@ import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * @title DBHelper
  * @author yanmaoyuan
  * @version 1.0
  */
-@Slf4j
-public class DBHelper {
+public enum DBHelper {
 
-    private final static String DB_FILE  = "data/cache.db";
+    INSTANCE;
 
-    private final static String INIT_SQL = "sql/init.sql";
+    Logger log = LoggerFactory.getLogger("DBHelper");
 
-    // Testing if database was created
-    private final static String TEST_SQL = "SELECT count(*) FROM `CACHE`";
+    private final static String DATA_DIR = "data";
 
-    private static final HikariDataSource dataSource;
+    private final static String TEST_SQL = "select count(*) from preference where key = 'init'";
 
-    private static final SqlSessionFactory sqlSessionFactory;
+    private final Map<String, SqlSessionFactory> map;
 
-    static {
-        log.info("Init dataSource");
+    private final List<HikariDataSource> list;
 
-        Path data = Paths.get("data");
+    DBHelper() {
+        Path data = Paths.get(DATA_DIR);
         if (Files.notExists(data)) {
             try {
                 Files.createDirectory(data);
@@ -59,24 +60,8 @@ public class DBHelper {
             }
         }
 
-        // Init HikariCP DataSource
-        HikariConfig hikariCfg = new HikariConfig();
-        hikariCfg.setJdbcUrl(org.sqlite.JDBC.PREFIX + DB_FILE);
-        hikariCfg.setMaximumPoolSize(9);
-        hikariCfg.setMinimumIdle(1);
-        hikariCfg.setConnectionTimeout(30000);
-        hikariCfg.setIdleTimeout(30000);
-
-        dataSource = new HikariDataSource(hikariCfg);
-
-        // Init MyBatis
-        TransactionFactory factory = new JdbcTransactionFactory();
-        Environment env = new Environment("dev", factory, dataSource);
-        Configuration mybatisCfg = new Configuration(env);
-
-        mybatisCfg.addMappers("ffxiv.housim.db.mapper");
-
-        sqlSessionFactory = new SqlSessionFactoryBuilder().build(mybatisCfg);
+        map = new HashMap<>();
+        list = new ArrayList<>(3);
     }
 
     /**
@@ -84,141 +69,137 @@ public class DBHelper {
      * 
      * @return
      */
-    public static boolean initialized() {
-        Connection conn = getConnection();
-        Statement stmt = null;
-        ResultSet rs = null;
+    public boolean initialized(@NonNull String db) {
+        try (SqlSession session = getSession(db)) {
+            Connection conn = session.getConnection();
+            Statement stmt = null;
+            ResultSet rs = null;
 
-        int value = 0;
-        try {
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(TEST_SQL);
-            if (rs.next()) {
-                value = rs.getInt(1);
+            int value = 0;
+            try {
+                stmt = conn.createStatement();
+                rs = stmt.executeQuery(TEST_SQL);
+                if (rs.next()) {
+                    value = rs.getInt(1);
+                }
+            } catch (SQLException e) {
+                value = 0;
             }
-        } catch (SQLException e) {
-            value = 0;
-        } finally {
-            close(stmt);
-            close(rs);
-            close(conn);
-        }
 
-        return value >= 1;
+            return value >= 1;
+        }
     }
 
     /**
      * Initialize db
      */
-    public static void initDatabase() {
+    public void initDatabase(String db) {
         log.info("Create database");
-        URL in = Resources.getResource(INIT_SQL);
+        String schema = "schema/" + db + ".sql";
+        URL in = Resources.getResource(schema);
         try {
             String sql = Resources.asCharSource(in, StandardCharsets.UTF_8).read();
-            executeUpdate(sql);
+            executeUpdate(db, sql);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void executeUpdate(String sql) {
-        Connection conn = getConnection();
-        try (Statement state = conn.createStatement()) {
-            state.executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            log.error("Failed execute:\n{}", sql, e);
+    public void executeUpdate(String db, String sql) {
+        try (SqlSession session = getSession(db)) {
+            Connection conn = session.getConnection();
+            try (Statement state = conn.createStatement()) {
+                state.executeUpdate(sql);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                log.error("Failed execute:\n{}", sql, e);
+            }
         }
-        close(conn);
     }
 
-    /**
-     * Get connection
-     * @return
-     */
-    public static Connection getConnection() {
+    public SqlSession getSession(@NonNull String db) {
+        return getSqlSessionFactory(db, db).openSession(true);
+    }
+
+    public SqlSessionFactory getSqlSessionFactory(@NonNull String db, @NonNull String ds) {
+
+        SqlSessionFactory sqlSessionFactory = map.get(db);
+        if (sqlSessionFactory != null) {
+            return sqlSessionFactory;
+        }
+
+        // Init HikariCP Schema
+        HikariDataSource dataSource = getDataSource(ds);
+        list.add(dataSource);
+
+        // Init MyBatis
+        TransactionFactory factory = new JdbcTransactionFactory();
+        Environment env = new Environment(db, factory, dataSource);
+        Configuration mybatisCfg = new Configuration(env);
+
         try {
-            return dataSource.getConnection();
-        } catch (SQLException e) {
+            ClassPath cp =  ClassPath.from(DBHelper.class.getClassLoader());
+            Set<ClassPath.ClassInfo> infoList = cp.getTopLevelClassesRecursive(DBHelper.class.getPackageName());
+            for (ClassPath.ClassInfo info : infoList) {
+                Class<?> clazz = info.load();
+                Schema schema = clazz.getAnnotation(Schema.class);
+                if (schema == null) {
+                    continue;
+                }
+                for (String val : schema.value()) {
+                    if (db.equals(val)) {
+                        mybatisCfg.addMapper(clazz);
+                    }
+                }
+            }
+        } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
+
+        sqlSessionFactory = new SqlSessionFactoryBuilder().build(mybatisCfg);
+        map.put(db, sqlSessionFactory);
+        return sqlSessionFactory;
     }
 
-    public static SqlSession getSession() {
-        return sqlSessionFactory.openSession();
+    // Init HikariCP Schema
+    private HikariDataSource getDataSource(String name) {
+
+        HikariConfig hikariCfg = new HikariConfig();
+        hikariCfg.setJdbcUrl(org.sqlite.JDBC.PREFIX + DATA_DIR + "/" + name + ".db");
+        hikariCfg.setMaximumPoolSize(9);
+        hikariCfg.setMinimumIdle(1);
+        hikariCfg.setConnectionTimeout(1000);
+        hikariCfg.setIdleTimeout(300000);
+        hikariCfg.setAutoCommit(true);
+
+        return new HikariDataSource(hikariCfg);
     }
 
     /**
-     * Close connection
-     * 
-     * @param conn
+     * Close HikariCP Schema
      */
-    public static void close(Connection conn) {
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+    public void close() {
+        for (HikariDataSource ds : list) {
+            if (ds != null) {
+                ds.close();
             }
-            conn = null;
-        }
-    }
-
-    /**
-     * Close statement
-     * @param statement
-     */
-    public static void close(Statement statement) {
-        if (statement != null) {
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            statement = null;
-        }
-    }
-
-    /**
-     * Close resultSet
-     * @param rs
-     */
-    public static void close(ResultSet rs) {
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            rs = null;
-        }
-    }
-
-    /**
-     * Close HikariCP DataSource
-     */
-    public static void close() {
-        if (dataSource != null) {
-            dataSource.close();
         }
     }
 
     public static void main(String[] args) {
 
-        if (!DBHelper.initialized()) {
-        	DBHelper.initDatabase();
+        DBHelper db = DBHelper.INSTANCE;
+        if (!db.initialized("cache")) {
+        	db.initDatabase("cache");
         }
 
-        try (SqlSession session = DBHelper.getSession()){
+        try (SqlSession session = db.getSession("cache")){
         	VersionMapper dao = session.getMapper(VersionMapper.class);
         	List<Version> list = dao.selectAll();
-        	list.forEach(it -> {
-        		System.out.println(it);
-        	});
+        	list.forEach(System.out::println);
         	System.out.println(list.size());
         }
 
-        close();
+        db.close();
     }
 }

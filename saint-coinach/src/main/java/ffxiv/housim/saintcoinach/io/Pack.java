@@ -79,7 +79,7 @@ public class Pack {
             channel = streamRef.get();
         }
 
-        if (channel != null) {
+        if (channel != null && channel.isOpen()) {
             return channel;
         }
 

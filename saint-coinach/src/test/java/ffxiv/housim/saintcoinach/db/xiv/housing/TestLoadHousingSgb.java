@@ -7,8 +7,10 @@ import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.entity.Item;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.*;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingItemCategory;
-import ffxiv.housim.saintcoinach.io.PackCollection;
-import ffxiv.housim.saintcoinach.io.PackFile;
+import ffxiv.housim.saintcoinach.io.*;
+import ffxiv.housim.saintcoinach.material.MaterialDefinition;
+import ffxiv.housim.saintcoinach.scene.model.ModelDefinition;
+import ffxiv.housim.saintcoinach.scene.model.ModelFile;
 import ffxiv.housim.saintcoinach.scene.sgb.ISgbData;
 import ffxiv.housim.saintcoinach.scene.sgb.SgbFile;
 import lombok.extern.slf4j.Slf4j;
@@ -89,9 +91,41 @@ public class TestLoadHousingSgb {
             HousingExterior fnc = e.getItem(HousingItemCategory.FNC);
 
             log.info("#{}:{} {}, {}, {}, {}, {}, {}, {}, {}", e.getKey(), ue2i.get(e.getKey()), rof, wal, wid, dor, rf, wl, sg, fnc);
+
         });
     }
 
+    @Test
+    public void testExterior() {
+        PackCollection packs = aRealmReversed.getGameData().getPackCollection();
+
+        Pack p01 = packs.tryGetPack(new PackIdentifier(1, 0, 0));
+        Pack p02 = packs.tryGetPack(new PackIdentifier(2, 0, 0));
+
+        travePack(p01);
+        travePack(p02);
+
+    }
+    private void travePack(Pack pack) {
+        System.out.println(pack);
+        IndexSource is = (IndexSource) pack.getSource();
+        Map<Integer, IndexDirectory> map = is.getIndex().getDirectories();
+
+        map.forEach((dirKey, dir) -> {
+            PackDirectory packDir = is.tryGetDirectory(dirKey);
+
+            Map<Integer, IndexFile> map2 = dir.getFiles();
+            map2.forEach((fileKey, indexFile) -> {
+                PackFile file = packDir.tryGetFile(fileKey);
+                if (file instanceof ModelFile mdl) {
+                    MaterialDefinition mdf = mdl.getModelDefinition().getMaterials()[0];
+                    if (mdf.getDefaultPath() != null) {
+                        log.info("mtrl:{}", mdf.getDefaultPath());
+                    }
+                }
+            });
+        });
+    }
     @Test
     public void testHousingInterior() {
         log.info("test housing interior");

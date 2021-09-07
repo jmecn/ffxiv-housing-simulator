@@ -122,7 +122,10 @@ public class ModelDefinition {
     private void build() {
         // osg and bil_*_base.mdl workaround
         // These models contain an extra 120 bytes after model headers
-        boolean isOrg = file.getPath().contains("/osg_");
+        boolean isOrg = false;
+        if (file.getPath() != null) {
+            isOrg = file.getPath().contains("/osg_");
+        }
 
         ByteBuffer buffer;
         try {

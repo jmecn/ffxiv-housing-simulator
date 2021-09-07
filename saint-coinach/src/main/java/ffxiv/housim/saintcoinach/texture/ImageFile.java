@@ -4,6 +4,7 @@ import ffxiv.housim.saintcoinach.io.FileCommonHeader;
 import ffxiv.housim.saintcoinach.io.Pack;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -12,6 +13,10 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
 public class ImageFile extends PackFile {
+
+    @Getter
+    @Setter
+    private int id;
 
     private WeakReference<byte[]> bufferCache;
 

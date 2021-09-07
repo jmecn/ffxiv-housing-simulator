@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ffxiv.housim.db.mapper.DyeMapper">
+
+    <resultMap id="BaseResultMap" type="ffxiv.housim.db.entity.Dye">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="item_id" jdbcType="INTEGER" property="itemId"/>
+        <result column="shade" jdbcType="INTEGER" property="shade"/>
+        <result column="order" jdbcType="INTEGER" property="order"/>
+        <result column="red" jdbcType="INTEGER" property="red"/>
+        <result column="green" jdbcType="INTEGER" property="green"/>
+        <result column="blue" jdbcType="INTEGER" property="blue"/>
+    </resultMap>
+
+    <insert id="saveAll">
+        INSERT OR REPLACE INTO dye(`id`,`name`,`item_id`,`shade`,`order`,`red`,`green`,`blue`)
+        VALUES
+        <foreach collection="list" item="it" separator=",">
+            (#{it.id},#{it.name},#{it.itemId},#{it.shade},#{it.order},#{it.red},#{it.green},#{it.blue})
+        </foreach>
+    </insert>
+</mapper>

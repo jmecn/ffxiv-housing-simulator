@@ -5,7 +5,7 @@ import java.util.Map;
 
 public enum HousingItemCategory {
 
-    ROF(1, "房顶", " bgcommon/hou/dyna/%s/%s_rof/%04d/asset/%s_%s_rof%04d.sgb", "bg/ffxiv/%s/hou/dyna/%s_rof/%04d/asset/%s_%s_rof%04d.sgb"),
+    ROF(1, "房顶", "bgcommon/hou/dyna/%s/%s_rof/%04d/asset/%s_%s_rof%04d.sgb", "bg/ffxiv/%s/hou/dyna/%s_rof/%04d/asset/%s_%s_rof%04d.sgb"),
     WAL(2, "外墙", "bgcommon/hou/dyna/%s/%s_wal/%04d/asset/%s_%s_wal%04d.sgb", "bg/ffxiv/%s/hou/dyna/%s_wal/%04d/asset/%s_%s_wal%04d.sgb"),
     WID(3, "窗户", "bgcommon/hou/dyna/%s/wid/%04d/asset/%s_%s_wid%04d.sgb"),
     DOR(4, "房门", "bgcommon/hou/dyna/%s/dor/%04d/asset/%s_%s_dor%04d.sgb"),
