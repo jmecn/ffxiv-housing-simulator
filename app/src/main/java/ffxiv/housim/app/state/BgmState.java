@@ -30,6 +30,9 @@ public class BgmState extends BaseAppState {
     private Node rootNode;
     private AudioNode bgmNode;
 
+    private Float loopStartSec = null;
+    private Float loopEndSec = null;
+
     @Override
     protected void initialize(Application app) {
 
@@ -59,14 +62,17 @@ public class BgmState extends BaseAppState {
     }
 
     public void play(String path) {
+
         AudioKey audioKey = new AudioKey(path, true, true);
         try {
             AudioData data = assetManager.loadAudio(audioKey);
-            ScdEntryHeader header;
 
+            loopStartSec = null;
+            loopEndSec = null;
             if (data instanceof ScdAudioData scd) {
                 data = scd.getData();
-                header = scd.getHeader();
+                loopStartSec = scd.getLoopStartSec();
+                loopEndSec = scd.getLoopEndSec();
             }
 
             if (data != null) {
@@ -84,6 +90,20 @@ public class BgmState extends BaseAppState {
             }
         } catch (AssetNotFoundException | AssetLoadException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void update(float tpf) {
+
+        // check loop
+        if (loopStartSec != null) {
+            if (bgmNode.getStatus() == AudioSource.Status.Stopped ||
+                    (loopEndSec != null && bgmNode.getPlaybackTime() >= loopEndSec)) {
+                log.info("loop start:{}", loopStartSec);
+                bgmNode.setTimeOffset(loopStartSec);
+                bgmNode.play();
+            }
         }
     }
 }

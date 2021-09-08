@@ -27,8 +27,8 @@ public class Music {
 
     // final static String NAME = "music/ffxiv/bgm_con_bahamut_bigboss0.scd";
     // final static String NAME = "music/ffxiv/bgm_system_title.scd";
-    // final static String NAME = "music/ffxiv/bgm_field_housing_night.scd";
-    final static String NAME = "music/ffxiv/bgm_field_housing_day.scd";
+    final static String NAME = "music/ffxiv/bgm_field_housing_night.scd";
+    //final static String NAME = "music/ffxiv/bgm_field_housing_day.scd";
 
     public static void main(String[] args) {
         String gameDir = System.getenv("FFXIV_HOME");
@@ -113,10 +113,6 @@ public class Music {
 
         AudioNode audioNode = new AudioNode(audioData, audioKey);
         audioNode.setPositional(false);
-        if (loopEndSec != null) {
-            audioNode.setTimeOffset(loopEndSec - 10f);
-            log.info("set time offset:{}", audioNode.getTimeOffset());
-        }
         audioNode.play();
         log.info("start time offset:{}", audioNode.getTimeOffset());
 
@@ -130,7 +126,7 @@ public class Music {
 
             log.info("status:{}, time:{}, offset:{}", audioNode.getStatus(), audioNode.getPlaybackTime(), audioNode.getTimeOffset());
             if (loopEndSec != null && loopStartSec != null) {
-                if (audioNode.getPlaybackTime() >= loopEndSec) {
+                if (audioNode.getStatus() == AudioSource.Status.Stopped || audioNode.getPlaybackTime() >= loopEndSec) {
                     log.info("loop start:{}", loopStartSec);// CommentHeader -> Comments -> LoopStart -> LoopTime = LoopStart / SampleRate
                     audioNode.play();
                     audioNode.setTimeOffset(loopStartSec);

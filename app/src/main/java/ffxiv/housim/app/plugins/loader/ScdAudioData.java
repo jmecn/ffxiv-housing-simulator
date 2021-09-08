@@ -18,11 +18,29 @@ public class ScdAudioData extends AudioData {
     private AudioData data;
 
     @Getter
-    private ScdEntryHeader header;
+    private Integer loopStartSample;
+    @Getter
+    private Integer loopEndSample;
+    @Getter
+    private Float loopStartSec;
+    @Getter
+    private Float loopEndSec;
 
-    public ScdAudioData(AudioData delegate, ScdEntry entry) {
+    public ScdAudioData(AudioData delegate) {
         this.data = delegate;
-        this.header = entry.getHeader();
+    }
+
+    public ScdAudioData(AudioData delegate, Integer loopStartSample, Integer loopEndSample) {
+        this.data = delegate;
+        int sampleRate = delegate.getSampleRate();
+        if (loopStartSample != null) {
+            this.loopStartSample = loopStartSample;
+            this.loopStartSec = loopStartSample / (float) sampleRate;
+        }
+        if (loopEndSample != null) {
+            this.loopEndSample = loopEndSample;
+            this.loopEndSec = loopEndSample / (float) sampleRate;
+        }
     }
 
     @Override

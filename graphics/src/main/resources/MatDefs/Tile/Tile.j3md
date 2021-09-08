@@ -1,0 +1,28 @@
+MaterialDef Tile {
+
+    MaterialParameters {
+        Vector2   Params
+        Texture2D ColorMap
+        Float     Time;
+        Float     Speed;
+        // Alpha threshold for fragment discarding
+        Float AlphaDiscardThreshold (AlphaTestFallOff)
+    }
+
+    Technique {
+        VertexShader GLSL310 GLSL300 GLSL100 GLSL150:   MatDefs/Tile/Tile.vert
+        FragmentShader GLSL310 GLSL300 GLSL100 GLSL150: MatDefs/Tile/Tile.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            ViewProjectionMatrix
+            ViewMatrix
+        }
+
+        Defines {
+            HAS_COLORMAP : ColorMap
+            DISCARD_ALPHA : AlphaDiscardThreshold
+            SPEED: Speed
+        }
+    }
+}

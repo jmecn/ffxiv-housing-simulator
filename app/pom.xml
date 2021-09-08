@@ -79,6 +79,10 @@
         </dependency>
 
         <dependency>
+            <groupId>com.simsilica</groupId>
+            <artifactId>zay-es</artifactId>
+        </dependency>
+        <dependency>
             <groupId>ffxiv.housim</groupId>
             <artifactId>db</artifactId>
             <version>${project.version}</version>
