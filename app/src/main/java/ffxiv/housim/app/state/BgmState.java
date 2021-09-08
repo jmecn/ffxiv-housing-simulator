@@ -9,11 +9,9 @@ import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.*;
 import com.jme3.scene.Node;
 import ffxiv.housim.app.plugins.loader.ScdAudioData;
-import ffxiv.housim.saintcoinach.sound.ScdEntryHeader;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * desc:
  *
  * @author yanmaoyuan
  * @date 2021/9/2
@@ -21,11 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BgmState extends BaseAppState {
 
-    private String daytime = "music/ffxiv/BGM_Field_Housing_Day.scd";
-    private String night = "music/ffxiv/BGM_Field_Housing_Night.scd";
+    public final static String DAYTIME = "music/ffxiv/bgm_field_housing_day.scd";
+    public final static String NIGHT = "music/ffxiv/bgm_field_housing_night.scd";
 
     private AssetManager assetManager;
-    private AudioRenderer audioRenderer;
 
     private Node rootNode;
     private AudioNode bgmNode;
@@ -35,30 +32,22 @@ public class BgmState extends BaseAppState {
 
     @Override
     protected void initialize(Application app) {
-
         assetManager = app.getAssetManager();
-        audioRenderer = app.getAudioRenderer();
-
         if (app instanceof SimpleApplication simpleApp) {
             rootNode = simpleApp.getRootNode();
         }
-
-        play(night);
     }
 
     @Override
     protected void cleanup(Application app) {
-
     }
 
     @Override
     protected void onEnable() {
-
     }
 
     @Override
     protected void onDisable() {
-
     }
 
     public void play(String path) {

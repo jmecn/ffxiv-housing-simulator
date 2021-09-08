@@ -1,25 +1,10 @@
 package ffxiv.housim.app;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.font.BitmapFont;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
-import com.jme3.util.SkyFactory;
-import com.simsilica.lemur.GuiGlobals;
-import com.simsilica.lemur.style.BaseStyles;
-import ffxiv.housim.app.plugins.SqpackRegister;
-import ffxiv.housim.app.state.BgmState;
-import ffxiv.housim.app.state.IconState;
-import ffxiv.housim.app.state.MainMenu;
 import ffxiv.housim.app.state.SplashState;
-import ffxiv.housim.graphics.factory.MaterialFactory;
-import ffxiv.housim.graphics.factory.ModelFactory;
-import ffxiv.housim.graphics.state.CheckerBoardState;
-import ffxiv.housim.graphics.state.LightState;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.io.PackCollection;
-import ffxiv.housim.ui.lemur.window.SimpleWindowManager;
 
 /**
  * desc: 主界面

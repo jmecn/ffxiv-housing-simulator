@@ -50,7 +50,6 @@ public class Main {
             log.error("read icon failed", e);
         }
 
-        log.info("icons:{}", Arrays.toString(images));
         return images;
     }
 

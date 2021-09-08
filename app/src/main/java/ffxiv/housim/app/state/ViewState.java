@@ -3,21 +3,26 @@ package ffxiv.housim.app.state;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
+import com.jme3.material.Material;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.simsilica.es.Entity;
 import com.simsilica.es.EntityData;
 import com.simsilica.es.EntityId;
 import com.simsilica.es.EntitySet;
+import ffxiv.housim.app.es.DyeColor;
 import ffxiv.housim.app.es.Model;
 import ffxiv.housim.app.es.Position;
 import ffxiv.housim.app.es.Rotation;
 import ffxiv.housim.graphics.factory.ModelFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+@Slf4j
 public class ViewState extends BaseAppState {
     private EntityData ed;
 
@@ -40,7 +45,7 @@ public class ViewState extends BaseAppState {
             rootNode.attachChild(viewRoot);
         }
 
-        entities = ed.getEntities(Model.class, Position.class, Rotation.class);
+        entities = ed.getEntities(Model.class, Position.class, Rotation.class, DyeColor.class);
     }
 
     @Override
@@ -111,7 +116,16 @@ public class ViewState extends BaseAppState {
     private void updateModel(Entity e, Spatial s) {
         Position p = e.get(Position.class);
         Rotation r = e.get(Rotation.class);
+        DyeColor d = e.get(DyeColor.class);
+
         s.setLocalTranslation(p.getLocation());
         s.setLocalRotation(r.getRotation());
+        s.depthFirstTraversal(it -> {
+            if (it instanceof Geometry geom) {
+                Material mat = geom.getMaterial();
+                String matName = mat.getMaterialDef().getName();
+                log.info("matName:{}", matName);
+            }
+        }, Spatial.DFSMode.PRE_ORDER );
     }
 }

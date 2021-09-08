@@ -13,7 +13,6 @@ import com.jme3.material.Materials;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.math.Vector4f;
 import com.jme3.post.SceneProcessor;
 import com.jme3.profile.AppProfiler;
 import com.jme3.renderer.Camera;
@@ -50,7 +49,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * desc:启动界面
+ * 启动界面
  *
  * @author yanmaoyuan
  * @date 2021/9/5
@@ -58,15 +57,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Slf4j
 public class SplashState extends BaseAppState implements SceneProcessor {
 
-    private ARealmReversed ffxiv;
-    private PackCollection packs;
+    private final ARealmReversed ffxiv;
+    private final PackCollection packs;
 
     private Application app;
     private AppStateManager stateManager;
-    private InputManager inputManager;
     private AssetManager assetManager;
     private Camera cam;
-    private ViewPort viewPort;
 
     private Node guiNode;
     private Node rootNode;
@@ -77,7 +74,6 @@ public class SplashState extends BaseAppState implements SceneProcessor {
     private Geometry loading;
     private int w;
     private int h;
-    private int padding = 40;
 
     int rx = 400;
     int ry = 168;
@@ -90,17 +86,16 @@ public class SplashState extends BaseAppState implements SceneProcessor {
     }
 
     // thread signal
-    private AtomicBoolean done = new AtomicBoolean(false);
-    private Object lock = new Object();
+    private final AtomicBoolean done = new AtomicBoolean(false);
+    private final Object lock = new Object();
 
     @Override
     protected void initialize(Application app) {
         this.app = app;
-        this.inputManager = app.getInputManager();
+        InputManager inputManager = app.getInputManager();
         this.assetManager = app.getAssetManager();
         this.stateManager = app.getStateManager();
         this.cam = app.getCamera();
-        this.viewPort = app.getViewPort();
 
         if (app instanceof SimpleApplication simpleApp) {
             this.rootNode = simpleApp.getRootNode();
@@ -112,6 +107,8 @@ public class SplashState extends BaseAppState implements SceneProcessor {
             stats.setDisplayFps(false);
             stats.setDisplayStatView(false);
         }
+
+        inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
 
         initSplash();
 
@@ -172,6 +169,7 @@ public class SplashState extends BaseAppState implements SceneProcessor {
         mat.setColor("Color", ColorRGBA.Black);
 
         bg = new Geometry("bg");
+        int padding = 40;
         bg.setMesh(new Quad(w + padding * 2, h + padding * 2));
         bg.setMaterial(mat);
 
@@ -215,7 +213,7 @@ public class SplashState extends BaseAppState implements SceneProcessor {
             loading.setMaterial(tileMaterial);
 
             splash.attachChild(loading);
-            loading.move((w - rx) / 2, (h - ry) / 2, 0);
+            loading.move((w - rx) * 0.5f, (h - ry) * 0.5f, 0);
         }
     }
 
@@ -256,8 +254,6 @@ public class SplashState extends BaseAppState implements SceneProcessor {
         stateManager.attach(new LightState());
         stateManager.attach(new SimpleWindowManager());
 
-        stateManager.attach(new IconState(packs));
-
         // init camera
         cam.setLocation(new Vector3f(0f, 3f, 10f));
         cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
@@ -277,7 +273,7 @@ public class SplashState extends BaseAppState implements SceneProcessor {
             bg.setLocalScale(scale);
         }
 
-        loading.move((w - rx) / 2, (h - ry) / 2, 0);
+        loading.move((w - rx) * 0.5f, (h - ry) * 0.5f, 0);
     }
 
     @Override
