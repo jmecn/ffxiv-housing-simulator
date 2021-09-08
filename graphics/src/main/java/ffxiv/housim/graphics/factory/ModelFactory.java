@@ -48,6 +48,7 @@ public class ModelFactory {
     }
 
     public static Node load(String sgbPath) {
+        log.info("load:{}", sgbPath);
         PackFile file = packs.tryGetFile(sgbPath);
         SgbFile sgbFile = new SgbFile(file);
         Node root = new Node(sgbFile.getFile().getPath());

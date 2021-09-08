@@ -21,6 +21,8 @@ import java.util.prefs.BackingStoreException;
 public class Main {
 
     public static void main(String[] args) {
+        System.out.println("FFXIV Housing Simulator");
+        Toolkit.getDefaultToolkit();
         AppSettings settings = getSettings(args);
 
         if (showSettings(settings)) {

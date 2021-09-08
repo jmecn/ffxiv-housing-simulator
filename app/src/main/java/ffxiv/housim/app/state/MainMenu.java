@@ -13,6 +13,7 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.texture.FrameBuffer;
 import ffxiv.housim.app.state.indoor.IndoorState;
+import ffxiv.housim.app.state.indoor.InteriorState;
 import ffxiv.housim.ui.lemur.menubar.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -175,6 +176,7 @@ public class MainMenu extends BaseAppState implements SceneProcessor {
         if (state == null) {
             state = new IndoorState();
             stateManager.attach(state);
+            stateManager.attach(new InteriorState());
         }
 
     }

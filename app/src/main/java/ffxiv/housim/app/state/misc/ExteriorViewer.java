@@ -53,7 +53,7 @@ public class ExteriorViewer extends SimpleApplication {
         super();
     }
 
-    private void initFurnitures()  {
+    private void initItems()  {
         String gameDir = System.getenv("FFXIV_HOME");
         try {
             ffxiv = new ARealmReversed(gameDir, Language.ChineseSimplified);
@@ -87,6 +87,12 @@ public class ExteriorViewer extends SimpleApplication {
                 log.info("ignore HousingExterior #{}", f.getExteriorId());
                 continue;
             }
+            Item item = he2i.get(f.getKey());
+            int cat = f.getHousingItemCategory();
+            if (f.getModel().isBlank() && item == null && (cat != 5 && cat != 6 && cat != 7)) {
+                log.info("ignore HousingExterior #{}, category:{}, item:{}", f.getExteriorId(), f.getHousingItemCategory(), item);
+                continue;
+            }
             list.add(f);
         }
 
@@ -99,7 +105,7 @@ public class ExteriorViewer extends SimpleApplication {
     public void simpleInitApp() {
         initScene();
 
-        initFurnitures();
+        initItems();
 
         initInput();
 
@@ -178,13 +184,20 @@ public class ExteriorViewer extends SimpleApplication {
                 HousingItemCategory hic = HousingItemCategory.of(f.getHousingItemCategory());
                 HousingSize hs = HousingSize.of(f.getHousingSize());
 
-                log.info("load #{}:{}, id:{}, cat:{}, size:{}", f.getKey(), item, f.getExteriorId(), hic.getName(), hs.getDesc());
-
-                if (f.getModel().isEmpty()) {
+                String model = f.getModel();
+                if (f.getHousingItemCategory() == 5) {
+                    model = String.format("bgcommon/hou/dyna/opt/rf/%04d/asset/opt_rf_m%04d.sgb", f.getExteriorId(), f.getExteriorId());
+                } else if (f.getHousingItemCategory() == 6) {
+                    model = String.format("bgcommon/hou/dyna/opt/wl/%04d/asset/opt_wl_m%04d.sgb", f.getExteriorId(), f.getExteriorId());
+                } else if (f.getHousingItemCategory() == 7) {
+                    model = String.format("bgcommon/hou/dyna/opt/sg/%04d/asset/opt_sg_m%04d.sgb", f.getExteriorId(), f.getExteriorId());
+                }
+                if (model.isBlank()) {
                     log.info("No model found");
                     return;
                 }
-                Node node = ModelFactory.load(f.getModel());
+                log.info("load #{}:{}, id:{}, cat:{}, size:{}", f.getKey(), item, f.getExteriorId(), hic.getName(), hs.getDesc());
+                Node node = ModelFactory.load(model);
                 viewNode.detachAllChildren();
                 viewNode.attachChild(node);
             } catch (Exception e) {

@@ -12,5 +12,5 @@ import lombok.Data;
 public class Interior {
     private int floor;
     private int wall;
-    private int door;
+    private int lmp;
 }
