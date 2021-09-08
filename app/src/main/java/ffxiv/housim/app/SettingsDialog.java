@@ -317,7 +317,7 @@ public final class SettingsDialog extends JFrame {
         });
 
         if (source.getIcons() != null) {
-            safeSetIconImages( Arrays.asList((BufferedImage[]) source.getIcons()) );
+            safeSetIconImages( Arrays.asList((Image[]) source.getIcons()) );
         }
 
         setTitle(MessageFormat.format(i18n.getString("frame.title"), source.getTitle()));

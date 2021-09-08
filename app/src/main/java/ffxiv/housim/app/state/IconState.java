@@ -62,13 +62,13 @@ public class IconState extends BaseAppState {
             rootNode.attachChild(thisRoot);
         }
 
-        index = 50800;
+        index = 20000;
         for (int y = 0; y < row; y++) {
             for (int x = 0; x < col; x++) {
                 int n = x + y * col;
                 Material mat = mats[n] = new Material(assetManager, Materials.UNSHADED);
                 mat.setFloat("AlphaDiscardThreshold", 0.5f);
-                Geometry geom = new Geometry("Icon" + n);
+                Geometry geom = new Geometry("icons" + n);
                 geom.setMesh(new Quad(1, 1, true));
                 geom.setMaterial(mat);
                 thisRoot.attachChild(geom);

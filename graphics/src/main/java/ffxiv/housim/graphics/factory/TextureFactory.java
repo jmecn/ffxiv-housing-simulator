@@ -84,12 +84,12 @@ public class TextureFactory {
         }
         Texture2D texture = new Texture2D(image);
         texture.setWrap(Texture.WrapMode.Repeat);
+        texture.setAnisotropicFilter(16);
 
         int numMipmaps = imageFile.getImageHeader().getNumMipmaps();
         if (numMipmaps > 1) {
             texture.setMinFilter(Texture.MinFilter.BilinearNearestMipMap);
         }
-
         return texture;
     }
 

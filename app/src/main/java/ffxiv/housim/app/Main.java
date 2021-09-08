@@ -6,13 +6,17 @@ import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.prefs.BackingStoreException;
@@ -22,12 +26,39 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("FFXIV Housing Simulator");
-        Toolkit.getDefaultToolkit();
         AppSettings settings = getSettings(args);
+
+        settings.setIcons(getIcons());
 
         if (showSettings(settings)) {
             startGame(settings);
         }
+    }
+
+    private static BufferedImage[] getIcons() {
+        BufferedImage[] images = new BufferedImage[4];
+        InputStream is = Main.class.getResourceAsStream("/icons/icon_128x128.png");
+        try {
+            BufferedImage image = ImageIO.read(is);
+            images[0] = image;
+            images[1] = scale(image,64);
+            images[2] = scale(image,32);
+            images[3] = scale(image,16);
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("read icon failed", e);
+        }
+
+        log.info("icons:{}", Arrays.toString(images));
+        return images;
+    }
+
+    private static BufferedImage scale(BufferedImage image, int size) {
+        Image img = image.getScaledInstance(size, size, 0);
+        BufferedImage to = new BufferedImage(size, size, image.getType());
+        to.getGraphics().drawImage(img, 0, 0, null);
+        return to;
     }
 
     private static AppSettings getSettings(String[] args) {
