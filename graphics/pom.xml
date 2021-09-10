@@ -26,6 +26,10 @@
             <artifactId>jme3-effects</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.simsilica</groupId>
+            <artifactId>lemur</artifactId>
+        </dependency>
+        <dependency>
             <groupId>ffxiv.housim</groupId>
             <artifactId>saint-coinach</artifactId>
             <version>${project.version}</version>

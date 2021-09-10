@@ -4,6 +4,13 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class ScdAdpcmEntry extends ScdEntry {
+
+    // all these are in big endian
+    private static final int i_RIFF = 0x46464952;// RIFF
+    private static final int i_WAVE = 0x45564157;// WAVE
+    private static final int i_fmt  = 0x20746D66;// fmt
+    private static final int i_data = 0x61746164;// data
+
     private byte[] decoded;
 
     protected ScdAdpcmEntry(ScdFile file, ScdEntryHeader header, int chunksOffset, int dataOffset) {
@@ -16,51 +23,29 @@ public class ScdAdpcmEntry extends ScdEntry {
         return decoded;
     }
 
-    final static int WaveHeaderSize = 0x10;
-
     private void decode(int chunksOffset, int dataOffset) {
         var wavHeaderOffset = dataOffset;
         var finalDataOffset = chunksOffset + header.samplesOffset;
+        int fmtSize = finalDataOffset - wavHeaderOffset;
 
-        decoded = new byte[0x1C + WaveHeaderSize + header.dataSize];
+        decoded = new byte[0x1C + fmtSize + header.dataSize];
         ByteBuffer bb = ByteBuffer.wrap(decoded);
-        bb.order(ByteOrder.BIG_ENDIAN);
-        var o = 0;
-        decoded[o++] = (byte)'R';
-        decoded[o++] = (byte)'I';
-        decoded[o++] = (byte)'F';
-        decoded[o++] = (byte)'F';
+        bb.order(ByteOrder.LITTLE_ENDIAN);
 
+        bb.putInt(i_RIFF);
+        bb.putInt(0x14 + fmtSize + header.dataSize);
+        bb.putInt(i_WAVE);
+        bb.putInt(i_fmt);
+        bb.putInt(fmtSize);
+        var o = 0x14;
+        System.arraycopy(file.data, wavHeaderOffset, decoded, o, fmtSize);
+
+        o += fmtSize;
         bb.position(o);
-        bb.putInt(0x14 + WaveHeaderSize + header.dataSize);
-
-        o += 4;
-
-        decoded[o++] = (byte)'W';
-        decoded[o++] = (byte)'A';
-        decoded[o++] = (byte)'V';
-        decoded[o++] = (byte)'E';
-        decoded[o++] = (byte)'f';
-        decoded[o++] = (byte)'m';
-        decoded[o++] = (byte)'t';
-        decoded[o++] = (byte)' ';
-
-        bb.position(o);
-        bb.putInt(WaveHeaderSize);
-        o += 4;
-
-        System.arraycopy(file.data, wavHeaderOffset, decoded, o, WaveHeaderSize);
-        o += WaveHeaderSize;
-
-        decoded[o++] = (byte)'d';
-        decoded[o++] = (byte)'a';
-        decoded[o++] = (byte)'t';
-        decoded[o++] = (byte)'a';
-
-        bb.position(o);
+        bb.putInt(i_data);
         bb.putInt(header.dataSize);
 
-        o += 4;
+        o += 8;
         System.arraycopy(file.data, finalDataOffset, decoded, o, header.dataSize);
     }
 }

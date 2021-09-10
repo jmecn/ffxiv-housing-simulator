@@ -1,4 +1,4 @@
-package ffxiv.housim.graphics.factory;
+package ffxiv.housim.app.factory;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -71,7 +71,7 @@ public class MaterialFactory {
     }
 
     private static Material innerBuild(MaterialDefinition matDef) {
-        log.info("load mtrl {}", matDef.getName());
+        log.debug("load mtrl {}", matDef.getName());
         Material mat = buildLightingMat(matDef);
         // Material mat = buildShowNormal(matDef);
         return mat;
@@ -145,6 +145,8 @@ public class MaterialFactory {
         MaterialTextureParameter[] matParams = m.getTextureParameters();
 
         Material mat = new Material(assetManager, Materials.LIGHTING);
+        //Material mat = new Material(assetManager, "MatDefs/Shader/Lighting.j3md");
+        mat.setBoolean("VertexLighting", true);
 
         for (MaterialTextureParameter e : matParams) {
             Parameter param = shPk.getParameter(e.getParameterId());
@@ -156,8 +158,9 @@ public class MaterialFactory {
                 if (name.endsWith("ColorMap0")) {
                     mat.setTexture("DiffuseMap", texture);
                     mat.setFloat("AlphaDiscardThreshold", e.alphaDiscard);
+                    log.info("alphaDiscard:{}", e.alphaDiscard);
                 } else if (name.endsWith("NormalMap0")) {
-                    //mat.setTexture("NormalMap", texture);
+                    mat.setTexture("NormalMap", texture);
                 } else if (name.endsWith("SpecularMap0")) {
                     mat.setTexture("SpecularMap", texture);
                 }
@@ -218,6 +221,8 @@ public class MaterialFactory {
         MaterialTextureParameter[] matParams = m.getTextureParameters();
 
         Material mat = new Material(assetManager, Materials.LIGHTING);
+        //Material mat = new Material(assetManager, "MatDefs/Shader/Lighting.j3md");
+        mat.setBoolean("VertexLighting", true);
 
         ColorRGBA color = new ColorRGBA(1f, 1f, 1f, 1f);
         float[] materialParameter = m.getMaterialParameter();
@@ -239,7 +244,8 @@ public class MaterialFactory {
                 if (name.endsWith("ColorMap0")) {
                     mat.setTexture("DiffuseMap", texture);
                 } else if (name.endsWith("NormalMap0")) {
-                    //mat.setTexture("NormalMap", texture);
+                    log.info("image:{}", image.getFormat());
+                    mat.setTexture("NormalMap", texture);
                 } else if (name.endsWith("SpecularMap0")) {
                     mat.setTexture("SpecularMap", texture);
                 }

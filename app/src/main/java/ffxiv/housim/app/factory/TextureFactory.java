@@ -1,4 +1,4 @@
-package ffxiv.housim.graphics.factory;
+package ffxiv.housim.app.factory;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;

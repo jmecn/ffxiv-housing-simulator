@@ -11,7 +11,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Quad;
 import com.jme3.system.AppSettings;
 import com.jme3.texture.Texture;
-import ffxiv.housim.graphics.factory.TextureFactory;
+import ffxiv.housim.app.factory.TextureFactory;
 import ffxiv.housim.saintcoinach.texture.ImageFile;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 

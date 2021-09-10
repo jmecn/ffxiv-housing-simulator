@@ -15,7 +15,7 @@ import ffxiv.housim.app.es.DyeColor;
 import ffxiv.housim.app.es.Model;
 import ffxiv.housim.app.es.Position;
 import ffxiv.housim.app.es.Rotation;
-import ffxiv.housim.graphics.factory.ModelFactory;
+import ffxiv.housim.app.factory.ModelFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;

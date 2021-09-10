@@ -51,8 +51,6 @@ public class SgbEntrySound implements ISgbEntry {
     private final String name;
     @Getter
     private final String scdFilePath;
-    @Getter
-    private ScdFile scdFile;
 
     public SgbEntrySound(PackCollection packs, ByteBuffer buffer, int offset) {
         buffer.position(offset);
@@ -91,16 +89,10 @@ public class SgbEntrySound implements ISgbEntry {
         // read name
         name = ByteBufferStr.getString(buffer, offset + nameOffset);
         scdFilePath = ByteBufferStr.getString(buffer, offset + scdNameOffset);
-        if (!scdFilePath.isEmpty()) {
-            PackFile file = packs.tryGetFile(scdFilePath);
-            if (file != null) {
-                scdFile = new ScdFile(file);
-            }
-        }
     }
 
-    private static float eaxDbToAmp(float eaxDb){
-        float dB = eaxDb / 2000f;
-        return (float) Math.pow(10f, dB);
+    @Override
+    public String toString() {
+        return scdFilePath;
     }
 }

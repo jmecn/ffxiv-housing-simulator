@@ -1,16 +1,12 @@
 package ffxiv.housim.app.plugins.loader;
 
+import com.google.common.io.Files;
 import com.jme3.asset.AssetInfo;
-import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetLoader;
-import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioBuffer;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.plugins.CachedOggStream;
-import com.jme3.audio.plugins.OGGLoader;
-import com.jme3.audio.plugins.UncachedOggStream;
-import com.jme3.audio.plugins.WAVLoader;
 import com.jme3.util.BufferUtils;
 import de.jarnbjo.ogg.EndOfOggStreamException;
 import de.jarnbjo.ogg.LogicalOggStream;
@@ -21,12 +17,8 @@ import ffxiv.housim.app.plugins.SqpackAssetInfo;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.sound.*;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.ByteBuffer;
 
 /**
@@ -88,8 +80,19 @@ public class ScdLoader implements AssetLoader {
     }
 
     private ScdAudioData loadOGG(ScdOggEntry entry, AudioKey audioKey) {
+        byte[] decoded = entry.getDecoded();
+        try {
+            File file = new File("data/" + audioKey.getName() + ".ogg");
+            File parent = file.getParentFile();
+            if (!parent.exists()) {
+                parent.mkdirs();
+            }
+            Files.write(decoded, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        ByteArrayInputStream bi = new ByteArrayInputStream(entry.getDecoded());
+        ByteArrayInputStream bi = new ByteArrayInputStream(decoded);
         try {
             CachedOggStream oggStream = new CachedOggStream(bi);
             LogicalOggStream loStream = oggStream.getLogicalStreams().iterator().next();
@@ -184,14 +187,26 @@ public class ScdLoader implements AssetLoader {
 
     private AudioData loadWAV(ScdAdpcmEntry entry, AudioKey audioKey) {
 
-        WAVLoader loader = new WAVLoader();
+        byte[] decoded = entry.getDecoded();
+        try {
+            File file = new File("data/" + audioKey.getName() + ".wav");
+            File parent = file.getParentFile();
+            if (!parent.exists()) {
+                parent.mkdirs();
+            }
+            Files.write(decoded, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        WavLoader loader = new WavLoader();
 
         AudioData audioData = null;
         try {
             audioData = (AudioData) loader.load(new AssetInfo(null, audioKey) {
                 @Override
                 public InputStream openStream() {
-                    return new ByteArrayInputStream(entry.getDecoded());
+                    return new ByteArrayInputStream(decoded);
                 }
             });
         } catch (IOException e) {

@@ -1,4 +1,4 @@
-package ffxiv.housim.graphics.state;
+package ffxiv.housim.app.state;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
@@ -23,9 +23,6 @@ public class LightState extends BaseAppState {
 
     private Node rootNode;
 
-    private ViewPort viewPort;
-    private AssetManager assetManager;
-
     // 光源
     private AmbientLight al;
     private DirectionalLight dl;
@@ -33,10 +30,10 @@ public class LightState extends BaseAppState {
     @Override
     protected void initialize(Application app) {
 
-        viewPort = app.getViewPort();
+        ViewPort viewPort = app.getViewPort();
         viewPort.setBackgroundColor(new ColorRGBA(0.75f, 0.8f, 0.9f, 1f));
-        
-        assetManager = app.getAssetManager();
+
+        AssetManager assetManager = app.getAssetManager();
 
         rootNode = ((SimpleApplication) app).getRootNode();
 

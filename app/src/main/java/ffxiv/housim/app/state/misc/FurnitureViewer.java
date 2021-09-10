@@ -16,10 +16,12 @@ import com.jme3.system.AppSettings;
 import com.jme3.util.SkyFactory;
 import com.jme3.util.TempVars;
 import ffxiv.housim.app.Constants;
-import ffxiv.housim.graphics.factory.MaterialFactory;
-import ffxiv.housim.graphics.state.CheckerBoardState;
-import ffxiv.housim.graphics.factory.ModelFactory;
-import ffxiv.housim.graphics.state.LightState;
+import ffxiv.housim.app.factory.MaterialFactory;
+import ffxiv.housim.app.plugins.SqpackRegister;
+import ffxiv.housim.app.state.BgmState;
+import ffxiv.housim.app.state.CheckerBoardState;
+import ffxiv.housim.app.factory.ModelFactory;
+import ffxiv.housim.app.state.LightState;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.io.PackCollection;
@@ -76,15 +78,16 @@ public class FurnitureViewer extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        stateManager.attach(new CheckerBoardState());
         initScene();
 
         initFurniture();
 
         initInput();
 
+        SqpackRegister.register(assetManager, ffxiv.getGameDirectory().getPath());
         ModelFactory.setPacks(packs);
         ModelFactory.setAssetManager(assetManager);
+        ModelFactory.setStateManager(stateManager);
         MaterialFactory.setPacks(packs);
         MaterialFactory.setAssetManager(assetManager);
 
@@ -162,6 +165,7 @@ public class FurnitureViewer extends SimpleApplication {
     private void initScene() {
         stateManager.attach(new CheckerBoardState());
         stateManager.attach(new LightState());
+        stateManager.attach(new BgmState());
 
         Spatial sky = SkyFactory.createSky(assetManager, "sky/env1.hdr", SkyFactory.EnvMapType.EquirectMap);
         rootNode.attachChild(sky);
@@ -175,7 +179,7 @@ public class FurnitureViewer extends SimpleApplication {
 
     public static void main(String[] args) {
         AppSettings setting = new AppSettings(true);
-        setting.setTitle("Final Fantasy XIV Housing Furniture Viewer");
+        setting.setTitle(Constants.TITLE);
         setting.setResolution(1280, 720);
         setting.setResizable(true);
         setting.setFrameRate(60);

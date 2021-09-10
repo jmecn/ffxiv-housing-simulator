@@ -1,15 +1,21 @@
-package ffxiv.housim.graphics.factory;
+package ffxiv.housim.app.factory;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.*;
-import com.jme3.scene.instancing.InstancedNode;
+import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.shape.Sphere;
+import com.simsilica.lemur.dnd.DragEvent;
+import com.simsilica.lemur.event.*;
+import ffxiv.housim.app.state.BgmState;
 import ffxiv.housim.saintcoinach.db.xiv.XivCollection;
 import ffxiv.housim.saintcoinach.math.Ubyte4;
 import ffxiv.housim.saintcoinach.scene.lgb.*;
@@ -38,6 +44,8 @@ public class ModelFactory {
 
     @Setter
     static AssetManager assetManager;
+    @Setter
+    static AppStateManager stateManager;
 
     static Cache<Integer, Mesh> CACHE;
     static {
@@ -48,7 +56,7 @@ public class ModelFactory {
     }
 
     public static Node load(String sgbPath) {
-        log.info("load:{}", sgbPath);
+        log.debug("load:{}", sgbPath);
         PackFile file = packs.tryGetFile(sgbPath);
         SgbFile sgbFile = new SgbFile(file);
         Node root = new Node(sgbFile.getFile().getPath());
@@ -67,7 +75,7 @@ public class ModelFactory {
             SgbGroup data = (SgbGroup) group;
 
             String name = data.getName();
-            log.info("build sgb:{}", name);
+            log.debug("build sgb:{}", name);
 
             int models = 0;
             int chairs = 0;
@@ -88,11 +96,18 @@ public class ModelFactory {
                     build(root, te, targets++);
                 } else if (e instanceof SgbEntry1C te) {
                     build(root, te, targets++);
+                } else if (e instanceof SgbEntrySound scd) {
+                    build(root, scd);
                 } else {
                     log.warn("unsupported entry:{}", e);
                 }
             }
         }
+    }
+
+    private static void build(Node root, SgbEntrySound scd) {
+        root.setUserData("scd", scd);
+        log.info("add sound:{}", scd.getScdFilePath());
     }
 
     private static void build(Node root, SgbEntryTargetMarker tc, int targets) {
@@ -218,10 +233,18 @@ public class ModelFactory {
         Mesh mesh = new Mesh();
         mesh.setBuffer(VertexBuffer.Type.Index, 1, indices);
 
+        float[] positions = new float[vertCount * 4];
+        float[] boneWeights = new float[vertCount * 4];
+        short[] boneIndices = new short[vertCount * 4];
+        float[] normal = new float[vertCount * 4];
+        float[] uv = new float[vertCount * 4];
+        float[] binormal = new float[vertCount * 4];
+        float[] tangent = new float[vertCount * 4];
+        float[] color = new float[vertCount * 4];
+
         for (VertexFormatElement element : vertexFormat.getElements()) {
             switch (element.attribute) {
                 case Position -> {
-                    float[] positions = new float[vertCount * 4];
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].position;
                         positions[i * 4] = v.x;
@@ -232,18 +255,16 @@ public class ModelFactory {
                     mesh.setBuffer(VertexBuffer.Type.Position, 4, positions);
                 }
                 case BoneWeights -> {
-                    float[] weights = new float[vertCount * 4];
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].boneWeights;
-                        weights[i * 4] = v.x;
-                        weights[i * 4 + 1] = v.y;
-                        weights[i * 4 + 2] = v.z;
-                        weights[i * 4 + 3] = v.w;
+                        boneWeights[i * 4] = v.x;
+                        boneWeights[i * 4 + 1] = v.y;
+                        boneWeights[i * 4 + 2] = v.z;
+                        boneWeights[i * 4 + 3] = v.w;
                     }
-                    mesh.setBuffer(VertexBuffer.Type.BoneWeight, 4, weights);
+                    mesh.setBuffer(VertexBuffer.Type.BoneWeight, 4, boneWeights);
                 }
                 case BoneIndices -> {
-                    short[] boneIndices = new short[vertCount * 4];
                     for (int i = 0; i < vertCount; i++) {
                         Ubyte4 v = vertices[i].boneIndices;
                         boneIndices[i * 4] = v.x;
@@ -254,7 +275,6 @@ public class ModelFactory {
                     mesh.setBuffer(VertexBuffer.Type.BoneIndex, 4, boneIndices);
                 }
                 case Normal -> {
-                    float[] normal = new float[vertCount * 4];
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].normal;
                         normal[i * 4] = v.x;
@@ -265,7 +285,6 @@ public class ModelFactory {
                     mesh.setBuffer(VertexBuffer.Type.Normal, 4, normal);
                 }
                 case TexCoord -> {
-                    float[] uv = new float[vertCount * 4];
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].texCoord;
                         uv[i * 4] = v.x;
@@ -276,7 +295,6 @@ public class ModelFactory {
                     mesh.setBuffer(VertexBuffer.Type.TexCoord, 4, uv);
                 }
                 case Binormal -> {
-                    float[] binormal = new float[vertCount * 4];
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].binormal;
                         binormal[i * 4] = v.x;
@@ -287,7 +305,6 @@ public class ModelFactory {
                     mesh.setBuffer(VertexBuffer.Type.Binormal, 4, binormal);
                 }
                 case Tangent -> {
-                    float[] tangent = new float[vertCount * 4];
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].tangent;
                         tangent[i * 4] = v.x;
@@ -295,11 +312,9 @@ public class ModelFactory {
                         tangent[i * 4 + 2] = v.z;
                         tangent[i * 4 + 3] = v.w;
                     }
-                    // use uv2 as Tangent2
                     mesh.setBuffer(VertexBuffer.Type.Tangent, 4, tangent);
                 }
                 case Color -> {
-                    float[] color = new float[vertCount * 4];
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].color;
                         color[i * 4] = v.x;
@@ -312,6 +327,45 @@ public class ModelFactory {
                 default -> throw new IllegalArgumentException();
             }
         }
+
+        /**
+        VertexBuffer tb = mesh.getBuffer(VertexBuffer.Type.Tangent);
+        VertexBuffer nb = mesh.getBuffer(VertexBuffer.Type.Normal);
+        VertexBuffer bnb = mesh.getBuffer(VertexBuffer.Type.Binormal);
+        if (tb == null && nb != null && bnb != null) {
+            TempVars vars = TempVars.get();
+
+            Vector3f t = vars.vect1;
+            Vector3f n = vars.vect2;
+            Vector3f bn = vars.vect3;
+            Vector3f none = vars.vect4;
+            for (int i = 0; i < vertCount; i+=4) {
+                n.set(normal[i], normal[i+1], normal[i+2]);
+                n.normalizeLocal();
+
+                bn.set(binormal[i], binormal[i+1], binormal[i+2]);
+                bn.multLocal(2.0f).subtractLocal(Vector3f.UNIT_XYZ);
+                float w = binormal[i+3] * 2f - 1f;
+
+                bn.multLocal(w);
+                bn.normalizeLocal();
+
+                float dot = bn.dot(n);
+                if (Math.abs(dot) > 0.01f) {
+                    log.warn("bn dot n:{}", dot);
+                }
+                bn.cross(n, t);
+                t.normalizeLocal();
+                tangent[i] = t.x;
+                tangent[i+1] = t.y;
+                tangent[i+2] = t.z;
+                tangent[i+3] = 1.0f;
+            }
+
+            mesh.setBuffer(VertexBuffer.Type.Tangent, 4, tangent);
+            vars.release();
+        }
+        */
 
         mesh.setStatic();
         mesh.updateBound();
