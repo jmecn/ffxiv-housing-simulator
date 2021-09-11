@@ -6,6 +6,7 @@ import ffxiv.housim.db.entity.FurnitureCatalog;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Furniture Catalog
@@ -13,4 +14,6 @@ import java.util.Collection;
 @Schema(XivDatabase.FFXIV)
 public interface FurnitureCatalogMapper {
     int saveAll(@Param("list")Collection<FurnitureCatalog> list);
+
+    List<FurnitureCatalog> queryAll();
 }

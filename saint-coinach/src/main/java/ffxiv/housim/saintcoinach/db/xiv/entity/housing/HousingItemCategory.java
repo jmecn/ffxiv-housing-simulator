@@ -32,17 +32,17 @@ public enum HousingItemCategory {
     // 19 frm bgcommon/hou/outdoor/frm/%04d/asset/frm_f%d_m%04d.sgb
     ;
 
-    short value;
+    int value;
     String name;
     String[] format;
 
     HousingItemCategory(int value, String name, String ... format) {
-        this.value = (short) value;
+        this.value = value;
         this.name = name;
         this.format = format;
     }
 
-    public short getValue() {
+    public int getValue() {
         return value;
     }
 
@@ -59,13 +59,13 @@ public enum HousingItemCategory {
     // h_ui_trn02_o
     // vfx/common/eff/%s.avfx
 
-    final static Map<Short, HousingItemCategory> CACHE = new HashMap<>();
+    final static Map<Integer, HousingItemCategory> CACHE = new HashMap<>();
     static {
         for(HousingItemCategory e : values()) {
             CACHE.put(e.value, e);
         }
     }
-    public static HousingItemCategory of (short val) {
+    public static HousingItemCategory of (int val) {
         return CACHE.get(val);
     }
 }

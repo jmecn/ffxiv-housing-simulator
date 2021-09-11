@@ -108,7 +108,8 @@ public class Main {
             }
         };
 
-        URL image = Resources.getResource("ffxiv/housim/app/Monkey.png");
+        URL image = null;
+        // URL image = Resources.getResource("ffxiv/housim/app/Monkey.png");
         SwingUtilities.invokeLater(() -> {
             synchronized (lock) {
                 SettingsDialog dialog = new SettingsDialog(settings, image, false);

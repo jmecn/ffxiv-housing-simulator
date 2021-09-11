@@ -143,6 +143,10 @@ public class LemurMenuBar {
         return root;
     }
 
+    public Container getMenuBarContainer() {
+        return menuBarContainer;
+    }
+
     public Spatial getSpatial() {
         return menuBarContainer;
     }

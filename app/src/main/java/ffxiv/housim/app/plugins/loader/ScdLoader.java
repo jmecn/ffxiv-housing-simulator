@@ -2,6 +2,7 @@ package ffxiv.housim.app.plugins.loader;
 
 import com.google.common.io.Files;
 import com.jme3.asset.AssetInfo;
+import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetLoader;
 import com.jme3.audio.AudioBuffer;
 import com.jme3.audio.AudioData;
@@ -34,14 +35,12 @@ public class ScdLoader implements AssetLoader {
     public Object load(AssetInfo assetInfo) throws IOException {
 
         if (assetInfo instanceof SqpackAssetInfo pack) {
-            return load(pack);
+            return load(pack.getPackFile(), pack.getKey());
         }
         return null;
     }
 
-    private ScdAudioData load(SqpackAssetInfo pack) {
-        PackFile packFile = pack.getPackFile();
-
+    private ScdAudioData load(PackFile packFile, AssetKey assetKey) {
         String name = packFile.getPath();
         ScdFile scdFile = new ScdFile(packFile);
         ScdEntry[] entries = scdFile.getEntries();
@@ -53,7 +52,7 @@ public class ScdLoader implements AssetLoader {
         ScdAudioData audioData = null;
 
         AudioKey audioKey = null;
-        if (pack.getKey() instanceof AudioKey key) {
+        if (assetKey instanceof AudioKey key) {
             audioKey = key;
         } else {
             audioKey = new AudioKey(name, true, true);

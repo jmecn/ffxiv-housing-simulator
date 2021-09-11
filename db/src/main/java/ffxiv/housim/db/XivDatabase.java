@@ -54,6 +54,8 @@ public class XivDatabase {
     Map<Integer, FurnitureCatalogCategory> furniture2catalog = new HashMap<>();
     Map<Integer, YardCatalogCategory> yardObject2catalog = new HashMap<>();
 
+    List<FurnitureCatalog> furnitureCatalogList = new ArrayList<>();
+
     public XivDatabase(ARealmReversed ffxiv) {
         this.ffxiv = ffxiv;
         this.gameVersion = ffxiv.getGameVersion();
@@ -88,17 +90,16 @@ public class XivDatabase {
         }
 
         initTerrain();
-        initItems();
-        initStain();
         initIndoor();
-        initOutdoor();
+        // initOutdoor();
     }
 
     private void initIndoor() {
         if (isInitialized("init_indoor")) {
             return;
         }
-
+        initItems();
+        initStain();
         initFurnitureCategory();
         initInterior();
         initFurniture();
@@ -183,20 +184,19 @@ public class XivDatabase {
             return;
         }
 
-        List<FurnitureCatalog> result = new ArrayList<>();
         IXivSheet<FurnitureCatalogCategory> list = ffxiv.getGameData().getSheet(FurnitureCatalogCategory.class);
         for (FurnitureCatalogCategory e : list) {
             FurnitureCatalog entity = new FurnitureCatalog();
             entity.setId(e.getKey());
-            entity.setCategory(e.getHousingItemCategory());
+            entity.setCategory((int) e.getHousingItemCategory());
             entity.setName(e.getCategory());
-            entity.setOrder(e.getOrder());
-            result.add(entity);
+            entity.setOrder((int) e.getOrder());
+            furnitureCatalogList.add(entity);
         }
 
         try (SqlSession session = db.getSession(FFXIV)) {
-            session.getMapper(FurnitureCatalogMapper.class).saveAll(result);
-            log.info("init furniture_catalog, count:{}", result.size());
+            session.getMapper(FurnitureCatalogMapper.class).saveAll(furnitureCatalogList);
+            log.info("init furniture_catalog, count:{}", furnitureCatalogList.size());
         }
 
         setInitialized("init_furniture_catalog");

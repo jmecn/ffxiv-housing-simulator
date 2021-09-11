@@ -41,8 +41,6 @@ public class IndoorState extends BaseAppState {
             rootNode = simpleApp.getRootNode();
         }
         windowManager = app.getStateManager().getState(SimpleWindowManager.class);
-
-        addGui();
     }
 
     @Override
@@ -87,11 +85,5 @@ public class IndoorState extends BaseAppState {
             AnimComposer ac = anim.get();
             ac.setCurrentAction("Take 01");
         }
-    }
-
-    private void addGui() {
-        FurnitureCatalog window = new FurnitureCatalog();
-
-        windowManager.add(window);
     }
 }

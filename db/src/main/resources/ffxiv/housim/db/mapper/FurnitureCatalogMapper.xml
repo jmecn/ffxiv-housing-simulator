@@ -16,4 +16,9 @@
             (#{it.id}, #{it.name}, #{it.category}, #{it.order})
         </foreach>
     </insert>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select * from furniture_catalog
+        order by category, `order`
+    </select>
 </mapper>
