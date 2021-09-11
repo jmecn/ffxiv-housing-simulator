@@ -35,7 +35,6 @@ public class SqpackLocator implements AssetLocator {
         }
         PackFile file = packs.tryGetFile(path);
         if (file != null) {
-            log.info("locate: {}", file);
             return new SqpackAssetInfo(manager, key, file);
         }
         return null;

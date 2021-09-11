@@ -2,6 +2,7 @@ package ffxiv.housim.app.state.indoor;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.simsilica.lemur.*;
@@ -95,6 +96,7 @@ public class FurnitureState extends BaseAppState {
 
         ListBox<Furniture> furnitureListBox = new ListBox<>(furnitureList);
         furnitureListBox.setCellRenderer(new FurnitureRenderer());
+        furnitureListBox.getGridPanel().setVisibleRows(16);
         furnitureListBox.addClickCommands(cmd -> {
             int selection = cmd.getSelectionModel().getSelection();
             Furniture f = (Furniture) cmd.getModel().get(selection);
@@ -106,7 +108,7 @@ public class FurnitureState extends BaseAppState {
         // left
         Container left = new Container("Left");
         left.setBorder(new InsetsComponent(3, 3, 3, 1));
-        left.setLayout(new SpringGridLayout());
+        left.setLayout(new SpringGridLayout(Axis.Y, Axis.X, FillMode.None, FillMode.Even));
 
         main.addChild(right, BorderLayout.Position.Center);
         main.addChild(left, BorderLayout.Position.West);
@@ -121,7 +123,7 @@ public class FurnitureState extends BaseAppState {
             if( existing == null ) {
                 Button button = new Button(value.getName(), getElement(), getStyle());
                 button.setIcon(getIcon(value.getIcon()));
-                button.setPreferredSize(new Vector3f(200, 32, 0));
+                button.setPreferredSize(new Vector3f(200, 20, 0));
                 existing = button;
             } else {
                 Button button = (Button) existing;
@@ -133,6 +135,7 @@ public class FurnitureState extends BaseAppState {
 
         private SqpackIcon getIcon(String path) {
             SqpackIcon component = new SqpackIcon(path, 1f, 0, 0, 0.01f, false);
+            component.setIconSize(new Vector2f(20, 20));
             return component;
         }
     }
@@ -158,6 +161,7 @@ public class FurnitureState extends BaseAppState {
             spec.setName("???");
 
             ListBox<FurnitureCatalog> listBox = new ListBox<>();
+            listBox.getGridPanel();
 
             listBox.getModel().add(all);
             listBox.getModel().addAll(sub);
