@@ -4,6 +4,9 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioData;
+import com.jme3.audio.AudioKey;
+import com.jme3.audio.AudioNode;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
@@ -15,6 +18,7 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.shape.Sphere;
 import com.simsilica.lemur.dnd.DragEvent;
 import com.simsilica.lemur.event.*;
+import ffxiv.housim.app.plugins.loader.ScdAudioData;
 import ffxiv.housim.app.state.BgmState;
 import ffxiv.housim.saintcoinach.db.xiv.XivCollection;
 import ffxiv.housim.saintcoinach.math.Ubyte4;
@@ -106,8 +110,19 @@ public class ModelFactory {
     }
 
     private static void build(Node root, SgbEntrySound scd) {
-        root.setUserData("scd", scd);
-        log.info("add sound:{}", scd.getScdFilePath());
+        AudioKey key = new AudioKey(scd.getScdFilePath(), false, false);
+
+        AudioData audioData = assetManager.loadAudio(key);
+        if (audioData instanceof ScdAudioData scdAudioData) {
+            AudioNode node = new AudioNode(scdAudioData.getData(), key);
+            if (audioData.getChannels() == 1) {
+                node.setPositional(true);
+                Vector3 trans = scd.getTranslation();
+                node.move(trans.x, trans.y, trans.z);
+            }
+            root.attachChild(node);
+            log.info("add sound:{}", scd.getScdFilePath());
+        }
     }
 
     private static void build(Node root, SgbEntryTargetMarker tc, int targets) {
@@ -130,12 +145,25 @@ public class ModelFactory {
         //root.attachChild(mark);
     }
 
+    static Material chairMat = null;
     private static void build(Node root, SgbEntryChairMarker ce, int chairs) {
         ColorRGBA color = new ColorRGBA(1.0f, 0f, 0f, 1f);
+        if (chairMat == null) {
+            chairMat = MaterialFactory.colorMaterial(color);
+        }
 
-        Geometry mark = new Geometry("ChairMarker#" + chairs);
-        mark.setMesh(new Sphere(8, 4, 0.1f));
-        mark.setMaterial(MaterialFactory.colorMaterial(color));
+        Spatial spatial = assetManager.loadModel("Model/Chair/scene.gltf");
+        spatial.scale(0.25f);
+
+        spatial.depthFirstTraversal(s -> {
+            if (s instanceof Geometry e) {
+                log.info("e:{}, e", e.getName(), e);
+                e.setMaterial(chairMat);
+            }
+        });
+
+        Node mark = new Node("ChairMarker#" + chairs);
+        mark.attachChild(spatial);
 
         // transform
         Vector3 trans = ce.getTranslation();
@@ -144,7 +172,7 @@ public class ModelFactory {
 
         mark.setLocalTranslation(trans.x, trans.y, trans.z);
         mark.setLocalRotation(new Quaternion().fromAngles(rotate.x, rotate.y, rotate.z));
-        mark.setLocalScale(scale.x, scale.y, scale.z);
+        //mark.setLocalScale(scale.x, scale.y, scale.z);
 
         root.attachChild(mark);
     }
