@@ -19,6 +19,7 @@ import com.simsilica.lemur.core.VersionedReference;
 import com.simsilica.lemur.event.CursorEventControl;
 import com.simsilica.lemur.event.DragHandler;
 import com.simsilica.lemur.list.DefaultCellRenderer;
+import com.simsilica.lemur.style.ElementId;
 import ffxiv.housim.app.es.DyeColor;
 import ffxiv.housim.app.es.Model;
 import ffxiv.housim.app.es.Position;
@@ -103,10 +104,9 @@ public class FurnitureCatalogState extends BaseAppState {
         @Override
         public Panel getView(Furniture value, boolean selected, Panel existing) {
             if( existing == null ) {
-                Button button = new Button(value.getName(), getElement(), getStyle());
+                Button button = new Button(value.getName(), new ElementId("list.item"), "glass");
                 button.setIcon(getIcon(value.getIcon()));
                 button.setPreferredSize(new Vector3f(200, 20, 0));
-                button.setFontSize(14);
                 existing = button;
             } else {
                 Button button = (Button) existing;
@@ -128,8 +128,8 @@ public class FurnitureCatalogState extends BaseAppState {
 
         // north
         Label title = new Label(i18n.getString("furniture.catalog.title"));
-        Container west = getLeft();
-        Container center = getRight();
+        Container west = getCatalogPanel();
+        Container center = getCenterPanel();
 
         main.addChild(title, BorderLayout.Position.North);
         main.addChild(center, BorderLayout.Position.Center);
@@ -142,14 +142,14 @@ public class FurnitureCatalogState extends BaseAppState {
         window = main;
     }
 
-    private Container getRight() {
-        Container right = new Container("Right");
+    private Container getCenterPanel() {
+        Container right = new Container("glass");
         right.setBorder(new InsetsComponent(3, 3, 3, 1));
         right.setLayout(new SpringGridLayout());
 
         ListBox<Furniture> furnitureListBox = new ListBox<>(furnitureList);
         furnitureListBox.setCellRenderer(new FurnitureRenderer());
-        furnitureListBox.getGridPanel().setVisibleRows(16);
+        furnitureListBox.getGridPanel().setVisibleRows(20);
         furnitureListBox.addClickCommands(cmd -> {
             int selection = cmd.getSelectionModel().getSelection();
             Furniture f = (Furniture) cmd.getModel().get(selection);
@@ -160,8 +160,8 @@ public class FurnitureCatalogState extends BaseAppState {
         return right;
     }
 
-    private Container getLeft() {
-        Container left = new Container("Left");
+    private Container getCatalogPanel() {
+        Container left = new Container("glass");
         left.setBorder(new InsetsComponent(3, 3, 3, 1));
         left.setLayout(new SpringGridLayout(Axis.Y, Axis.X, FillMode.None, FillMode.Even));
 
@@ -174,7 +174,6 @@ public class FurnitureCatalogState extends BaseAppState {
             List<FurnitureCatalog> sub = e.getValue();
 
             ListBox<FurnitureCatalog> listBox = new ListBox<>();
-            listBox.getGridPanel();
 
             int specCount = queryCount(e.getKey(), 999);
             int catCount = e.getValue().size();
@@ -227,6 +226,9 @@ public class FurnitureCatalogState extends BaseAppState {
             });
         }
 
+        // Just a placeholder, make sure that left container is wide enough.
+        Panel panel = left.addChild(new Panel("glass"));
+        panel.setPreferredSize(new Vector3f(150, 1, 0));
         return left;
     }
 

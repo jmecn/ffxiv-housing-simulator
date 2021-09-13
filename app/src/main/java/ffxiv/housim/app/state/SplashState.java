@@ -240,7 +240,7 @@ public class SplashState extends BaseAppState implements SceneProcessor {
         BitmapFont font = assetManager.loadFont("Font/indoor.fnt");
 
         GuiGlobals.initialize(app);
-        BaseStyles.loadGlassStyle();
+        BaseStyles.loadStyleResources("ffxiv/housim/ui/style/styles.groovy");
         GuiGlobals.getInstance().getStyles().setDefaultStyle(BaseStyles.GLASS);
         GuiGlobals.getInstance().getStyles().setDefault(font);
 
