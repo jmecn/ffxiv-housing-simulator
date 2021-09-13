@@ -1,10 +1,14 @@
 package ffxiv.housim.app.state.indoor;
 
 import com.jme3.app.Application;
+import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.scene.Node;
+import com.simsilica.es.EntityData;
+import com.simsilica.es.EntityId;
 import com.simsilica.lemur.*;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.component.BorderLayout;
@@ -12,7 +16,13 @@ import com.simsilica.lemur.component.InsetsComponent;
 import com.simsilica.lemur.component.SpringGridLayout;
 import com.simsilica.lemur.core.VersionedList;
 import com.simsilica.lemur.core.VersionedReference;
+import com.simsilica.lemur.event.CursorEventControl;
+import com.simsilica.lemur.event.DragHandler;
 import com.simsilica.lemur.list.DefaultCellRenderer;
+import ffxiv.housim.app.es.DyeColor;
+import ffxiv.housim.app.es.Model;
+import ffxiv.housim.app.es.Position;
+import ffxiv.housim.app.es.Rotation;
 import ffxiv.housim.db.DBHelper;
 import ffxiv.housim.db.XivDatabase;
 import ffxiv.housim.db.entity.Furniture;
@@ -21,15 +31,10 @@ import ffxiv.housim.db.mapper.FurnitureCatalogMapper;
 import ffxiv.housim.db.mapper.FurnitureMapper;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingItemCategory;
 import ffxiv.housim.ui.lemur.icon.SqpackIcon;
-import ffxiv.housim.ui.lemur.window.JmeWindow;
-import ffxiv.housim.ui.lemur.window.SimpleWindowManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -38,7 +43,11 @@ import java.util.stream.Collectors;
  * @date 2021/9/11
  */
 @Slf4j
-public class FurnitureState extends BaseAppState {
+public class FurnitureCatalogState extends BaseAppState {
+
+    // Resource bundle for i18n.
+    ResourceBundle i18n = ResourceBundle.getBundle("ffxiv.housim.i18n/House");
+
     private DBHelper db;
 
     Camera cam;
@@ -48,8 +57,21 @@ public class FurnitureState extends BaseAppState {
     List<RollupPanel> rollupPanels = new ArrayList<>();
     List<VersionedReference<Boolean>> checkBoxes = new ArrayList<>();
 
+    private EntityId entityId;
+
+    private EntityData ed;
+
+    public FurnitureCatalogState(EntityData ed) {
+        this.ed = ed;
+    }
+
+    private Node guiNode;
+
+    private Container window;
+
     @Override
     protected void initialize(Application app) {
+
         cam = app.getCamera();
         db = DBHelper.INSTANCE;
 
@@ -58,10 +80,11 @@ public class FurnitureState extends BaseAppState {
             catalogs = furnitureCatalogMapper.queryAll();
         }
 
-        initGui();
+        if (app instanceof SimpleApplication simpleApp) {
+            guiNode = simpleApp.getGuiNode();
+        }
 
-        SimpleWindowManager windowManager = app.getStateManager().getState(SimpleWindowManager.class);
-        windowManager.add(window);
+        getWindow();
     }
 
     @Override
@@ -76,47 +99,6 @@ public class FurnitureState extends BaseAppState {
     protected void onDisable() {
     }
 
-    private JmeWindow window;
-
-    private void initGui() {
-        if (window != null) {
-            return;
-        }
-        window = new JmeWindow("FurnitureCatalog");
-
-        Container main = new Container();
-        window.setContent(main);
-
-        main.setLayout(new BorderLayout());
-
-        // right
-        Container right = new Container("Right");
-        right.setBorder(new InsetsComponent(3, 3, 3, 1));
-        right.setLayout(new SpringGridLayout());
-
-        ListBox<Furniture> furnitureListBox = new ListBox<>(furnitureList);
-        furnitureListBox.setCellRenderer(new FurnitureRenderer());
-        furnitureListBox.getGridPanel().setVisibleRows(16);
-        furnitureListBox.addClickCommands(cmd -> {
-            int selection = cmd.getSelectionModel().getSelection();
-            Furniture f = (Furniture) cmd.getModel().get(selection);
-            log.info("id:{}, name:{}", f.getId(), f.getName());
-            // TODO set current furniture
-        });
-        right.addChild(furnitureListBox);
-
-        // left
-        Container left = new Container("Left");
-        left.setBorder(new InsetsComponent(3, 3, 3, 1));
-        left.setLayout(new SpringGridLayout(Axis.Y, Axis.X, FillMode.None, FillMode.Even));
-
-        main.addChild(right, BorderLayout.Position.Center);
-        main.addChild(left, BorderLayout.Position.West);
-
-        // init left
-        initLeft(left);
-    }
-
     class FurnitureRenderer extends DefaultCellRenderer<Furniture> {
         @Override
         public Panel getView(Furniture value, boolean selected, Panel existing) {
@@ -124,6 +106,7 @@ public class FurnitureState extends BaseAppState {
                 Button button = new Button(value.getName(), getElement(), getStyle());
                 button.setIcon(getIcon(value.getIcon()));
                 button.setPreferredSize(new Vector3f(200, 20, 0));
+                button.setFontSize(14);
                 existing = button;
             } else {
                 Button button = (Button) existing;
@@ -135,12 +118,52 @@ public class FurnitureState extends BaseAppState {
 
         private SqpackIcon getIcon(String path) {
             SqpackIcon component = new SqpackIcon(path, 1f, 0, 0, 0.01f, false);
-            component.setIconSize(new Vector2f(20, 20));
+            component.setIconSize(new Vector2f(16, 16));
             return component;
         }
     }
 
-    private void initLeft(Container left) {
+    private void getWindow() {
+        Container main = new Container(new BorderLayout());
+
+        // north
+        Label title = new Label(i18n.getString("furniture.catalog.title"));
+        Container west = getLeft();
+        Container center = getRight();
+
+        main.addChild(title, BorderLayout.Position.North);
+        main.addChild(center, BorderLayout.Position.Center);
+        main.addChild(west, BorderLayout.Position.West);
+
+        guiNode.attachChild(main);
+        main.setLocalTranslation(20, 500, 10);
+
+        CursorEventControl.addListenersToSpatial(main, new DragHandler());
+        window = main;
+    }
+
+    private Container getRight() {
+        Container right = new Container("Right");
+        right.setBorder(new InsetsComponent(3, 3, 3, 1));
+        right.setLayout(new SpringGridLayout());
+
+        ListBox<Furniture> furnitureListBox = new ListBox<>(furnitureList);
+        furnitureListBox.setCellRenderer(new FurnitureRenderer());
+        furnitureListBox.getGridPanel().setVisibleRows(16);
+        furnitureListBox.addClickCommands(cmd -> {
+            int selection = cmd.getSelectionModel().getSelection();
+            Furniture f = (Furniture) cmd.getModel().get(selection);
+            setCurrentFurniture(f);
+        });
+        right.addChild(furnitureListBox);
+
+        return right;
+    }
+
+    private Container getLeft() {
+        Container left = new Container("Left");
+        left.setBorder(new InsetsComponent(3, 3, 3, 1));
+        left.setLayout(new SpringGridLayout(Axis.Y, Axis.X, FillMode.None, FillMode.Even));
 
         // init left
         TreeMap<Integer, List<FurnitureCatalog>> map = catalogs.stream().collect(Collectors.groupingBy(FurnitureCatalog::getCategory, TreeMap::new, Collectors.toList()));
@@ -150,22 +173,32 @@ public class FurnitureState extends BaseAppState {
             HousingItemCategory cat = HousingItemCategory.of(e.getKey());
             List<FurnitureCatalog> sub = e.getValue();
 
-            FurnitureCatalog all = new FurnitureCatalog();
-            all.setCategory(e.getKey());
-            all.setId(null);
-            all.setName("全部");
-
-            FurnitureCatalog spec = new FurnitureCatalog();
-            spec.setCategory(e.getKey());
-            spec.setId(999);
-            spec.setName("???");
-
             ListBox<FurnitureCatalog> listBox = new ListBox<>();
             listBox.getGridPanel();
 
-            listBox.getModel().add(all);
+            int specCount = queryCount(e.getKey(), 999);
+            int catCount = e.getValue().size();
+
+            // 有多个分类，增加一个"全部"选项
+            if (catCount > 1 || specCount > 0) {
+                FurnitureCatalog all = new FurnitureCatalog();
+                all.setCategory(e.getKey());
+                all.setId(null);
+                all.setName("全部");
+                listBox.getModel().add(all);
+            }
+
             listBox.getModel().addAll(sub);
-            listBox.getModel().add(spec);
+
+            // 增加一个代表未知家具的选项
+            if (specCount > 0) {
+                FurnitureCatalog spec = new FurnitureCatalog();
+                spec.setCategory(e.getKey());
+                spec.setId(999);
+                spec.setName("???");
+
+                listBox.getModel().add(spec);
+            }
 
             listBox.getGridPanel().setVisibleRows(listBox.getModel().size());
             listBox.setScrollOnHover(false);// disable scroll
@@ -184,17 +217,26 @@ public class FurnitureState extends BaseAppState {
             rollupPanels.add(rollupPanel);
             checkBoxes.add(rollupPanel.getOpenModel().createReference());
 
-            log.info("list:{}", listBox.getPreferredSize());
             listBox.setSize(new Vector3f(200, listBox.getPreferredSize().y, 0f));
             left.addChild(rollupPanel);
 
             listBox.addClickCommands(cmd -> {
                 int selection = cmd.getSelectionModel().getSelection();
                 FurnitureCatalog fc = (FurnitureCatalog) cmd.getModel().get(selection);
-                log.info("cat:{}, id:{}, name:{}", fc.getCategory(), fc.getId(), fc.getName());
                 queryFurniture(fc.getCategory(), fc.getId());
             });
         }
+
+        return left;
+    }
+
+    private int queryCount(Integer category, Integer catalog) {
+        int count = 0;
+        try (SqlSession session = db.getSession(XivDatabase.FFXIV)) {
+            FurnitureMapper mapper = session.getMapper(FurnitureMapper.class);
+            count = mapper.queryCount(category, catalog);
+        }
+        return count;
     }
 
     private void queryFurniture(Integer category, Integer catalog) {
@@ -220,5 +262,18 @@ public class FurnitureState extends BaseAppState {
                 }
             }
         }
+    }
+
+    public void setCurrentFurniture(Furniture furniture) {
+        log.info("id:{}, name:{}", furniture.getId(), furniture.getName());
+
+        if (entityId == null) {
+            entityId = ed.createEntity();
+        }
+
+        ed.setComponent(entityId, new Model(furniture.getModel()));
+        ed.setComponent(entityId, new Position(new Vector3f()));
+        ed.setComponent(entityId, new Rotation(0f));
+        ed.setComponent(entityId, new DyeColor(null));
     }
 }

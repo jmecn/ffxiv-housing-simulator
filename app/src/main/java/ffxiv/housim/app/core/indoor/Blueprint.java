@@ -1,6 +1,7 @@
 package ffxiv.housim.app.core.indoor;
 
 import ffxiv.housim.app.core.command.ICommand;
+import ffxiv.housim.app.core.enums.HouseArea;
 import ffxiv.housim.app.core.enums.HouseType;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,13 +21,9 @@ public class Blueprint {
 
     private UUID uuid;
 
-    enum Area {
-        wil, sea, fst, est
-    }
-
     public HouseType houseType = HouseType.Small;
 
-    public Area area = Area.wil;
+    public HouseArea area = HouseArea.wil;
 
     private boolean has2nd = false;
     private Interior _2nd = null;

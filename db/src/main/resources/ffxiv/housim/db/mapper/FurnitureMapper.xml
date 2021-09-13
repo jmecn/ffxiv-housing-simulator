@@ -34,4 +34,16 @@
             </if>
         </where>
     </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from furniture
+        <where>
+            <if test="category != null">
+                and category = #{category}
+            </if>
+            <if test="catalog != null">
+                and catalog = #{catalog}
+            </if>
+        </where>
+    </select>
 </mapper>

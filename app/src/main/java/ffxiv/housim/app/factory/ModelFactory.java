@@ -59,15 +59,45 @@ public class ModelFactory {
                 .build();
     }
 
-    public static Node load(String sgbPath) {
+    public static Node load(String path) {
+        if (path.endsWith("sgb")) {
+            return loadSgb(path);
+        } else if (path.endsWith("lgb")) {
+            return loadLgb(path);
+        } else {
+            return null;
+        }
+    }
+
+    public static Node loadLgb(String lgbPath) {
+        PackFile file = packs.tryGetFile(lgbPath);
+        if (file != null) {
+            log.debug("load:{}", lgbPath);
+
+            LgbFile lgbFile = new LgbFile(file);
+            Node root = new Node(file.getPath());
+            build(root, lgbFile);
+
+            return root;
+        }
+        log.warn("lgb file not found:{}", lgbPath);
+        return null;
+    }
+
+    public static Node loadSgb(String sgbPath) {
         log.debug("load:{}", sgbPath);
+
         PackFile file = packs.tryGetFile(sgbPath);
-        SgbFile sgbFile = new SgbFile(file);
-        Node root = new Node(sgbFile.getFile().getPath());
+        if (file != null) {
+            SgbFile sgbFile = new SgbFile(file);
+            Node root = new Node(file.getPath());
 
-        build(root, sgbFile);
+            build(root, sgbFile);
 
-        return root;
+            return root;
+        }
+
+        return null;
     }
 
     private static void build(Node root, SgbFile sgbFile) {

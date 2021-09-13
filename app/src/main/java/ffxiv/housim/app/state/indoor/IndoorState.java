@@ -1,9 +1,6 @@
 package ffxiv.housim.app.state.indoor;
 
-import ch.qos.logback.classic.Logger;
 import com.jme3.anim.AnimComposer;
-import com.jme3.anim.AnimationMask;
-import com.jme3.anim.tween.action.Action;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
@@ -13,7 +10,6 @@ import com.jme3.material.Materials;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import ffxiv.housim.ui.gui.FurnitureCatalog;
 import ffxiv.housim.ui.lemur.window.SimpleWindowManager;
 import lombok.extern.slf4j.Slf4j;
 

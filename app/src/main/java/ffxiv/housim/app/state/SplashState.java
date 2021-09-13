@@ -31,7 +31,8 @@ import com.simsilica.es.base.DefaultEntityData;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.style.BaseStyles;
 import ffxiv.housim.app.plugins.SqpackRegister;
-import ffxiv.housim.app.state.indoor.FurnitureState;
+import ffxiv.housim.app.state.indoor.FurnitureCatalogState;
+import ffxiv.housim.app.state.indoor.FurnitureViewState;
 import ffxiv.housim.db.XivDatabase;
 import ffxiv.housim.app.factory.MaterialFactory;
 import ffxiv.housim.app.factory.ModelFactory;
@@ -246,7 +247,7 @@ public class SplashState extends BaseAppState implements SceneProcessor {
         EntityData ed = new DefaultEntityData();
         // init state
         stateManager.attach(new EntityDataState(ed));
-        stateManager.attach(new ViewState(ed));
+        stateManager.attach(new FurnitureViewState(ed));
         stateManager.attach(new BgmState());
         stateManager.attach(new MainMenu());
         stateManager.attach(new CheckerBoardState());
@@ -254,7 +255,7 @@ public class SplashState extends BaseAppState implements SceneProcessor {
         stateManager.attach(new SimpleWindowManager());
 
         // TODO for test
-        stateManager.attach(new FurnitureState());
+        stateManager.attach(new FurnitureCatalogState(ed));
 
         // init camera
         cam.setLocation(new Vector3f(0f, 3f, 10f));

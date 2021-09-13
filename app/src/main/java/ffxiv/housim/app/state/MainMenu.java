@@ -13,16 +13,9 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.post.SceneProcessor;
-import com.jme3.profile.AppProfiler;
 import com.jme3.renderer.Camera;
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
-import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
-import com.jme3.texture.FrameBuffer;
 import com.jme3.util.TempVars;
-import ffxiv.housim.app.state.indoor.FurnitureState;
 import ffxiv.housim.app.state.indoor.IndoorState;
 import ffxiv.housim.app.state.indoor.InteriorState;
 import ffxiv.housim.ui.lemur.menubar.*;
@@ -231,7 +224,7 @@ public class MainMenu extends BaseAppState {
             state = new IndoorState();
             stateManager.attach(state);
             stateManager.attach(new InteriorState());
-            //stateManager.attach(new FurnitureState());
+            //stateManager.attach(new FurnitureCatalogState());
         }
 
     }

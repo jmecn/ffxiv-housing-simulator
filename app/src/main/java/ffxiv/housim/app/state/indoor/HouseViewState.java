@@ -1,4 +1,4 @@
-package ffxiv.housim.app.state;
+package ffxiv.housim.app.state.indoor;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
@@ -15,6 +15,8 @@ import ffxiv.housim.app.es.DyeColor;
 import ffxiv.housim.app.es.Model;
 import ffxiv.housim.app.es.Position;
 import ffxiv.housim.app.es.Rotation;
+import ffxiv.housim.app.es.interior.HModel;
+import ffxiv.housim.app.es.interior.HType;
 import ffxiv.housim.app.factory.ModelFactory;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,8 +24,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author yanmaoyuan
+ * @date 2021/9/13
+ */
 @Slf4j
-public class ViewState extends BaseAppState {
+public class HouseViewState extends BaseAppState {
     private EntityData ed;
 
     private EntitySet entities;
@@ -32,9 +38,12 @@ public class ViewState extends BaseAppState {
     private final Node viewRoot;
 
     private final Map<EntityId, Spatial> models;
-    public ViewState(EntityData ed) {
+    private final Map<EntityId, String> modelNames;
+
+    public HouseViewState(EntityData ed) {
         this.ed = ed;
         models = new HashMap<>();
+        modelNames = new HashMap<>();
         viewRoot = new Node("ViewRoot");
     }
 
@@ -45,7 +54,7 @@ public class ViewState extends BaseAppState {
             rootNode.attachChild(viewRoot);
         }
 
-        entities = ed.getEntities(Model.class, Position.class, Rotation.class, DyeColor.class);
+        entities = ed.getEntities(HModel.class, HType.class);
     }
 
     @Override
@@ -79,15 +88,20 @@ public class ViewState extends BaseAppState {
 
     private void removeEntities(Set<Entity> entities) {
         for(Entity e : entities) {
-            Spatial s = models.get(e.getId());
+            EntityId id = e.getId();
+
+            Spatial s = models.get(id);
             s.removeFromParent();
+            modelNames.remove(id);
+            models.remove(id);
         }
     }
 
     private void updateEntities(Set<Entity> entities) {
         for(Entity e : entities) {
+            updateVisual(e);
             Spatial s = models.get(e.getId());
-            updateModel(e, s);
+            updateTranslation(e, s);
         }
     }
 
@@ -96,8 +110,10 @@ public class ViewState extends BaseAppState {
         for(Entity e : entities) {
             Spatial s = createVisual(e);
             models.put(e.getId(), s);
-            updateModel(e, s);
+            modelNames.put(e.getId(), s.getName());
+            updateTranslation(e, s);
             viewRoot.attachChild(s);
+            log.info("add spatial:{}", s.getName());
         }
     }
 
@@ -106,14 +122,41 @@ public class ViewState extends BaseAppState {
 
         Spatial s = ModelFactory.load(model.getPath());
         if (s != null) {
-            s.setUserData("EntityId", e.getId());
+            s.setUserData("EntityId", e.getId().getId());
             return s;
         }
         // TODO
         return new Node();
     }
 
-    private void updateModel(Entity e, Spatial s) {
+    private void updateVisual(Entity e) {
+        Model m = e.get(Model.class);
+        EntityId id = e.getId();
+
+        if (!models.containsKey(id)) {
+            Spatial s = createVisual(e);
+            models.put(id, s);
+            modelNames.put(id, m.getPath());
+            viewRoot.attachChild(s);
+        } else {
+            String exist = modelNames.get(id);
+            // modified?
+            if (!exist.equals(m.getPath())) {
+                modelNames.remove(id);
+                Spatial s = models.remove(id);
+                s.removeFromParent();
+
+                // new model
+                s = createVisual(e);
+                models.put(id, s);
+                modelNames.put(id, s.getName());
+                viewRoot.attachChild(s);
+            }
+        }
+    }
+
+    private void updateTranslation(Entity e, Spatial s) {
+        Model m = e.get(Model.class);
         Position p = e.get(Position.class);
         Rotation r = e.get(Rotation.class);
         DyeColor d = e.get(DyeColor.class);

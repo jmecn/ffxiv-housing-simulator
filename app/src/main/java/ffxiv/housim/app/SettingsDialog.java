@@ -335,9 +335,11 @@ public final class SettingsDialog extends JFrame {
         if (gameDir == null) {
             gameDir = "";
         }
-        gameDirText = new JTextField(40);
+
+        gameDirText = new JTextField();
         gameDirText.setEditable(false);
         gameDirText.setText(gameDir);
+        gameDirText.setPreferredSize(new Dimension(400, 24));
 
         if (Main.checkGameDir(gameDir)) {
             gameDirText.setBackground(Color.white);
