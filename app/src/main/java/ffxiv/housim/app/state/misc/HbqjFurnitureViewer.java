@@ -17,6 +17,7 @@ import com.jme3.util.SkyFactory;
 import com.jme3.util.TempVars;
 import ffxiv.housim.app.factory.MaterialFactory;
 import ffxiv.housim.app.factory.ModelFactory;
+import ffxiv.housim.app.plugins.SqpackRegister;
 import ffxiv.housim.app.state.CheckerBoardState;
 import ffxiv.housim.app.state.LightState;
 import ffxiv.housim.saintcoinach.ARealmReversed;
@@ -57,6 +58,7 @@ public class HbqjFurnitureViewer extends SimpleApplication {
             e.printStackTrace();
             System.exit(-1);
         }
+        SqpackRegister.register(assetManager, gameDir);
         packs = ffxiv.getGameData().getPackCollection();
         IXivSheet<HousingFurniture> sheet = ffxiv.getGameData().getSheet(HousingFurniture.class);
 
