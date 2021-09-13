@@ -31,6 +31,8 @@ public class XivDatabase {
 
     private DBHelper db = DBHelper.INSTANCE;
 
+    public final static int UNKNOWN_CATALOG = 999;
+
     public final static String CACHE = "cache";
 
     public final static String FFXIV = "ffxiv";
@@ -251,7 +253,7 @@ public class XivDatabase {
             entity.setCategory(f.getHousingItemCategory());
             if (cat == null) {
                 log.warn("not catalog found. #{}: {}, category:{}", f.getKey(), item, f.getHousingItemCategory());
-                entity.setCatalog(999);
+                entity.setCatalog(UNKNOWN_CATALOG);
             } else {
                 entity.setCatalog(cat.getKey());
             }
@@ -434,7 +436,7 @@ public class XivDatabase {
             entity.setCategory(f.getHousingItemCategory());
             if (cat == null) {
                 log.warn("not catalog found. #{}: {}, category:{}", f.getKey(), item, f.getHousingItemCategory());
-                entity.setCatalog(999);
+                entity.setCatalog(UNKNOWN_CATALOG);
             } else {
                 entity.setCatalog(cat.getKey());
             }

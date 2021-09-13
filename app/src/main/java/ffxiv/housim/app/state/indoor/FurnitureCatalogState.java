@@ -193,7 +193,7 @@ public class FurnitureCatalogState extends BaseAppState {
             if (specCount > 0) {
                 FurnitureCatalog spec = new FurnitureCatalog();
                 spec.setCategory(e.getKey());
-                spec.setId(999);
+                spec.setId(XivDatabase.UNKNOWN_CATALOG);
                 spec.setName("???");
 
                 listBox.getModel().add(spec);
