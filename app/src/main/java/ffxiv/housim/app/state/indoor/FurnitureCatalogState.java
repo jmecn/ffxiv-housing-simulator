@@ -12,6 +12,7 @@ import com.simsilica.es.EntityId;
 import com.simsilica.lemur.*;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.component.BorderLayout;
+import com.simsilica.lemur.component.DynamicInsetsComponent;
 import com.simsilica.lemur.component.InsetsComponent;
 import com.simsilica.lemur.component.SpringGridLayout;
 import com.simsilica.lemur.core.VersionedList;
@@ -20,6 +21,7 @@ import com.simsilica.lemur.event.CursorEventControl;
 import com.simsilica.lemur.event.DragHandler;
 import com.simsilica.lemur.list.DefaultCellRenderer;
 import com.simsilica.lemur.style.ElementId;
+import com.simsilica.lemur.text.DefaultDocumentModel;
 import ffxiv.housim.app.es.DyeColor;
 import ffxiv.housim.app.es.Model;
 import ffxiv.housim.app.es.Position;
@@ -52,7 +54,9 @@ public class FurnitureCatalogState extends BaseAppState {
     private DBHelper db;
 
     Camera cam;
-    List<FurnitureCatalog> catalogs;
+
+    DefaultDocumentModel searchDoc = new DefaultDocumentModel();
+
     VersionedList<Furniture> furnitureList = new VersionedList<>();
 
     List<RollupPanel> rollupPanels = new ArrayList<>();
@@ -75,11 +79,6 @@ public class FurnitureCatalogState extends BaseAppState {
 
         cam = app.getCamera();
         db = DBHelper.INSTANCE;
-
-        try (SqlSession session = db.getSession(XivDatabase.FFXIV)) {
-            FurnitureCatalogMapper furnitureCatalogMapper = session.getMapper(FurnitureCatalogMapper.class);
-            catalogs = furnitureCatalogMapper.queryAll();
-        }
 
         if (app instanceof SimpleApplication simpleApp) {
             guiNode = simpleApp.getGuiNode();
@@ -128,12 +127,21 @@ public class FurnitureCatalogState extends BaseAppState {
 
         // north
         Label title = new Label(i18n.getString("furniture.catalog.title"));
-        Container west = getCatalogPanel();
+        Container catalog = getCatalogPanel();
+        Container search = getSearchPanel();
+
+        Container west = new Container(new BorderLayout());
+        west.addChild(search, BorderLayout.Position.North);
+        west.addChild(catalog, BorderLayout.Position.Center);
+
         Container center = getCenterPanel();
+
+        Container south = getButtonPanel();
 
         main.addChild(title, BorderLayout.Position.North);
         main.addChild(center, BorderLayout.Position.Center);
         main.addChild(west, BorderLayout.Position.West);
+        main.addChild(south, BorderLayout.Position.South);
 
         guiNode.attachChild(main);
         main.setLocalTranslation(20, 500, 10);
@@ -144,7 +152,6 @@ public class FurnitureCatalogState extends BaseAppState {
 
     private Container getCenterPanel() {
         Container right = new Container("glass");
-        right.setBorder(new InsetsComponent(3, 3, 3, 1));
         right.setLayout(new SpringGridLayout());
 
         ListBox<Furniture> furnitureListBox = new ListBox<>(furnitureList);
@@ -160,10 +167,28 @@ public class FurnitureCatalogState extends BaseAppState {
         return right;
     }
 
+    private Container getSearchPanel() {
+        Container panel = new Container("glass");
+        panel.setInsets(new Insets3f(0, 0, 2, 0));
+
+        panel.addChild(new Label(i18n.getString("furniture.catalog.search")));
+        TextField textField = panel.addChild(new TextField(searchDoc, "glass"));
+        textField.setSingleLine(true);
+
+        return panel;
+    }
+
     private Container getCatalogPanel() {
         Container left = new Container("glass");
-        left.setBorder(new InsetsComponent(3, 3, 3, 1));
         left.setLayout(new SpringGridLayout(Axis.Y, Axis.X, FillMode.None, FillMode.Even));
+
+        left.addChild(new Label(i18n.getString("furniture.catalog.catalog")));
+
+        List<FurnitureCatalog> catalogs;
+        try (SqlSession session = db.getSession(XivDatabase.FFXIV)) {
+            FurnitureCatalogMapper furnitureCatalogMapper = session.getMapper(FurnitureCatalogMapper.class);
+            catalogs = furnitureCatalogMapper.queryAll();
+        }
 
         // init left
         TreeMap<Integer, List<FurnitureCatalog>> map = catalogs.stream().collect(Collectors.groupingBy(FurnitureCatalog::getCategory, TreeMap::new, Collectors.toList()));
@@ -250,6 +275,17 @@ public class FurnitureCatalogState extends BaseAppState {
                 furnitureList.add(it);
             }
         }
+    }
+
+    private Container getButtonPanel() {
+        Container panel = new Container("glass");
+
+        Button add = panel.addChild(new Button(i18n.getString("furniture.catalog.add")));
+        add.setInsetsComponent(new DynamicInsetsComponent(0.5f, 1.0f, 0.5f,0.0f));
+        add.addClickCommands(cmd -> {
+            // TODO
+        });
+        return panel;
     }
 
     public void update(float tpf) {
