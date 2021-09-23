@@ -76,7 +76,6 @@ public class Main {
         setting.setResizable(true);
         setting.setFrameRate(60);
         setting.setSamples(4);
-        setting.setUseRetinaFrameBuffer(false);
         setting.setGammaCorrection(false);
         setting.setRenderer(AppSettings.LWJGL_OPENGL41);
 
