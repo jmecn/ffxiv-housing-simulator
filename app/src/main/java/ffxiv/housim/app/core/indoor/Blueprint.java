@@ -21,7 +21,7 @@ public class Blueprint {
 
     private UUID uuid;
 
-    public HouseType houseType = HouseType.Small;
+    public HouseType type = HouseType.Small;
 
     public HouseArea area = HouseArea.wil;
 

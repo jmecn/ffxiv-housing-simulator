@@ -1,6 +1,7 @@
 package ffxiv.housim.app.state;
 
 import com.jme3.app.Application;
+import com.jme3.app.FlyCamAppState;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
 import com.jme3.app.state.AppStateManager;
@@ -43,6 +44,7 @@ import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackDirectory;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.texture.ImageFile;
+import ffxiv.housim.ui.gui.DarkStyle;
 import ffxiv.housim.ui.lemur.window.SimpleWindowManager;
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,6 +63,7 @@ public class SplashState extends BaseAppState implements SceneProcessor {
     private final PackCollection packs;
 
     private Application app;
+    private InputManager inputManager;
     private AppStateManager stateManager;
     private AssetManager assetManager;
     private Camera cam;
@@ -92,7 +95,7 @@ public class SplashState extends BaseAppState implements SceneProcessor {
     @Override
     protected void initialize(Application app) {
         this.app = app;
-        InputManager inputManager = app.getInputManager();
+        this.inputManager = app.getInputManager();
         this.assetManager = app.getAssetManager();
         this.stateManager = app.getStateManager();
         this.cam = app.getCamera();
@@ -108,7 +111,7 @@ public class SplashState extends BaseAppState implements SceneProcessor {
             stats.setDisplayStatView(false);
         }
 
-        inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
+        // inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
 
         initSplash();
 
@@ -240,8 +243,8 @@ public class SplashState extends BaseAppState implements SceneProcessor {
         BitmapFont font = assetManager.loadFont("Font/indoor.fnt");
 
         GuiGlobals.initialize(app);
-        BaseStyles.loadStyleResources("ffxiv/housim/ui/style/styles.groovy");
-        GuiGlobals.getInstance().getStyles().setDefaultStyle(BaseStyles.GLASS);
+        BaseStyles.loadStyleResources(DarkStyle.RESOURCE);
+        GuiGlobals.getInstance().getStyles().setDefaultStyle(DarkStyle.STYLE);
         GuiGlobals.getInstance().getStyles().setDefault(font);
 
         EntityData ed = new DefaultEntityData();
@@ -249,7 +252,7 @@ public class SplashState extends BaseAppState implements SceneProcessor {
         stateManager.attach(new EntityDataState(ed));
         stateManager.attach(new FurnitureViewState(ed));
         stateManager.attach(new BgmState());
-        stateManager.attach(new MainMenu());
+        stateManager.attach(new MainMenu(ed));
         stateManager.attach(new CheckerBoardState());
         stateManager.attach(new LightState());
         stateManager.attach(new SimpleWindowManager());

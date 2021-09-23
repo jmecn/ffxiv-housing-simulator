@@ -30,8 +30,8 @@
             <dependencies>
                 <dependency>
                     <groupId>org.jmonkeyengine</groupId>
-                    <artifactId>jme3-lwjgl</artifactId>
-                    <scope>runtime</scope>
+                    <artifactId>jme3-lwjgl3</artifactId>
+                    <scope>compile</scope>
                 </dependency>
             </dependencies>
         </profile>
@@ -76,11 +76,6 @@
         <dependency>
             <groupId>org.jmonkeyengine</groupId>
             <artifactId>jme3-jogg</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.mdzhb</groupId>
-            <artifactId>jt-adpcm</artifactId>
-            <version>1.0.1</version>
         </dependency>
 
         <dependency>

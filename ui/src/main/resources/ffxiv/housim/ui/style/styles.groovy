@@ -34,21 +34,21 @@ def border2 = TbtQuadBackgroundComponent.create(
 def doubleGradient = new QuadBackgroundComponent( color(0.5, 0.75, 0.85, 0.5) );
 doubleGradient.texture = texture( name:"/com/simsilica/lemur/icons/double-gradient-128.png", generateMips:false )
 
-selector( "glass" ) {
+selector( "dark" ) {
     fontSize = 14
 }
 
-selector( "label", "glass" ) {
+selector( "label", "dark" ) {
     insets = new Insets3f( 2, 2, 0, 2 );
     color = color(0.75, 0.75, 0.75, 0.95)
 }
 
-selector( "container", "glass" ) {
+selector( "container", "dark" ) {
     background = bevel.clone()
     background.setColor(color(0.5, 0.5, 0.5, 1.0))
 }
 
-selector( "slider", "glass" ) {
+selector( "slider", "dark" ) {
     background = gradient.clone()
     background.setColor(color(0.5, 0.5, 0.5, 0.95))
 }
@@ -97,7 +97,7 @@ def sliderButtonCommands = [
         (ButtonAction.Hover):[repeatCommand]
 ];
 
-selector( "title", "glass" ) {
+selector( "title", "dark" ) {
     color = color(0.9, 0.9, 0.9, 0.85)
 
     highlightColor = color(1, 0.8, 1, 0.85)
@@ -111,7 +111,7 @@ selector( "title", "glass" ) {
     buttonCommands = stdButtonCommands;
 }
 
-selector( "button", "glass" ) {
+selector( "button", "dark" ) {
     background = gradient.clone()
     color = color(0.9, 0.9, 0.9, 0.85f)
     background.setColor(color(0.75, 0.75, 0.75, 0.5))
@@ -120,22 +120,22 @@ selector( "button", "glass" ) {
     buttonCommands = stdButtonCommands;
 }
 
-selector( "slider", "glass" ) {
+selector( "slider", "dark" ) {
     insets = new Insets3f( 1, 3, 1, 2 );
 }
 
-selector( "slider", "button", "glass" ) {
+selector( "slider", "button", "dark" ) {
     background = doubleGradient.clone()
     background.setColor(color(0.75, 0.75, 0.75, 0.5))
     insets = new Insets3f( 0, 0, 0, 0 );
 }
 
-selector( "slider.thumb.button", "glass" ) {
+selector( "slider.thumb.button", "dark" ) {
     text = "[]"
     color = color(0.6, 0.8, 0.8, 0.85)
 }
 
-selector( "slider.left.button", "glass" ) {
+selector( "slider.left.button", "dark" ) {
     text = "-"
     background = doubleGradient.clone()
     background.setColor(color(0.5, 0.75, 0.75, 0.5))
@@ -145,7 +145,7 @@ selector( "slider.left.button", "glass" ) {
     buttonCommands = sliderButtonCommands;
 }
 
-selector( "slider.right.button", "glass" ) {
+selector( "slider.right.button", "dark" ) {
     text = "+"
     background = doubleGradient.clone()
     background.setColor(color(0.5, 0.75, 0.75, 0.5))
@@ -155,20 +155,20 @@ selector( "slider.right.button", "glass" ) {
     buttonCommands = sliderButtonCommands;
 }
 
-selector( "slider.up.button", "glass" ) {
+selector( "slider.up.button", "dark" ) {
     buttonCommands = sliderButtonCommands;
 }
 
-selector( "slider.down.button", "glass" ) {
+selector( "slider.down.button", "dark" ) {
     buttonCommands = sliderButtonCommands;
 }
 
-selector( "optionPanel", "glass" ) {
+selector( "optionPanel", "dark" ) {
     background = gradient.clone()
     background.setColor(color(0.25, 0.5, 0.5, 0.5))
 }
 
-selector( "optionPanel.container", "glass" ) {
+selector( "optionPanel.container", "dark" ) {
 
     background = gradient.clone()
     background.color = color(0.25, 0.4, 0.6, 0.25)
@@ -176,68 +176,68 @@ selector( "optionPanel.container", "glass" ) {
     insets = new Insets3f( 2, 2, 2, 2 )
 }
 
-selector( "list.container", "glass" ) {
+selector( "list.container", "dark" ) {
     background = gradient.clone()
     background.setColor(color(0.5, 0.5, 0.5, 0.5))
     insets = new Insets3f( 2, 2, 2, 2, 2, 2 );
 }
 
-selector( "list.item", "glass" ) {
+selector( "list.item", "dark" ) {
     color = color(0.75, 0.75, 0.75, 0.85)
     background = transparent.clone();
 }
 
-selector( "list.selector", "glass" ) {
+selector( "list.selector", "dark" ) {
     background = gradient.clone();
     background.color = color(0.6, 0.6, 0.6, 0.5)
     background.material.material.additionalRenderState.blendMode = RenderState.BlendMode.AlphaAdditive;
 }
 
-selector( "colorChooser.value", "glass" ) {
+selector( "colorChooser.value", "dark" ) {
     border = gradient.clone()
     border.setColor(color(0.5, 0.5, 0.5, 0.5))
     insets = new Insets3f( 2, 2, 2, 2, 2, 2 );
 }
 
-selector( "colorChooser.colors", "glass" ) {
+selector( "colorChooser.colors", "dark" ) {
     border = gradient.clone()
     border.setColor(color(0.5, 0.5, 0.5, 0.5))
     insets = new Insets3f( 2, 2, 2, 2, 2, 2 );
 }
 
-selector( "selector.container", "glass" ) {
+selector( "selector.container", "dark" ) {
     color = color(0.8, 0.9, 1, 0.85f)
     background = gradient.clone()
     background.setColor(color(0, 0.6, 0.6, 0.5))
 }
 
-selector( "selector.item", "glass" ) {
+selector( "selector.item", "dark" ) {
     color = color(0.8, 0.8, 0.9, 0.9)
     background = transparent;
     insets = new Insets3f(1, 1, 1, 1, 1, 1);
 }
 
-selector( "selector.popup", "glass" ) {
+selector( "selector.popup", "dark" ) {
     background = gradient.clone()
     background.setColor(color(0, 0.75, 0.75, 0.75))
 }
 
-selector( "selector.down.button", "glass" ) {
+selector( "selector.down.button", "dark" ) {
     insets = new Insets3f(0, 0, 0, 0, 0, 0);
 }
 
-selector( "spinner.value", "glass" ) {
+selector( "spinner.value", "dark" ) {
     color = color(0.8, 0.8, 0.9, 0.9)
     background = gradient.clone();
     background.color = color(0.2, 0.2, 0.2, 0.75);
 }
 
-selector( "spinner.buttons.container", "glass" ) {
+selector( "spinner.buttons.container", "dark" ) {
     background = transparent;
     insets = new Insets3f(0, 0, 0, 0);
 }
 
-selector( "spinner", "button", "glass" ) {
+selector( "spinner", "button", "dark" ) {
     background = gradient.clone()
     // A negative margin works here when the font can support it.
     // It helps eat up the extra whitespace above/below the '+'/'-' signs.
@@ -247,7 +247,11 @@ selector( "spinner", "button", "glass" ) {
     textHAlignment = HAlignment.Center;
 }
 
-selector( "checkbox", "glass" ) {
+selector( "dropdown", "selection", "dark") {
+    background = border2.clone();
+}
+
+selector( "checkbox", "dark" ) {
     def on = new IconComponent( "/com/simsilica/lemur/icons/Glass-check-on.png", 1f,
             0, 0, 1f, false );
     on.setColor(color(0.9, 0.9, 0.9, 0.9))
@@ -263,20 +267,20 @@ selector( "checkbox", "glass" ) {
     color = color(0.8, 0.9, 1, 0.85f)
 }
 
-selector( "rollup", "glass" ) {
+selector( "rollup", "dark" ) {
     background = gradient.clone()
     background.setColor(color(0.5, 0.5, 0.5, 0.5))
 }
 
-selector( "tabbedPanel", "glass" ) {
+selector( "tabbedPanel", "dark" ) {
     activationColor = color(0.8, 0.9, 1, 0.85f)
 }
 
-selector( "tabbedPanel.container", "glass" ) {
+selector( "tabbedPanel.container", "dark" ) {
     background = null
 }
 
-selector( "tab.button", "glass" ) {
+selector( "tab.button", "dark" ) {
     background = gradient.clone()
     background.setColor(color(0.5, 0.5, 0.5, 0.5))
     color = color(0.4, 0.45, 0.5, 0.85f)
@@ -302,14 +306,14 @@ def stdMenuCommands = [
         (Button.ButtonAction.HighlightOff):[menuHoverCommand]
 ]
 
-selector( "menu-bar", "glass") {
+selector( "menu-bar", "dark") {
     background = gradient.clone()
     background.setMargin(5, 5)
     background.setColor(color(0.5, 0.5, 0.5, 1.0))
 }
 
 // Menu and MenuItem (Button)
-selector( "menu-item", "glass") {
+selector( "menu-item", "dark") {
     background = gradient.clone()
     background.setColor(color(0.5, 0.5, 0.5, 0.0))
     background.setMargin(10, 5)
@@ -318,7 +322,7 @@ selector( "menu-item", "glass") {
 }
 
 // CheckboxMenuItem (CheckBox)
-selector( "menu-checkbox", "glass" ) {
+selector( "menu-checkbox", "dark" ) {
 
     def on = new IconComponent( "/com/simsilica/lemur/icons/Glass-check-on.png", 1f, 0, 0, 1f, false )
     on.setColor(color(0.9, 0.9, 0.9, 0.9))
@@ -339,7 +343,7 @@ selector( "menu-checkbox", "glass" ) {
 }
 
 // menu children container
-selector( "menu-children", "glass" ) {
+selector( "menu-children", "dark" ) {
     background = gradient.clone()
     background.setMargin(5, 5)
     background.setColor(color(0.5, 0.5, 0.5, 1.0))
@@ -347,33 +351,33 @@ selector( "menu-children", "glass" ) {
 
 
 /////////// window
-selector( "window-title-bar", "glass" ) {
+selector( "window-title-bar", "dark" ) {
     // background = new QuadBackgroundComponent(ColorUtils.fromHex("#365d8f"))
     background = gradient.clone()
     background.setColor(color(0.5, 0.5, 0.5, 1.0))
     //background.setMargin(2, 2)
 }
 
-selector( "window-title-label", "glass" ) {
+selector( "window-title-label", "dark" ) {
     background = null
     textVAlignment = VAlignment.Center
     color = color(0.8, 0.8, 0.8, 1.0)
     insets = new Insets3f( 5, 5, 5, 15 )
 }
 
-selector( "window-content-outer", "glass") {
+selector( "window-content-outer", "dark") {
     background = gradient.clone()
     background.setColor(color(0.5, 0.5, 0.5, 1.0))
     background.setMargin(5,5)
 }
 
-selector( "window-content-inner", "glass" ) {
+selector( "window-content-inner", "dark" ) {
     background = gradient.clone()
     background.setColor(color(0.5, 0.5, 0.5, 0.25))
     background.setMargin(5,5)
 }
 
-selector( "window-button-minimize", "glass" ) {
+selector( "window-button-minimize", "dark" ) {
     background = null
     icon = new IconComponent("Style/Icon/button.png")
     icon.setColor(color(1.0, 0.7412, 0.298, 1.0))
@@ -381,7 +385,7 @@ selector( "window-button-minimize", "glass" ) {
     fontSize = 0
 }
 
-selector( "window-button-maximize", "glass" ) {
+selector( "window-button-maximize", "dark" ) {
     background = null
     icon = new IconComponent("Style/Icon/button.png")
     icon.setColor(color(0.0, 0.7921, 0.3411, 1.0))
@@ -389,7 +393,7 @@ selector( "window-button-maximize", "glass" ) {
     fontSize = 0
 }
 
-selector( "window-button-close", "glass" ) {
+selector( "window-button-close", "dark" ) {
     background = null
     icon = new IconComponent("Style/Icon/button.png")
     icon.setColor(color(1.0, 0.3882, 0.3568, 1.0))
@@ -397,7 +401,7 @@ selector( "window-button-close", "glass" ) {
     fontSize = 0
 }
 
-selector( "dialog-button", "glass") {
+selector( "dialog-button", "dark") {
     background = gradient.clone()
     color = color(0.8, 0.9, 1, 0.85f)
     background.setColor(color(0, 0.75, 0.75, 0.5))
@@ -411,7 +415,7 @@ selector( "dialog-button", "glass") {
     buttonCommands = stdButtonCommands;
 }
 
-selector( "value", "label", "glass" ) {
+selector( "value", "label", "dark" ) {
     insets = new Insets3f( 1, 2, 0, 2 );
     textHAlignment = HAlignment.Right;
     background = border.clone();

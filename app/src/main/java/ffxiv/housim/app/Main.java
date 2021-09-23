@@ -25,13 +25,21 @@ import java.util.prefs.BackingStoreException;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("FFXIV Housing Simulator");
+        String os = System.getProperty("os.name");
+        boolean isMacOS = os.toLowerCase().contains("mac");
         AppSettings settings = getSettings(args);
 
-        settings.setIcons(getIcons());
-
-        if (showSettings(settings)) {
-            startGame(settings);
+        if (isMacOS) {
+            String gameDir = settings.getString(Constants.GAME_DIR);
+            if (checkGameDir(gameDir)) {
+                startGame(settings);
+            } else {
+                showSettings(settings);
+            }
+        } else {
+             if (showSettings(settings)) {
+                 startGame(settings);
+             }
         }
     }
 
@@ -65,10 +73,11 @@ public class Main {
 
         setting.setTitle(Constants.TITLE);
         setting.setResolution(1280, 720);
-        setting.setResizable(false);
+        setting.setResizable(true);
         setting.setFrameRate(60);
         setting.setSamples(4);
-        setting.setGammaCorrection(true);
+        setting.setUseRetinaFrameBuffer(false);
+        setting.setGammaCorrection(false);
         setting.setRenderer(AppSettings.LWJGL_OPENGL41);
 
         // read from registry
@@ -95,6 +104,9 @@ public class Main {
         } catch (Exception e) {
             // doesn't matter
         }
+
+        // set icons
+        settings.setIcons(getIcons());
 
         final AtomicBoolean done = new AtomicBoolean();
         final AtomicInteger result = new AtomicInteger();

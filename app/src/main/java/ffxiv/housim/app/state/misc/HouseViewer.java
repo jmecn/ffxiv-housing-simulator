@@ -369,6 +369,7 @@ public class HouseViewer extends SimpleApplication {
 
         HouseViewer app = new HouseViewer();
         app.setSettings(setting);
+        app.setShowSettings(false);
         app.start();
     }
 }

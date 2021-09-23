@@ -24,26 +24,24 @@ public class HousingSimulator extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-
-        String gameDir = settings.getString(Constants.GAME_DIR);
-        // init state
-        stateManager.attach(new SplashState(ffxiv));
-
         // init camera
         cam.setLocation(new Vector3f(0f, 3f, 10f));
         cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
         cam.setFov(60);
 
         flyCam.setMoveSpeed(10f);
+        flyCam.setZoomSpeed(0f);
         flyCam.setDragToRotate(true);
-
     }
 
     int frame = 0;
     public void simpleUpdate(float tpf) {
-        if (frame == 1) {
-            // TODO
+        if (frame < 2) {
+            frame++;
+            if (frame == 2) {
+                // init state
+                stateManager.attach(new SplashState(ffxiv));
+            }
         }
-        frame ++;
     }
 }

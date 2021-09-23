@@ -27,10 +27,9 @@ public class InteriorState extends BaseAppState {
         model = new DefaultDocumentModel();
 
         blueprint = new Blueprint();
-        PropertyPanel panel = new PropertyPanel("glass");
-        panel.addEnumField("houseType", blueprint, "houseType");
-        panel.addEnumField("area", blueprint, "area");
-        panel.addIntField("limit", blueprint, "limit", 200, 400, 100);
+        PropertyPanel panel = new PropertyPanel("dark");
+        panel.addEnumField("房屋类型", blueprint, "type");
+        panel.addEnumField("住宅区", blueprint, "area");
 
         if (app instanceof SimpleApplication sa) {
             sa.getGuiNode().attachChild(panel);

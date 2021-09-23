@@ -257,6 +257,7 @@ public class HbqjFurnitureViewer extends SimpleApplication {
 
         HbqjFurnitureViewer app = new HbqjFurnitureViewer();
         app.setSettings(setting);
+        app.setShowSettings(false);
         app.start();
     }
 }

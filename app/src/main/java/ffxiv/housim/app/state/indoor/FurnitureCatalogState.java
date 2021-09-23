@@ -13,7 +13,6 @@ import com.simsilica.lemur.*;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.component.BorderLayout;
 import com.simsilica.lemur.component.DynamicInsetsComponent;
-import com.simsilica.lemur.component.InsetsComponent;
 import com.simsilica.lemur.component.SpringGridLayout;
 import com.simsilica.lemur.core.VersionedList;
 import com.simsilica.lemur.core.VersionedReference;
@@ -33,6 +32,7 @@ import ffxiv.housim.db.entity.FurnitureCatalog;
 import ffxiv.housim.db.mapper.FurnitureCatalogMapper;
 import ffxiv.housim.db.mapper.FurnitureMapper;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingItemCategory;
+import ffxiv.housim.ui.gui.DarkStyle;
 import ffxiv.housim.ui.lemur.icon.SqpackIcon;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
@@ -68,6 +68,7 @@ public class FurnitureCatalogState extends BaseAppState {
 
     public FurnitureCatalogState(EntityData ed) {
         this.ed = ed;
+        this.db = DBHelper.INSTANCE;
     }
 
     private Node guiNode;
@@ -78,7 +79,6 @@ public class FurnitureCatalogState extends BaseAppState {
     protected void initialize(Application app) {
 
         cam = app.getCamera();
-        db = DBHelper.INSTANCE;
 
         if (app instanceof SimpleApplication simpleApp) {
             guiNode = simpleApp.getGuiNode();
@@ -103,7 +103,7 @@ public class FurnitureCatalogState extends BaseAppState {
         @Override
         public Panel getView(Furniture value, boolean selected, Panel existing) {
             if( existing == null ) {
-                Button button = new Button(value.getName(), new ElementId("list.item"), "glass");
+                Button button = new Button(value.getName(), new ElementId("list.item"), "DarkStyle.STYLE");
                 button.setIcon(getIcon(value.getIcon()));
                 button.setPreferredSize(new Vector3f(200, 20, 0));
                 existing = button;
@@ -151,8 +151,7 @@ public class FurnitureCatalogState extends BaseAppState {
     }
 
     private Container getCenterPanel() {
-        Container right = new Container("glass");
-        right.setLayout(new SpringGridLayout());
+        Container right = new Container(new SpringGridLayout());
 
         ListBox<Furniture> furnitureListBox = new ListBox<>(furnitureList);
         furnitureListBox.setCellRenderer(new FurnitureRenderer());
@@ -168,21 +167,21 @@ public class FurnitureCatalogState extends BaseAppState {
     }
 
     private Container getSearchPanel() {
-        Container panel = new Container("glass");
+        Container panel = new Container();
         panel.setInsets(new Insets3f(0, 0, 2, 0));
 
         panel.addChild(new Label(i18n.getString("furniture.catalog.search")));
-        TextField textField = panel.addChild(new TextField(searchDoc, "glass"));
+        TextField textField = panel.addChild(new TextField(searchDoc));
         textField.setSingleLine(true);
 
         return panel;
     }
 
     private Container getCatalogPanel() {
-        Container left = new Container("glass");
-        left.setLayout(new SpringGridLayout(Axis.Y, Axis.X, FillMode.None, FillMode.Even));
+        Container catalogPanel = new Container();
+        catalogPanel.setLayout(new SpringGridLayout(Axis.Y, Axis.X, FillMode.Last, FillMode.Even));
 
-        left.addChild(new Label(i18n.getString("furniture.catalog.catalog")));
+        catalogPanel.addChild(new Label(i18n.getString("furniture.catalog.catalog")));
 
         List<FurnitureCatalog> catalogs;
         try (SqlSession session = db.getSession(XivDatabase.FFXIV)) {
@@ -224,11 +223,17 @@ public class FurnitureCatalogState extends BaseAppState {
                 listBox.getModel().add(spec);
             }
 
-            listBox.getGridPanel().setVisibleRows(listBox.getModel().size());
+            int rows = listBox.getModel().size();
+            if (rows < 5) {
+                rows = 5;
+            }
+            listBox.getGridPanel().setVisibleRows(rows);
+            listBox.getGridPanel().setRow(rows);
+
             listBox.setScrollOnHover(false);// disable scroll
             listBox.getSlider().removeFromParent();// disable slider
 
-            RollupPanel rollupPanel = new RollupPanel(cat.getName(), "glass");
+            RollupPanel rollupPanel = new RollupPanel(cat.getName(), DarkStyle.STYLE);
             rollupPanel.setContents(listBox);
             if (i++ == 0) {
                 rollupPanel.setOpen(true);
@@ -241,8 +246,7 @@ public class FurnitureCatalogState extends BaseAppState {
             rollupPanels.add(rollupPanel);
             checkBoxes.add(rollupPanel.getOpenModel().createReference());
 
-            listBox.setSize(new Vector3f(200, listBox.getPreferredSize().y, 0f));
-            left.addChild(rollupPanel);
+            catalogPanel.addChild(rollupPanel);
 
             listBox.addClickCommands(cmd -> {
                 int selection = cmd.getSelectionModel().getSelection();
@@ -252,9 +256,9 @@ public class FurnitureCatalogState extends BaseAppState {
         }
 
         // Just a placeholder, make sure that left container is wide enough.
-        Panel panel = left.addChild(new Panel("glass"));
-        panel.setPreferredSize(new Vector3f(150, 1, 0));
-        return left;
+        Panel panel = catalogPanel.addChild(new Panel(DarkStyle.STYLE));
+        panel.setPreferredSize(new Vector3f(140, 1, 0));
+        return catalogPanel;
     }
 
     private int queryCount(Integer category, Integer catalog) {
@@ -278,7 +282,7 @@ public class FurnitureCatalogState extends BaseAppState {
     }
 
     private Container getButtonPanel() {
-        Container panel = new Container("glass");
+        Container panel = new Container(DarkStyle.STYLE);
 
         Button add = panel.addChild(new Button(i18n.getString("furniture.catalog.add")));
         add.setInsetsComponent(new DynamicInsetsComponent(0.5f, 1.0f, 0.5f,0.0f));
@@ -288,6 +292,7 @@ public class FurnitureCatalogState extends BaseAppState {
         return panel;
     }
 
+    @Override
     public void update(float tpf) {
         for (int i = 0; i < checkBoxes.size(); i++) {
             VersionedReference<Boolean> check = checkBoxes.get(i);

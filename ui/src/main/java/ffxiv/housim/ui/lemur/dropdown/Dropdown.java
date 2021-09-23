@@ -50,7 +50,7 @@ public class Dropdown<T> extends Panel {
 
     protected Dropdown(boolean applyStyles, ElementId elementId, String style) {
         super(false, elementId, style);
-        BoxLayout layout = new BoxLayout(Axis.X, FillMode.None);
+        BoxLayout layout = new BoxLayout(Axis.X, FillMode.First);
         getControl(GuiControl.class).setLayout(layout);
         this.collapseButton = new Button("v", elementId.child("button"), style);
         this.chosenElement = new Label("", elementId.child("selection"), style);

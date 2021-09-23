@@ -16,6 +16,9 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.util.TempVars;
+import com.simsilica.es.EntityData;
+import ffxiv.housim.app.state.indoor.FurnitureCatalogState;
+import ffxiv.housim.app.state.indoor.HouseCreateState;
 import ffxiv.housim.app.state.indoor.IndoorState;
 import ffxiv.housim.app.state.indoor.InteriorState;
 import ffxiv.housim.ui.lemur.menubar.*;
@@ -51,6 +54,12 @@ public class MainMenu extends BaseAppState {
 
     private InputManager inputManager;
     private LemurMenuBar menuBar;
+
+    private EntityData ed;
+
+    public MainMenu(EntityData ed) {
+        this.ed = ed;
+    }
 
     @Override
     protected void initialize(Application app) {
@@ -105,6 +114,7 @@ public class MainMenu extends BaseAppState {
         TempVars vars = TempVars.get();
 
         Vector2f cursor = inputManager.getCursorPosition();
+        log.info("cursor:{}", cursor);
 
         Vector3f dir = cam.getWorldCoordinates(cursor, 1f, vars.vect1);
         dir.subtractLocal(cam.getLocation());
@@ -224,7 +234,8 @@ public class MainMenu extends BaseAppState {
             state = new IndoorState();
             stateManager.attach(state);
             stateManager.attach(new InteriorState());
-            //stateManager.attach(new FurnitureCatalogState());
+            stateManager.attach(new FurnitureCatalogState(ed));
+            stateManager.attach(new HouseCreateState(ed));
         }
 
     }

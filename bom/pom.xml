@@ -20,7 +20,7 @@
         <guava.version>27.0.1-jre</guava.version>
         <protobuf.version>3.9.0</protobuf.version>
         <zxing.version>3.4.0</zxing.version>
-        <jme3.version>3.4.0-stable</jme3.version>
+        <jme3.version>3.3.0-SNAPSHOT</jme3.version>
     </properties>
 
     <dependencyManagement>
@@ -73,12 +73,6 @@
                 <artifactId>jme3-terrain</artifactId>
                 <version>${jme3.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.jmonkeyengine</groupId>
-                <artifactId>jme3-bullet</artifactId>
-                <version>${jme3.version}</version>
-            </dependency>
-
             <!-- Lemur GUI -->
             <dependency>
                 <groupId>com.simsilica</groupId>
