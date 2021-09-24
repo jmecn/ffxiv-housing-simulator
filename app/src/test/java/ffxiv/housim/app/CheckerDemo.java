@@ -30,7 +30,7 @@ public class CheckerDemo extends SimpleApplication {
         AppSettings settings = new AppSettings(true);
         settings.setResolution(WIDTH, HEIGHT);
         settings.setResizable(true);
-        settings.setUseRetinaFrameBuffer(true);
+        //settings.setUseRetinaFrameBuffer(true);
         settings.setSamples(4);
 
         CheckerDemo app = new CheckerDemo();
@@ -99,7 +99,7 @@ public class CheckerDemo extends SimpleApplication {
             Vector2f scale = new Vector2f(1f, 1f);
             JmeContext context = getContext();
             if (context instanceof LwjglWindow) {
-                ((LwjglWindow) context).getWindowContentScale(scale);
+                //((LwjglWindow) context).getWindowContentScale(scale);
             }
             log.info("frame:{}, scale:{}", frame, scale);
 

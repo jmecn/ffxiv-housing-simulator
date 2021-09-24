@@ -33,7 +33,7 @@ public class Checker3D extends SimpleApplication {
         AppSettings settings = new AppSettings(true);
         settings.setResolution(WIDTH, HEIGHT);
         settings.setResizable(true);
-        settings.setUseRetinaFrameBuffer(true);
+        //settings.setUseRetinaFrameBuffer(true);
         settings.setSamples(4);
 
         Checker3D app = new Checker3D();

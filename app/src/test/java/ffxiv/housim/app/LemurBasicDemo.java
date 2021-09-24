@@ -10,7 +10,7 @@ public class LemurBasicDemo {
 
         AppSettings settings = new AppSettings(true);
         settings.setResolution(1280, 720);
-        settings.setUseRetinaFrameBuffer(true);
+        //settings.setUseRetinaFrameBuffer(true);
         settings.setResizable(true);
 
         BasicDemo app = new BasicDemo() {

@@ -13,7 +13,7 @@ public class TestRestartContext extends SimpleApplication {
     public static void main(String[] args) {
         AppSettings settings = new AppSettings(true);
         settings.setResolution(1280, 720);
-        settings.setUseRetinaFrameBuffer(true);
+        //settings.setUseRetinaFrameBuffer(true);
         settings.setResizable(true);
 
         TestRestartContext app = new TestRestartContext();
