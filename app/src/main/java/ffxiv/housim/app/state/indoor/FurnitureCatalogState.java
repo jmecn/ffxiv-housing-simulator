@@ -84,7 +84,10 @@ public class FurnitureCatalogState extends BaseAppState {
             guiNode = simpleApp.getGuiNode();
         }
 
-        getWindow();
+        window = getWindow();
+        guiNode.attachChild(window);
+        window.setLocalTranslation(20, 500, 10);
+        CursorEventControl.addListenersToSpatial(window, new DragHandler());
     }
 
     @Override
@@ -122,7 +125,7 @@ public class FurnitureCatalogState extends BaseAppState {
         }
     }
 
-    private void getWindow() {
+    private Container getWindow() {
         Container main = new Container(new BorderLayout());
 
         // north
@@ -143,11 +146,7 @@ public class FurnitureCatalogState extends BaseAppState {
         main.addChild(west, BorderLayout.Position.West);
         main.addChild(south, BorderLayout.Position.South);
 
-        guiNode.attachChild(main);
-        main.setLocalTranslation(20, 500, 10);
-
-        CursorEventControl.addListenersToSpatial(main, new DragHandler());
-        window = main;
+        return main;
     }
 
     private Container getCenterPanel() {

@@ -3,6 +3,7 @@ package ffxiv.housim.app.state.indoor;
 import com.jme3.anim.AnimComposer;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
@@ -10,6 +11,7 @@ import com.jme3.material.Materials;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.simsilica.es.EntityData;
 import ffxiv.housim.ui.lemur.window.SimpleWindowManager;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,9 +26,14 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public class IndoorState extends BaseAppState {
 
+    private EntityData ed;
     private SimpleWindowManager windowManager;
     private AssetManager assetManager;
     private Node rootNode;
+
+    public IndoorState(EntityData ed) {
+        this.ed = ed;
+    }
 
     @Override
     protected void initialize(Application app) {
@@ -37,6 +44,11 @@ public class IndoorState extends BaseAppState {
             rootNode = simpleApp.getRootNode();
         }
         windowManager = app.getStateManager().getState(SimpleWindowManager.class);
+
+
+        AppStateManager stateManager = app.getStateManager();
+        stateManager.attach(new InteriorState(ed));
+        stateManager.attach(new FurnitureCatalogState(ed));
     }
 
     @Override

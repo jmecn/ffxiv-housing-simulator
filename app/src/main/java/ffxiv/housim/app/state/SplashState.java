@@ -257,9 +257,6 @@ public class SplashState extends BaseAppState implements SceneProcessor {
         stateManager.attach(new LightState());
         stateManager.attach(new SimpleWindowManager());
 
-        // TODO for test
-        stateManager.attach(new FurnitureCatalogState(ed));
-
         // init camera
         cam.setLocation(new Vector3f(0f, 3f, 10f));
         cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);

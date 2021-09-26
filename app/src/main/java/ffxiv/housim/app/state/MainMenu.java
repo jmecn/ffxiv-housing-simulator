@@ -17,10 +17,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.util.TempVars;
 import com.simsilica.es.EntityData;
-import ffxiv.housim.app.state.indoor.FurnitureCatalogState;
-import ffxiv.housim.app.state.indoor.HouseCreateState;
 import ffxiv.housim.app.state.indoor.IndoorState;
-import ffxiv.housim.app.state.indoor.InteriorState;
 import ffxiv.housim.ui.lemur.menubar.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -231,11 +228,8 @@ public class MainMenu extends BaseAppState {
         // TODO
         IndoorState state = stateManager.getState(IndoorState.class);
         if (state == null) {
-            state = new IndoorState();
+            state = new IndoorState(ed);
             stateManager.attach(state);
-            stateManager.attach(new InteriorState());
-            stateManager.attach(new FurnitureCatalogState(ed));
-            stateManager.attach(new HouseCreateState(ed));
         }
 
     }
