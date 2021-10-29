@@ -106,7 +106,7 @@ public class FurnitureCatalogState extends BaseAppState {
         @Override
         public Panel getView(Furniture value, boolean selected, Panel existing) {
             if( existing == null ) {
-                Button button = new Button(value.getName(), new ElementId("list.item"), "DarkStyle.STYLE");
+                Button button = new Button(value.getName(), new ElementId("list.item"), DarkStyle.STYLE);
                 button.setIcon(getIcon(value.getIcon()));
                 button.setPreferredSize(new Vector3f(200, 20, 0));
                 existing = button;
