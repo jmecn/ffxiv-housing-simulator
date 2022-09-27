@@ -28,6 +28,7 @@ public class BMFontGen {
 
     public BMFontGen() throws IOException {
         String gameDir = System.getenv("FFXIV_HOME");
+        log.info("gameDir:{}", gameDir);
         db = new ARealmReversed(gameDir, Language.ChineseSimplified);
 
         texts = new TreeSet<>();

@@ -124,7 +124,8 @@ public class TestLoadHousingSgb {
             Map<Integer, IndexFile> map2 = dir.getFiles();
             map2.forEach((fileKey, indexFile) -> {
                 PackFile file = packDir.tryGetFile(fileKey);
-                if (file instanceof ModelFile mdl) {
+                if (file instanceof ModelFile) {
+                    ModelFile mdl = (ModelFile) file;
                     MaterialDefinition mdf = mdl.getModelDefinition().getMaterials()[0];
                     if (mdf.getDefaultPath() != null) {
                         log.info("mtrl:{}", mdf.getDefaultPath());
@@ -145,19 +146,19 @@ public class TestLoadHousingSgb {
             log.info("#{}: {}, {}, {}", e.getKey(), item, hcat.getName(), e.getOrder());
 
             switch (hcat) {
-                case ROM_WL -> {
+                case ROM_WL : {
                     String mtrl = String.format("bgcommon/hou/dyna/mat/wl/%04d/material/rom_wl_2%04da.mtrl", e.getOrder(), e.getOrder());
                     PackFile file = packs.tryGetFile(mtrl);
                     log.info("material:{}, file:{}", mtrl, file);
                     break;
                 }
-                case ROM_FL -> {
+                case ROM_FL : {
                     String mtrl = String.format("bgcommon/hou/dyna/mat/fl/%04d/material/rom_fl_2%04da.mtrl", e.getOrder(), e.getOrder());
                     PackFile file = packs.tryGetFile(mtrl);
                     log.info("material:{}, file:{}", mtrl, file);
                     break;
                 }
-                case LMP -> {
+                case LMP : {
                     String sgb = String.format("bgcommon/hou/dyna/lmp/lp/%04d/asset/lmp_s0_m%04d.sgb", e.getOrder(), e.getOrder());
                     PackFile file = packs.tryGetFile(sgb);
                     log.info("Scene:{}, file:{}", sgb, file);

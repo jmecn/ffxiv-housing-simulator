@@ -12,6 +12,7 @@ import ffxiv.housim.saintcoinach.db.ex.relational.definition.SheetDefinition;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.db.xiv.XivCollection;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -88,7 +89,7 @@ public class ARealmReversed {
      * @param gamePath Directory path to the game installation.
      * @param language Initial language to use.
      */
-    public ARealmReversed(String gamePath, Language language) throws IOException {
+    public ARealmReversed(@NonNull String gamePath, Language language) throws IOException {
         this(new File(gamePath), new File(DefaultStateFile), language, null);
     }
 
@@ -99,7 +100,7 @@ public class ARealmReversed {
      * @param storePath Path to the file used for storing definitions and history.
      * @param language Initial language to use.
      */
-    public ARealmReversed(String gamePath, String storePath, Language language) throws IOException {
+    public ARealmReversed(@NonNull String gamePath, @NonNull String storePath, Language language) throws IOException {
         this(new File(gamePath), new File(storePath), language, null);
     }
 

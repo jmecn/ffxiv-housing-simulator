@@ -10,6 +10,7 @@ import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivSubRow;
 import ffxiv.housim.saintcoinach.db.xiv.entity.bgm.BGM;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +42,7 @@ public class TestLoadBgm {
     public void testScd() {
         IXivSheet<BGM> sheet = aRealmReversed.getGameData().getSheet(BGM.class);
         for (BGM bgm : sheet) {
-            if (bgm.getFile() != null && bgm.getFile().isBlank()) {
+            if (bgm.getFile() != null && StringUtils.isBlank(bgm.getFile())) {
                 log.info("No file in BGM#{}: {}", bgm.getKey(), bgm.getFile());
                 continue;
             }
@@ -88,7 +89,8 @@ public class TestLoadBgm {
                 values[i] = xivRow.get(columns[i].getIndex());
             }
 
-            if (xivRow instanceof XivSubRow xivSubRow) {
+            if (xivRow instanceof XivSubRow) {
+                XivSubRow xivSubRow = (XivSubRow) xivRow;
                 log.info("#{}: {}", xivSubRow.getFullKey(), values);
             } else if (xivRow != null) {
                 log.info("#{}: {}", xivRow.getKey(), values);

@@ -46,7 +46,7 @@ public class TestFurnitureCatalog {
                 return;
             }
             Item item = e.getItem();
-            var category = e.getCategory();
+            FurnitureCatalogCategory category = e.getCategory();
             HousingFurniture fur = map.get(item.getKey());
             HousingItemCategory hcat = HousingItemCategory.of(category.getHousingItemCategory());
             log.info("#{}:{}, 类别:{}->{}, 排序:{}", fur.getModelKey(), item.getName(), hcat.getName(), category.getCategory(), category.getOrder());
@@ -65,7 +65,7 @@ public class TestFurnitureCatalog {
             if (obj.getModelKey() == 0) {
                 return;
             }
-            var category = e.getCategory();
+            YardCatalogCategory category = e.getCategory();
             HousingItemCategory hcat = HousingItemCategory.of(category.getHousingItemCategory());
             log.info("#{}:{}, 类别:{}->{}, 排序:{}", obj.getModelKey(), item.getName(), hcat.getName(), category.getCategory(), category.getOrder());
         });

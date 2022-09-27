@@ -84,7 +84,8 @@ public class TestLoadMap {
                 values[i] = xivRow.get(columns[i].getIndex());
             }
 
-            if (xivRow instanceof XivSubRow xivSubRow) {
+            if (xivRow instanceof XivSubRow) {
+                XivSubRow xivSubRow = (XivSubRow) xivRow;
                 log.info("#{}: {}", xivSubRow.getFullKey(), values);
             } else if (xivRow != null) {
                 log.info("#{}: {}", xivRow.getKey(), values);

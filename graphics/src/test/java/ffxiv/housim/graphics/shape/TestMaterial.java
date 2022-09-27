@@ -93,7 +93,8 @@ public class TestMaterial {
                 if (e == null) {
                     continue;
                 }
-                if (e instanceof SgbEntryModel me) {
+                if (e instanceof SgbEntryModel) {
+                    SgbEntryModel me = (SgbEntryModel) e;
                     build(me, models++);
                 }
             }
