@@ -21,24 +21,24 @@ public class BoundingBox {
     }
 
     public BoundingBox scale(Vector3 factor) {
-        var center = new Vector3 (
+        Vector3 center = new Vector3 (
             (pointA.x + pointB.x) / 2f,
             (pointA.y + pointB.y) / 2f,
             (pointA.z + pointB.z) / 2f
         );
-        var d = new Vector3 (
+        Vector3 d = new Vector3 (
             Math.abs(pointA.x - center.z) * factor.x,
             Math.abs(pointA.y - center.y) * factor.y,
             Math.abs(pointA.z - center.z) * factor.z
         );
 
-        var retPointA = new Vector4 (
+        Vector4 retPointA = new Vector4 (
             center.x + d.x,
             center.y + d.y,
             center.z + d.z,
             pointA.w
         );
-        var retPointB = new Vector4 (
+        Vector4 retPointB = new Vector4 (
             center.x - d.x,
             center.y - d.y,
             center.z - d.z,
@@ -53,26 +53,26 @@ public class BoundingBox {
     }
 
     public BoundingBox grow(Vector3 change) {
-        var center = new Vector3 (
+        Vector3 center = new Vector3 (
             (pointA.x + pointB.x) / 2f,
             (pointA.y + pointB.y) / 2f,
             (pointA.z + pointB.z) / 2f
         );
 
-        var d = new Vector3 (
+        Vector3 d = new Vector3 (
             Math.abs(pointA.x - center.x) + change.x,
             Math.abs(pointA.y - center.y) + change.y,
             Math.abs(pointA.z - center.z) + change.z
         );
 
-        var retPointA = new Vector4 (
+        Vector4 retPointA = new Vector4 (
             center.x + d.x,
             center.y + d.y,
             center.z + d.z,
             pointA.w
         );
 
-        var retPointB = new Vector4 (
+        Vector4 retPointB = new Vector4 (
             center.x - d.x,
             center.y - d.y,
             center.z - d.z,

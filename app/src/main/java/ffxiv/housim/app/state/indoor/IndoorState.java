@@ -40,7 +40,8 @@ public class IndoorState extends BaseAppState {
 
         assetManager = app.getAssetManager();
 
-        if (app instanceof SimpleApplication simpleApp) {
+        if (app instanceof SimpleApplication) {
+            SimpleApplication simpleApp = (SimpleApplication) app;
             rootNode = simpleApp.getRootNode();
         }
         windowManager = app.getStateManager().getState(SimpleWindowManager.class);

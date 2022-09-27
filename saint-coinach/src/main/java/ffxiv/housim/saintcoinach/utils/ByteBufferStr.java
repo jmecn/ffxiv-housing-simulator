@@ -37,6 +37,6 @@ public class ByteBufferStr {
             log.warn("init lens enlarged to:{}", size);
         }
 
-        return bos.toString(StandardCharsets.UTF_8);
+        return new String(bos.toByteArray(), StandardCharsets.UTF_8);
     }
 }

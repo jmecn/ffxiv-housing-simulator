@@ -49,11 +49,11 @@ public class TestRestartContext extends SimpleApplication {
                 log.info("frame#{}: cam res={}x{}, fbSize={}x{}", frame, cam.getWidth(), cam.getHeight(), w, h);
             }
 
-//            if (frame == 3) {
-//                if (h != -1 && w != -1) {
-//                    reshape(w, h);
-//                }
-//            }
+            if (frame == 3) {
+                if (h != -1 && w != -1) {
+                    reshape(w, h);
+                }
+            }
 
             if (frame == 5) {
                 context.restart();

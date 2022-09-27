@@ -28,6 +28,7 @@ import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingFurniture;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,11 +61,11 @@ public class FurnitureViewer extends SimpleApplication {
         list = new ArrayList<>(sheet.getCount());
 
         for (HousingFurniture f : sheet) {
-            if (f.getSgbPath() == null || f.getSgbPath().isBlank()) {
+            if (StringUtils.isBlank(f.getSgbPath())) {
                 log.info("ignore HousingFurniture #{}, {}", f.getModelKey(), f.getItem());
                 continue;
             }
-            if (f.getItem() == null || f.getItem().getName().isBlank()) {
+            if (f.getItem() == null || StringUtils.isBlank(f.getItem().getName())) {
                 log.info("ignore HousingFurniture #{}, {}", f.getModelKey(), f.getSgbPath());
                 continue;
             }

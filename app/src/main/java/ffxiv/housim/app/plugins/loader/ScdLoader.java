@@ -34,7 +34,8 @@ public class ScdLoader implements AssetLoader {
     @Override
     public Object load(AssetInfo assetInfo) throws IOException {
 
-        if (assetInfo instanceof SqpackAssetInfo pack) {
+        if (assetInfo instanceof SqpackAssetInfo) {
+            SqpackAssetInfo pack = (SqpackAssetInfo) assetInfo;
             return load(pack.getPackFile(), pack.getKey());
         }
         return null;
@@ -52,7 +53,8 @@ public class ScdLoader implements AssetLoader {
         ScdAudioData audioData = null;
 
         AudioKey audioKey = null;
-        if (assetKey instanceof AudioKey key) {
+        if (assetKey instanceof AudioKey) {
+            AudioKey key = (AudioKey) assetKey;
             audioKey = key;
         } else {
             audioKey = new AudioKey(name, true, true);
@@ -61,9 +63,11 @@ public class ScdLoader implements AssetLoader {
         for (ScdEntry entry : entries) {
             ScdEntryHeader header = entry.getHeader();
 
-            if (entry instanceof ScdOggEntry ogg) {
+            if (entry instanceof ScdOggEntry) {
+                ScdOggEntry ogg = (ScdOggEntry) entry;
                 audioData = loadOGG(ogg, audioKey);
-            } else if (entry instanceof ScdAdpcmEntry wav) {
+            } else if (entry instanceof ScdAdpcmEntry) {
+                ScdAdpcmEntry wav = (ScdAdpcmEntry) entry;
                 AudioData data = loadWAV(wav, audioKey);
                 if (data != null) {
                     audioData = new ScdAudioData(data);

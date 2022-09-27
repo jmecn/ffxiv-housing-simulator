@@ -24,8 +24,8 @@ public class ScdAdpcmEntry extends ScdEntry {
     }
 
     private void decode(int chunksOffset, int dataOffset) {
-        var wavHeaderOffset = dataOffset;
-        var finalDataOffset = chunksOffset + header.samplesOffset;
+        int wavHeaderOffset = dataOffset;
+        int finalDataOffset = chunksOffset + header.samplesOffset;
         int fmtSize = finalDataOffset - wavHeaderOffset;
 
         decoded = new byte[0x1C + fmtSize + header.dataSize];
@@ -37,7 +37,7 @@ public class ScdAdpcmEntry extends ScdEntry {
         bb.putInt(i_WAVE);
         bb.putInt(i_fmt);
         bb.putInt(fmtSize);
-        var o = 0x14;
+        int o = 0x14;
         System.arraycopy(file.data, wavHeaderOffset, decoded, o, fmtSize);
 
         o += fmtSize;

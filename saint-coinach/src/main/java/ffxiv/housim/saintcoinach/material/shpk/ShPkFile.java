@@ -146,7 +146,7 @@ public class ShPkFile {
             parameters.add(new Parameter(ParameterType.Sampler, buffer, parameterListOffset));
         }
 
-        parameterMap = parameters.stream().collect(Collectors.toUnmodifiableMap(Parameter::getId, Functions.identity()));
+        parameterMap = parameters.stream().collect(Collectors.toMap(Parameter::getId, Functions.identity()));
     }
 
     /**
@@ -196,7 +196,8 @@ public class ShPkFile {
         int offset = shaderDataOffset + shader.getDataOffset() + vertexShaderOffset;
         int len = shader.getDataLength()  - vertexShaderOffset;
         byte[] data = new byte[len];
-        buffer.get(offset, data);
+        buffer.position(offset);
+        buffer.get(data);
 
         return data;
     }

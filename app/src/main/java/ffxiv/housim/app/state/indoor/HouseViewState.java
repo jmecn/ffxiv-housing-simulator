@@ -49,7 +49,8 @@ public class HouseViewState extends BaseAppState {
 
     @Override
     protected void initialize(Application app) {
-        if (app instanceof SimpleApplication simpleApp) {
+        if (app instanceof SimpleApplication) {
+            SimpleApplication simpleApp = (SimpleApplication) app;
             rootNode = simpleApp.getRootNode();
             rootNode.attachChild(viewRoot);
         }
@@ -164,7 +165,8 @@ public class HouseViewState extends BaseAppState {
         s.setLocalTranslation(p.getLocation());
         s.setLocalRotation(r.getRotation());
         s.depthFirstTraversal(it -> {
-            if (it instanceof Geometry geom) {
+            if (it instanceof Geometry) {
+                Geometry geom = (Geometry) it;
                 Material mat = geom.getMaterial();
                 String matName = mat.getMaterialDef().getName();
                 log.info("matName:{}", matName);

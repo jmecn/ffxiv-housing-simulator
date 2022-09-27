@@ -45,7 +45,7 @@ public class Model {
         String name = getName();// using to calculate hash
 
         this.meshes = new Mesh[header.meshCount];
-        for (var i = 0; i < header.meshCount; i++) {
+        for (int i = 0; i < header.meshCount; i++) {
             int index = header.meshOffset + i;
 
             int hash = Hash.compute(name + "#" + index);

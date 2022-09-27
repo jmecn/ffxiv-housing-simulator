@@ -80,7 +80,8 @@ public class FurnitureCatalogState extends BaseAppState {
 
         cam = app.getCamera();
 
-        if (app instanceof SimpleApplication simpleApp) {
+        if (app instanceof SimpleApplication) {
+            SimpleApplication simpleApp = (SimpleApplication) app;
             guiNode = simpleApp.getGuiNode();
         }
 

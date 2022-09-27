@@ -172,7 +172,7 @@ public class ModelDefinition {
 
         attributeNames = readStrings(buffer, attributeCount);
         attributes = new ModelAttribute[attributeCount];
-        for (var i = 0; i < attributeCount; i++) {
+        for (int i = 0; i < attributeCount; i++) {
             attributes[i] = new ModelAttribute(this, i);
         }
 
@@ -197,7 +197,7 @@ public class ModelDefinition {
             materialNames[i] = stringArray[i];
         }
         materials = new MaterialDefinition[materialCount];
-        for (var i = 0; i < materialCount; i++) {
+        for (int i = 0; i < materialCount; i++) {
             materials[i] = new MaterialDefinition(this, i);
         }
 
@@ -241,7 +241,7 @@ public class ModelDefinition {
         }
 
         this.bones = new Bone[boneCount];
-        for (var i = 0; i < boneCount; i++)
+        for (int i = 0; i < boneCount; i++)
             this.bones[i] = new Bone(this, i, buffer);
 
         if (buffer.position() != buffer.limit()) {
@@ -313,7 +313,7 @@ public class ModelDefinition {
         }
 
         this.vertexFormats = new VertexFormat[meshCount];
-        for (var i = 0; i < meshCount; i++) {
+        for (int i = 0; i < meshCount; i++) {
             this.vertexFormats[i] = new VertexFormat(buffer);
         }
     }
@@ -323,7 +323,7 @@ public class ModelDefinition {
         int[] stringOffsets = new int[count];
         String[] values = new String[count];
 
-        for (var i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             stringOffsets[i] = buffer.getInt();
         }
 

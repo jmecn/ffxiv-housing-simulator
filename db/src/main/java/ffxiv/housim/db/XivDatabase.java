@@ -12,6 +12,7 @@ import ffxiv.housim.saintcoinach.db.xiv.entity.housing.*;
 import ffxiv.housim.saintcoinach.db.xiv.entity.map.TerritoryType;
 import ffxiv.housim.saintcoinach.math.XivColor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.*;
@@ -150,25 +151,32 @@ public class XivDatabase {
                 continue;
             }
 
-            if (row instanceof HousingInterior it) {
+            if (row instanceof HousingInterior) {
+                HousingInterior it = (HousingInterior) row;
                 interior2item.put(it.getKey(), e);
                 item2interior.put(e.getKey(), it);
-            } else if (row instanceof HousingExterior it) {
+            } else if (row instanceof HousingExterior) {
+                HousingExterior it = (HousingExterior) row;
                 exterior2item.put(it.getKey(), e);
                 item2exterior.put(e.getKey(), it);
-            } else if (row instanceof HousingPreset it) {
+            } else if (row instanceof HousingPreset) {
+                HousingPreset it = (HousingPreset) row;
                 preset2item.put(it.getKey(), e);
                 item2preset.put(e.getKey(), it);
-            } else if (row instanceof HousingUnitedExterior it) {
+            } else if (row instanceof HousingUnitedExterior) {
+                HousingUnitedExterior it = (HousingUnitedExterior) row;
                 unitedExterior2item.put(it.getKey(), e);
                 item2unitedExterior.put(e.getKey(), it);
-            } else if (row instanceof HousingFurniture it) {
+            } else if (row instanceof HousingFurniture) {
+                HousingFurniture it = (HousingFurniture) row;
                 furniture2item.put(it.getKey(), e);
                 item2furniture.put(e.getKey(), it);
-            } else if (row instanceof HousingYardObject it) {
+            } else if (row instanceof HousingYardObject) {
+                HousingYardObject it = (HousingYardObject) row;
                 yardObject2item.put(row.getKey(), e);
                 item2yardObject.put(e.getKey(), it);
-            } else if (row instanceof Stain it) {
+            } else if (row instanceof Stain) {
+                Stain it = (Stain) row;
                 stain2item.put(it.getKey(), e);
                 item2stain.put(e.getKey(), it);
             } else {
@@ -229,13 +237,13 @@ public class XivDatabase {
 
         List<Furniture> result = new ArrayList<>(furnitures.getCount());
         for (HousingFurniture f : furnitures) {
-            if (f.getSgbPath() == null || f.getSgbPath().isBlank()) {
+            if (StringUtils.isBlank(f.getSgbPath())) {
                 continue;
             }
 
             Item item = furniture2item.get(f.getKey());
 
-            if (item == null || item.getName().isBlank()) {
+            if (item == null || StringUtils.isBlank(item.getName())) {
                 continue;
             }
 
@@ -278,7 +286,7 @@ public class XivDatabase {
         List<Interior> result = new ArrayList<>(interiors.getCount());
         for (HousingInterior e : interiors) {
             Item item = interior2item.get(e.getKey());
-            if (item == null || item.getName().isBlank()) {
+            if (item == null || StringUtils.isBlank(item.getName())) {
                 continue;
             }
 
@@ -345,7 +353,7 @@ public class XivDatabase {
         IXivSheet<HousingUnitedExterior> sheet = ffxiv.getGameData().getSheet(HousingUnitedExterior.class);
         for (HousingUnitedExterior e : sheet) {
             Item item = unitedExterior2item.get(e.getKey());
-            if (item == null || item.getName().isBlank()) {
+            if (item == null || StringUtils.isBlank(item.getName())) {
                 continue;
             }
 
@@ -366,7 +374,7 @@ public class XivDatabase {
         IXivSheet<HousingPreset> sheet = ffxiv.getGameData().getSheet(HousingPreset.class);
         for (HousingPreset e : sheet) {
             Item item = preset2item.get(e.getKey());
-            if (item == null || item.getName().isBlank()) {
+            if (item == null || StringUtils.isBlank(item.getName())) {
                 continue;
             }
 
@@ -413,11 +421,11 @@ public class XivDatabase {
         IXivSheet<HousingYardObject> yardObjects = ffxiv.getGameData().getSheet(HousingYardObject.class);
         List<YardObject> result = new ArrayList<>(yardObjects.getCount());
         for (HousingYardObject f : yardObjects) {
-            if (f.getSgbPath() == null || f.getSgbPath().isBlank()) {
+            if (StringUtils.isBlank(f.getSgbPath())) {
                 log.info("ignore HousingYardObject #{}, {}", f.getModelKey(), f.getItem());
                 continue;
             }
-            if (f.getItem() == null || f.getItem().getName().isBlank()) {
+            if (f.getItem() == null || StringUtils.isBlank(f.getItem().getName())) {
                 log.info("ignore HousingYardObject #{}, {}", f.getModelKey(), f.getSgbPath());
                 continue;
             }
@@ -467,7 +475,7 @@ public class XivDatabase {
             if (territoryType.getKey() == 0) {
                 continue;
             }
-            if (territoryType.getBg() == null || territoryType.getBg().isBlank()) {
+            if (StringUtils.isBlank(territoryType.getBg())) {
                 continue;
             }
             String name = territoryType.getName();

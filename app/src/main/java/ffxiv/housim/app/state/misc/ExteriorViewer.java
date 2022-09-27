@@ -30,6 +30,7 @@ import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingItemCategory;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingSize;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -89,7 +90,7 @@ public class ExteriorViewer extends SimpleApplication {
             }
             Item item = he2i.get(f.getKey());
             int cat = f.getHousingItemCategory();
-            if (f.getModel().isBlank() && item == null && (cat != 5 && cat != 6 && cat != 7)) {
+            if (StringUtils.isBlank(f.getModel()) && item == null && (cat != 5 && cat != 6 && cat != 7)) {
                 log.info("ignore HousingExterior #{}, category:{}, item:{}", f.getExteriorId(), f.getHousingItemCategory(), item);
                 continue;
             }
@@ -192,7 +193,7 @@ public class ExteriorViewer extends SimpleApplication {
                 } else if (f.getHousingItemCategory() == 7) {
                     model = String.format("bgcommon/hou/dyna/opt/sg/%04d/asset/opt_sg_m%04d.sgb", f.getExteriorId(), f.getExteriorId());
                 }
-                if (model.isBlank()) {
+                if (StringUtils.isBlank(model)) {
                     log.info("No model found");
                     return;
                 }

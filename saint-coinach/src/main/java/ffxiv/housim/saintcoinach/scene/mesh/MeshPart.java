@@ -3,6 +3,7 @@ package ffxiv.housim.saintcoinach.scene.mesh;
 import ffxiv.housim.saintcoinach.scene.model.ModelAttribute;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MeshPart {
 
@@ -19,10 +20,10 @@ public class MeshPart {
         this.indexOffset = header.indexOffset;
         this.indexCount = header.indexCount;
 
-        var attr = new ArrayList<ModelAttribute>();
+        List<ModelAttribute> attr = new ArrayList<>();
 
         ModelAttribute[] attributes = mesh.getModel().getDefinition().getAttributes();
-        for (var i = 0; i < attributes.length; ++i) {
+        for (int i = 0; i < attributes.length; ++i) {
             if(((header.attributesMask >> i) & 1) == 1) {
                 attr.add(attributes[i]);
             }

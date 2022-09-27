@@ -78,6 +78,7 @@ public class Main {
         setting.setSamples(4);
         setting.setGammaCorrection(false);
         setting.setRenderer(AppSettings.LWJGL_OPENGL41);
+        setting.setUseRetinaFrameBuffer(false);
 
         // read from registry
         try {

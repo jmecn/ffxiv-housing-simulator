@@ -33,7 +33,8 @@ public class BgmState extends BaseAppState {
     @Override
     protected void initialize(Application app) {
         assetManager = app.getAssetManager();
-        if (app instanceof SimpleApplication simpleApp) {
+        if (app instanceof SimpleApplication) {
+            SimpleApplication simpleApp = (SimpleApplication) app;
             rootNode = simpleApp.getRootNode();
         }
     }
@@ -58,7 +59,8 @@ public class BgmState extends BaseAppState {
 
             loopStartSec = null;
             loopEndSec = null;
-            if (data instanceof ScdAudioData scd) {
+            if (data instanceof ScdAudioData) {
+                ScdAudioData scd = (ScdAudioData) data;
                 data = scd.getData();
                 loopStartSec = scd.getLoopStartSec();
                 loopEndSec = scd.getLoopEndSec();

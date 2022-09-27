@@ -49,9 +49,9 @@ public class InteriorState extends BaseAppState {
 
         panel.setLocalTranslation(100, 300, 0);
         CursorEventControl.addListenersToSpatial(panel, new DragHandler());
-        if (app instanceof SimpleApplication sa) {
-            sa.getGuiNode().attachChild(panel);
-
+        if (app instanceof SimpleApplication) {
+            SimpleApplication simpleApp = (SimpleApplication) app;
+            simpleApp.getGuiNode().attachChild(panel);
         }
     }
 

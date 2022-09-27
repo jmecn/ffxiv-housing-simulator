@@ -32,39 +32,39 @@ public class ScdFile {
 
         init();
 
-        var fileHeaderSize = buffer.getShort(0x0E);
+        short fileHeaderSize = buffer.getShort(0x0E);
 
         readScdHeader(fileHeaderSize);
 
         if (header.entryCount == 0) {
             log.warn("entry count:{}", 0);
         }
-        var entryHeaders = new ScdEntryHeader[header.entryCount];
-        var entryTable = new int[header.entryCount];
-        var entryChunkOffsets = new int[header.entryCount];
-        var entryDataOffsets = new int[header.entryCount];
+        ScdEntryHeader[] entryHeaders = new ScdEntryHeader[header.entryCount];
+        int[] entryTable = new int[header.entryCount];
+        int[] entryChunkOffsets = new int[header.entryCount];
+        int[] entryDataOffsets = new int[header.entryCount];
 
         buffer.position(header.entryTableOffset);
-        for (var i = 0; i < header.entryCount; i++) {
+        for (int i = 0; i < header.entryCount; i++) {
             entryTable[i] = buffer.getInt();
         }
 
         for (int i = 0; i < header.entryCount; i++) {
-            var headerOffset = entryTable[i];
+            int headerOffset = entryTable[i];
             entryHeaders[i] = readEntryHeader(headerOffset);
 
             entryChunkOffsets[i] = headerOffset + 0x20;
             entryDataOffsets[i] = entryChunkOffsets[i];
 
             int dataOffset = buffer.getInt(entryDataOffsets[i] + 4);
-            for (var j = 0; j < entryHeaders[i].auxChunkCount; j++) {
+            for (int j = 0; j < entryHeaders[i].auxChunkCount; j++) {
                 entryDataOffsets[i] += dataOffset;
             }
         }
         this.entryHeaders = entryHeaders;
 
         this.entries = new ScdEntry[header.entryCount];
-        for (var i = 0; i < header.entryCount; i++) {
+        for (int i = 0; i < header.entryCount; i++) {
             this.entries[i] = createEntry(entryHeaders[i], entryChunkOffsets[i], entryDataOffsets[i]);
         }
 
@@ -97,7 +97,7 @@ public class ScdFile {
         throw new IllegalStateException("Unknown byte order:" + sourceFile.getPath());
     }
     private void readScdHeader(int offset) {
-        var h = new ScdHeader();
+        ScdHeader h = new ScdHeader();
 
         buffer.position(offset);
 
@@ -116,7 +116,7 @@ public class ScdFile {
     }
 
     private ScdEntryHeader readEntryHeader(int offset) {
-        var h = new ScdEntryHeader();
+        ScdEntryHeader h = new ScdEntryHeader();
 
         buffer.position(offset);
 

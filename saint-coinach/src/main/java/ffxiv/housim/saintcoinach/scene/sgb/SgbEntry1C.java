@@ -70,7 +70,8 @@ public class SgbEntry1C implements ISgbEntry {
         if (!modelFilePath.isEmpty()) {
             if (modelFilePath.endsWith(".mdl")) {
                 PackFile file = packs.tryGetFile(modelFilePath);
-                if (file != null && file instanceof ModelFile mdlFile) {
+                if (file != null && file instanceof ModelFile) {
+                    ModelFile mdlFile = (ModelFile) file;
                     model = mdlFile.getModelDefinition().getModel(ModelQuality.High);
                 }
             } else if (modelFilePath.endsWith(".sgb")) {

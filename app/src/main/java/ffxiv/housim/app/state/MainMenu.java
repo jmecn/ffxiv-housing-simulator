@@ -66,7 +66,8 @@ public class MainMenu extends BaseAppState {
         this.stateManager = app.getStateManager();
         this.inputManager = app.getInputManager();
 
-        if (app instanceof SimpleApplication simpleApp) {
+        if (app instanceof SimpleApplication) {
+            SimpleApplication simpleApp = (SimpleApplication) app;
             guiNode = simpleApp.getGuiNode();
             rootNode = simpleApp.getRootNode();
         }

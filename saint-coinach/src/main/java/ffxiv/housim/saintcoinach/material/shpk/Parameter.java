@@ -37,7 +37,8 @@ public class Parameter {
         int length = nameLength;
 
         byte[] bytes = new byte[length];
-        buffer.get(offset, bytes);
+        buffer.position(offset);
+        buffer.get(bytes);
         this.name = new String(bytes, StandardCharsets.US_ASCII);
     }
 

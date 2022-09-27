@@ -27,6 +27,7 @@ import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingYardObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,11 +61,11 @@ public class YardObjectViewer extends SimpleApplication {
         list = new ArrayList<>(sheet.getCount());
 
         for (HousingYardObject f : sheet) {
-            if (f.getSgbPath() == null || f.getSgbPath().isBlank()) {
+            if (StringUtils.isBlank(f.getSgbPath())) {
                 log.info("ignore HousingYardObject #{}, {}", f.getModelKey(), f.getItem());
                 continue;
             }
-            if (f.getItem() == null || f.getItem().getName().isBlank()) {
+            if (f.getItem() == null || StringUtils.isBlank(f.getItem().getName())) {
                 log.info("ignore HousingYardObject #{}, {}", f.getModelKey(), f.getSgbPath());
                 continue;
             }

@@ -21,7 +21,8 @@ public class TexLoader implements AssetLoader {
 
     @Override
     public Object load(AssetInfo assetInfo) throws IOException {
-        if (assetInfo instanceof SqpackAssetInfo pack) {
+        if (assetInfo instanceof SqpackAssetInfo) {
+            SqpackAssetInfo pack = (SqpackAssetInfo) assetInfo;
             return load(pack.getPackFile(), pack.getKey());
         }
         return null;

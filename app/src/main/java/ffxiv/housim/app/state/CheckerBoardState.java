@@ -79,7 +79,7 @@ public class CheckerBoardState extends BaseAppState implements ActionListener {
     }
     
     private void createCheckerBoard() {
-        Quad quad = new Quad(40, 40);
+        Quad quad = new Quad(60, 40);
         Geometry grid = new Geometry("CheckerBoard", quad);
         grid.rotate(-FastMath.HALF_PI, 0, 0);
         grid.center();

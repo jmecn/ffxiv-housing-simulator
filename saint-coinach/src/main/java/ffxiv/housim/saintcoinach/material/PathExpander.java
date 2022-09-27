@@ -1,6 +1,7 @@
 package ffxiv.housim.saintcoinach.material;
 
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,7 +48,7 @@ public class PathExpander {
 
         save.pathFormat = matcher.replaceAll(replacement);
         save.variantsAvailable = containsVariant;
-        if (stainReplacement == null || stainReplacement.isBlank()) {
+        if (StringUtils.isBlank(stainReplacement)) {
             save.stainedPathFormat = null;
         } else {
             save.stainedPathFormat = matcher.replaceAll(stainReplacement);

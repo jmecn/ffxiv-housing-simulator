@@ -202,9 +202,9 @@ public class SgbGroup implements ISgbData {
 
         log.debug("headerSize:{}, entryCount:{}, entrySize:{}, ptr:{}", entriesOffset - offset, count, count * 24, entriesOffset);
 
-        for (var i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             try {
-                var entryOffset = entriesOffset + (i * 24);
+                int entryOffset = entriesOffset + (i * 24);
                 entries[i] = new SgbEntry1C(coll, buffer, entryOffset);
                 break;
             } catch (Exception e) {

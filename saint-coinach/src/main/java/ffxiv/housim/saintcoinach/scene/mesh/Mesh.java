@@ -82,10 +82,10 @@ public class Mesh {
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         vertices = new Vertex[header.vertexCount];
-        for (var i = 0; i < header.vertexCount; i++) {
+        for (int i = 0; i < header.vertexCount; i++) {
             vertices[i] = VertexReader.read(buffer, vertexFormat, offsets);
 
-            for (var oi = 0; oi < offsets.length; oi++) {
+            for (int oi = 0; oi < offsets.length; oi++) {
                 offsets[oi] += header.bytesPerVertexPerBuffer[oi];
             }
         }
@@ -103,7 +103,7 @@ public class Mesh {
         ByteBuffer buffer = ByteBuffer.wrap(data);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         buffer.position(position);
-        for (var i = 0; i < header.indexCount; i++) {
+        for (int i = 0; i < header.indexCount; i++) {
             this.indices[i] = buffer.getShort();
         }
     }

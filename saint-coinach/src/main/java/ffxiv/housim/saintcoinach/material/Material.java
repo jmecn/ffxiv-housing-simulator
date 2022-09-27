@@ -130,19 +130,19 @@ public class Material {
 
     private void readNames(ByteBuffer buffer) {
         int[] texOffset = new int[texCount];
-        for (var i = 0; i < texCount; i++) {
+        for (int i = 0; i < texCount; i++) {
             texOffset[i] = buffer.getShort();
             buffer.getShort();// 0 or 1, what to do with this?
         }
 
         int[] mapOffset = new int[mapCount];
-        for (var i = 0; i < mapCount; i++) {
+        for (int i = 0; i < mapCount; i++) {
             mapOffset[i] = buffer.getShort();
             buffer.getShort();// 0 or 1, what to do with this?
         }
 
         int[] colorSetOffset = new int[colorSetCount];
-        for (var i = 0; i < colorSetCount; i++) {
+        for (int i = 0; i < colorSetCount; i++) {
             colorSetOffset[i] = buffer.getShort();
             buffer.getShort();// 0 or 1, what to do with this?
         }

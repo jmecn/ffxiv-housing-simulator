@@ -73,7 +73,7 @@ public class MaterialDefinition {
         String search = name.substring(i);
 
         ExpandResult result = new ExpandResult();
-        for (var pe : PathExpanders) {
+        for (PathExpander pe : PathExpanders) {
             if (pe.tryExpand(search, result)) {
                 return result;
             }
@@ -138,7 +138,7 @@ public class MaterialDefinition {
     }
 
     public Material get() {
-        var path = defaultPath;
+        String path = defaultPath;
         return create(path, ImcVariant.DEFAULT);
     }
 

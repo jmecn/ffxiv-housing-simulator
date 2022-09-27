@@ -93,7 +93,7 @@ public class ModelAttribute {
         m.put("atr_sv_i", 1 << 8);
         m.put("atr_sv_j", 1 << 9);
 
-        MaskMap = Map.copyOf(m);
+        MaskMap = m;
     }
 
 }

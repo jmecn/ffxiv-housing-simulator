@@ -12,7 +12,7 @@ public class ColorMap {
         byte[] data = file.getData();
         this.colors = new XivColor[data.length / 4];
 
-        for (var i = 0; i < data.length; i += 4) {
+        for (int i = 0; i < data.length; i += 4) {
             byte r = data[i];
             byte g = data[i + 1];
             byte b = data[i + 2];

@@ -120,17 +120,23 @@ public class ModelFactory {
                     continue;
                 }
 
-                if (e instanceof SgbEntryModel me) {
+                if (e instanceof SgbEntryModel) {
+                    SgbEntryModel me = (SgbEntryModel) e;
                     build(root, me, models++);
-                } else if (e instanceof SgbEntryChairMarker ce) {
+                } else if (e instanceof SgbEntryChairMarker) {
+                    SgbEntryChairMarker ce = (SgbEntryChairMarker) e;
                     build(root, ce, chairs++);
-                } else if (e instanceof SgbEntryTargetMarker te) {
+                } else if (e instanceof SgbEntryTargetMarker) {
+                    SgbEntryTargetMarker te = (SgbEntryTargetMarker) e;
                     build(root, te, targets++);
-                } else if (e instanceof SgbEntryGimmick te) {
+                } else if (e instanceof SgbEntryGimmick) {
+                    SgbEntryGimmick te = (SgbEntryGimmick) e;
                     build(root, te, targets++);
-                } else if (e instanceof SgbEntry1C te) {
+                } else if (e instanceof SgbEntry1C) {
+                    SgbEntry1C te = (SgbEntry1C) e;
                     build(root, te, targets++);
-                } else if (e instanceof SgbEntrySound scd) {
+                } else if (e instanceof SgbEntrySound) {
+                    SgbEntrySound scd = (SgbEntrySound) e;
                     build(root, scd);
                 } else {
                     log.warn("unsupported entry:{}", e);
@@ -143,7 +149,8 @@ public class ModelFactory {
         AudioKey key = new AudioKey(scd.getScdFilePath(), false, false);
 
         AudioData audioData = assetManager.loadAudio(key);
-        if (audioData instanceof ScdAudioData scdAudioData) {
+        if (audioData instanceof ScdAudioData) {
+            ScdAudioData scdAudioData = (ScdAudioData) audioData;
             AudioNode node = new AudioNode(scdAudioData.getData(), key);
             if (audioData.getChannels() == 1) {
                 node.setPositional(true);
@@ -186,7 +193,8 @@ public class ModelFactory {
         spatial.scale(0.25f);
 
         spatial.depthFirstTraversal(s -> {
-            if (s instanceof Geometry e) {
+            if (s instanceof Geometry) {
+                Geometry e = (Geometry) s;
                 log.info("e:{}, e", e.getName(), e);
                 e.setMaterial(chairMat);
             }
@@ -302,7 +310,7 @@ public class ModelFactory {
 
         for (VertexFormatElement element : vertexFormat.getElements()) {
             switch (element.attribute) {
-                case Position -> {
+                case Position : {
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].position;
                         positions[i * 4] = v.x;
@@ -311,8 +319,9 @@ public class ModelFactory {
                         positions[i * 4 + 3] = v.w;
                     }
                     mesh.setBuffer(VertexBuffer.Type.Position, 4, positions);
+                    break;
                 }
-                case BoneWeights -> {
+                case BoneWeights : {
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].boneWeights;
                         boneWeights[i * 4] = v.x;
@@ -321,8 +330,9 @@ public class ModelFactory {
                         boneWeights[i * 4 + 3] = v.w;
                     }
                     mesh.setBuffer(VertexBuffer.Type.BoneWeight, 4, boneWeights);
+                    break;
                 }
-                case BoneIndices -> {
+                case BoneIndices : {
                     for (int i = 0; i < vertCount; i++) {
                         Ubyte4 v = vertices[i].boneIndices;
                         boneIndices[i * 4] = v.x;
@@ -331,8 +341,9 @@ public class ModelFactory {
                         boneIndices[i * 4 + 3] = v.w;
                     }
                     mesh.setBuffer(VertexBuffer.Type.BoneIndex, 4, boneIndices);
+                    break;
                 }
-                case Normal -> {
+                case Normal : {
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].normal;
                         normal[i * 4] = v.x;
@@ -341,8 +352,9 @@ public class ModelFactory {
                         normal[i * 4 + 3] = v.w;
                     }
                     mesh.setBuffer(VertexBuffer.Type.Normal, 4, normal);
+                    break;
                 }
-                case TexCoord -> {
+                case TexCoord : {
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].texCoord;
                         uv[i * 4] = v.x;
@@ -351,8 +363,9 @@ public class ModelFactory {
                         uv[i * 4 + 3] = v.w;
                     }
                     mesh.setBuffer(VertexBuffer.Type.TexCoord, 4, uv);
+                    break;
                 }
-                case Binormal -> {
+                case Binormal : {
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].binormal;
                         binormal[i * 4] = v.x;
@@ -361,8 +374,9 @@ public class ModelFactory {
                         binormal[i * 4 + 3] = v.w;
                     }
                     mesh.setBuffer(VertexBuffer.Type.Binormal, 4, binormal);
+                    break;
                 }
-                case Tangent -> {
+                case Tangent : {
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].tangent;
                         tangent[i * 4] = v.x;
@@ -371,8 +385,9 @@ public class ModelFactory {
                         tangent[i * 4 + 3] = v.w;
                     }
                     mesh.setBuffer(VertexBuffer.Type.Tangent, 4, tangent);
+                    break;
                 }
-                case Color -> {
+                case Color : {
                     for (int i = 0; i < vertCount; i++) {
                         Vector4 v = vertices[i].color;
                         color[i * 4] = v.x;
@@ -381,8 +396,11 @@ public class ModelFactory {
                         color[i * 4 + 3] = v.w;
                     }
                     mesh.setBuffer(VertexBuffer.Type.Color, 4, color);
+                    break;
                 }
-                default -> throw new IllegalArgumentException();
+                default : {
+                    throw new IllegalArgumentException();
+                }
             }
         }
 
@@ -513,11 +531,14 @@ public class ModelFactory {
                 if (e == null) {
                     continue;
                 }
-                if (e instanceof LgbEntryModel me) {
+                if (e instanceof LgbEntryModel) {
+                    LgbEntryModel me = (LgbEntryModel) e;
                     build(root, me, models++);
-                } else if (e instanceof LgbEntryGimmick g) {
+                } else if (e instanceof LgbEntryGimmick) {
+                    LgbEntryGimmick g = (LgbEntryGimmick) e;
                     build(root, g, models++);
-                } else if (e instanceof LgbEntryEObj eo) {
+                } else if (e instanceof LgbEntryEObj) {
+                    LgbEntryEObj eo = (LgbEntryEObj) e;
                     build(root, eo, models++);
                 } else {
                     log.warn("unsupported entry:{}", e);

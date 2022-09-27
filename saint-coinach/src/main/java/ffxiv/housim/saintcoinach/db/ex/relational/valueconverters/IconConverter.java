@@ -24,11 +24,14 @@ public class IconConverter implements IValueConverter<ImageFile> {
     @Override
     public ImageFile convert(IDataRow row, Object rawValue) {
         int nr;
-        if (rawValue instanceof Byte val) {
+        if (rawValue instanceof Byte) {
+            Byte val = (Byte) rawValue;
             nr = val * 0xFF;
-        } else if (rawValue instanceof Short val) {
+        } else if (rawValue instanceof Short) {
+            Short val = (Short) rawValue;
             nr = val & 0xFFFF;
-        } else if (rawValue instanceof Integer val) {
+        } else if (rawValue instanceof Integer) {
+            Integer val = (Integer) rawValue;
             nr = val;
         } else  {
             nr = ((Number) rawValue).intValue();

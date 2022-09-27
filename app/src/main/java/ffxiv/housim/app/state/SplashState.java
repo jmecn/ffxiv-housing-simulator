@@ -100,7 +100,8 @@ public class SplashState extends BaseAppState implements SceneProcessor {
         this.stateManager = app.getStateManager();
         this.cam = app.getCamera();
 
-        if (app instanceof SimpleApplication simpleApp) {
+        if (app instanceof SimpleApplication) {
+            SimpleApplication simpleApp = (SimpleApplication) app;
             this.rootNode = simpleApp.getRootNode();
             this.guiNode = simpleApp.getGuiNode();
         }
@@ -199,7 +200,8 @@ public class SplashState extends BaseAppState implements SceneProcessor {
         }
 
         PackFile file = dir.tryGetFile(0x271D5C69);
-        if (file instanceof ImageFile image) {
+        if (file instanceof ImageFile) {
+            ImageFile image = (ImageFile) file;
             image.setPath(path + "/0x271D5C69");
             Texture2D tex = TextureFactory.get(image);
 

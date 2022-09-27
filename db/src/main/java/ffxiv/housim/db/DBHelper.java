@@ -139,7 +139,7 @@ public enum DBHelper {
 
         try {
             ClassPath cp =  ClassPath.from(DBHelper.class.getClassLoader());
-            Set<ClassPath.ClassInfo> infoList = cp.getTopLevelClassesRecursive(DBHelper.class.getPackageName());
+            Set<ClassPath.ClassInfo> infoList = cp.getTopLevelClassesRecursive(DBHelper.class.getPackage().getName());
             for (ClassPath.ClassInfo info : infoList) {
                 Class<?> clazz = info.load();
                 Schema schema = clazz.getAnnotation(Schema.class);

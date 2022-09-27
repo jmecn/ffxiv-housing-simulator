@@ -26,9 +26,11 @@ import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingFurniture;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,11 +68,11 @@ public class HbqjFurnitureViewer extends SimpleApplication {
         map = new HashMap<>();
 
         for (HousingFurniture f : sheet) {
-            if (f.getSgbPath() == null || f.getSgbPath().isBlank()) {
+            if (StringUtils.isBlank(f.getSgbPath())) {
                 log.info("ignore HousingFurniture #{}, {}", f.getModelKey(), f.getItem());
                 continue;
             }
-            if (f.getItem() == null || f.getItem().getName().isBlank()) {
+            if (f.getItem() == null || StringUtils.isBlank(f.getItem().getName())) {
                 log.info("ignore HousingFurniture #{}, {}", f.getModelKey(), f.getSgbPath());
                 continue;
             }
@@ -152,7 +154,7 @@ public class HbqjFurnitureViewer extends SimpleApplication {
         }
         String data;
         try {
-            data = Files.readString(file.toPath());
+            data = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();;
             return map;
@@ -176,7 +178,7 @@ public class HbqjFurnitureViewer extends SimpleApplication {
         }
         String data;
         try {
-            data = Files.readString(file.toPath());
+            data = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();;
             return;
@@ -185,7 +187,8 @@ public class HbqjFurnitureViewer extends SimpleApplication {
         JsonElement root = parser.parse(data);
 
         JsonArray list;
-        if (root instanceof JsonObject obj) {
+        if (root instanceof JsonObject) {
+            JsonObject obj = (JsonObject) root;
             int size = obj.getAsJsonPrimitive("size").getAsInt();
             log.info("size:{}", size);
             if (size <= 0) {

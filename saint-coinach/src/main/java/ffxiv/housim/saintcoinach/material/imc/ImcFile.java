@@ -40,7 +40,7 @@ public class ImcFile {
 
         short rem = count;
         while (--rem >= 0) {
-            for (var part : parts.values()) {
+            for (ImcPart part : parts.values()) {
                 part.getVariants().add(new ImcVariant(buffer));
             }
         }

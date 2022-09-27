@@ -15,7 +15,8 @@ public class SqpackLoader implements AssetLoader {
 
     @Override
     public Object load(AssetInfo assetInfo) throws IOException {
-        if (assetInfo instanceof SqpackAssetInfo sqpack) {
+        if (assetInfo instanceof SqpackAssetInfo) {
+            SqpackAssetInfo sqpack = (SqpackAssetInfo) assetInfo;
             return sqpack.getPackFile();
         }
         return null;

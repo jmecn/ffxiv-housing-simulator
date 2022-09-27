@@ -107,7 +107,18 @@ public class XivCollection extends RelationalExCollection {
             return;
         }
 
-        String packageName = getClass().getPackageName() + ".entity";
+        Class<?> c = getClass();
+
+        // getPackageName
+        String pn;
+        if (c.isPrimitive()) {
+            pn = "java.lang";
+        } else {
+            String cn = c.getName();
+            int dot = cn.lastIndexOf('.');
+            pn = (dot != -1) ? cn.substring(0, dot).intern() : "";
+        }
+        String packageName = pn + ".entity";
         for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(packageName)) {
             Class<?> clazz = classInfo.load();
 

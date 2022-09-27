@@ -100,7 +100,8 @@ public class BMFontGen {
             if (i.getFilterGroup() == 14 || i.getFilterGroup() == 15) {
                 add(i.getName());
                 IXivRow row = i.getAdditionalData();
-                if (row instanceof Stain stain) {
+                if (row instanceof Stain) {
+                    Stain stain = (Stain) row;
                     add(stain.getName());
                 }
             }

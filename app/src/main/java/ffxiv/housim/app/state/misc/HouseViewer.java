@@ -34,6 +34,7 @@ import ffxiv.housim.saintcoinach.db.xiv.entity.map.TerritoryType;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.scene.terrain.Territory;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -73,7 +74,7 @@ public class HouseViewer extends SimpleApplication {
             if (f.getKey() == 0) {
                 continue;
             }
-            if (f.getBg() == null || f.getBg().isBlank()) {
+            if (StringUtils.isBlank(f.getBg())) {
                 continue;
             }
             String name = f.getName();

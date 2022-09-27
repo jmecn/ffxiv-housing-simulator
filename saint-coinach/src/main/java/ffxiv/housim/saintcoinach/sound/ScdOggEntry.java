@@ -79,7 +79,7 @@ public class ScdOggEntry extends ScdEntry {
 
         if (cryptType == ScdOggCryptType.VARBIS_HEADER_XOR) {
             if (xorVal != 0) {
-                for (var i = 0; i < vorbisHeaderSize; i++) {
+                for (int i = 0; i < vorbisHeaderSize; i++) {
                     decoded[i] ^= xorVal;
                 }
             }
