@@ -34,13 +34,15 @@ public class BaseParam extends XivRow {
         return asString("Description");
     }
 
-    @Override
-    public String toString() {
-        return getName();
+    /**
+     * Get the maximum value of the current {@link BaseParam} for a specific {@link EquipSlotCategory}.
+     * @param category {@link EquipSlotCategory} to get the maximum parameter value for.
+     * @return The maximum value for the current {@link BaseParam} on <code>category</code>.
+     */
+    public int getMaximum(EquipSlotCategory category) {
+        int offset = 3;
+        return category.getKey() == 0 ? 0 : (int) get(offset + category.getKey());
     }
-
-    // TODO Define EquipSlotCategory
-    // TODO public int getMaximum(EquipSlotCategory category)
 
     /**
      * Get the value modifier of the current {@link BaseParam} for a certain role.
@@ -48,11 +50,16 @@ public class BaseParam extends XivRow {
      * @return Returns the modifier for <code>role</code>, in percent.
      */
     public int getModifier(int role) {
-        int Offset = 25;
-        int Maximum = 12;
-        if (role < 0 || role > Maximum) {
+        int offset = 25;
+        int maximum = 12;
+        if (role < 0 || role > maximum) {
             return 0;
         }
-        return (int) get(Offset + role);
+        return (int) get(offset + role);
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }

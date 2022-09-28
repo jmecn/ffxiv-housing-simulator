@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach.db.xiv.music.orch;
+package ffxiv.housim.saintcoinach.db.xiv.entity;
 
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
@@ -11,8 +11,8 @@ import ffxiv.housim.saintcoinach.texture.ImageFile;
  * @author yanmaoyuan
  * @date 2022/9/28
  */
-public class OrchestrionCategory extends XivRow {
-    public OrchestrionCategory(IXivSheet sheet, IRelationalRow sourceRow) {
+public class Emote extends XivRow {
+    public Emote(IXivSheet sheet, IRelationalRow sourceRow) {
         super(sheet, sourceRow);
     }
 
@@ -20,16 +20,20 @@ public class OrchestrionCategory extends XivRow {
         return asString("Name");
     }
 
-    public short getHideOrder() {
-        return asInt16("HideOrder");
+    public EmoteCategory getEmoteCategory() {
+        return as(EmoteCategory.class);
     }
 
     public ImageFile getIcon() {
         return asImage("Icon");
     }
 
-    public short getOrder() {
-        return asInt16("Order");
+    public LogMessage getTargetedLogMessage() {
+        return as(LogMessage.class, "LogMessage{Targeted}");
+    }
+
+    public LogMessage getUntargetedLogMessage() {
+        return as(LogMessage.class, "LogMessage{Untargeted}");
     }
 
     @Override
