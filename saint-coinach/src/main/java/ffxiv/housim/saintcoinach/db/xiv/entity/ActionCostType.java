@@ -1,5 +1,8 @@
 package ffxiv.housim.saintcoinach.db.xiv.entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * desc:
  *
@@ -91,4 +94,18 @@ public enum ActionCostType {// byte
     Coda,
     Enshrouded,
     Unknown83; // Don't know what's this for, used by Eukrasian Prognosis
+
+    final static Map<Integer, ActionCostType> CACHE;
+    static {
+        CACHE = new HashMap<>();
+        int i = 0;
+        for(ActionCostType e : values()) {
+            CACHE.put(i, e);
+            i++;
+        }
+    }
+
+    public static ActionCostType of(int value) {
+        return CACHE.get(value);
+    }
 }
