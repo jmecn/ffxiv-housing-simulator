@@ -2,11 +2,12 @@ package ffxiv.housim.saintcoinach.db.xiv.orchestrion;
 
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
-import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
-import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalSheet;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivCollection;
-import ffxiv.housim.saintcoinach.db.xiv.entity.*;
+import ffxiv.housim.saintcoinach.db.xiv.music.orch.Orchestrion;
+import ffxiv.housim.saintcoinach.db.xiv.music.orch.OrchestrionCategory;
+import ffxiv.housim.saintcoinach.db.xiv.music.orch.OrchestrionPath;
+import ffxiv.housim.saintcoinach.db.xiv.music.orch.OrchestrionUiparam;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +52,7 @@ public class TestOrchestrion {
         }
 
         XivCollection coll = aRealmReversed.getGameData();
-        IRelationalSheet<OrchestrionCategory> items = coll.getSheet(OrchestrionCategory.class);
+        IXivSheet<OrchestrionCategory> items = coll.getSheet(OrchestrionCategory.class);
         for (OrchestrionCategory row : items) {
             log.info("{}, {}, {}, {}, {}", row.getKey(), row.getName(), row.getHideOrder(), row.getIcon(), row.getOrder());
         }
@@ -68,7 +69,7 @@ public class TestOrchestrion {
         }
 
         XivCollection coll = aRealmReversed.getGameData();
-        IRelationalSheet<OrchestrionPath> items = coll.getSheet(OrchestrionPath.class);
+        IXivSheet<OrchestrionPath> items = coll.getSheet(OrchestrionPath.class);
         for (OrchestrionPath row : items) {
             log.info("{}, {}", row.getKey(), row.getFile());
         }
@@ -84,7 +85,7 @@ public class TestOrchestrion {
         }
 
         XivCollection coll = aRealmReversed.getGameData();
-        IRelationalSheet<OrchestrionUiparam> items = coll.getSheet(OrchestrionUiparam.class);
+        IXivSheet<OrchestrionUiparam> items = coll.getSheet(OrchestrionUiparam.class);
         for (OrchestrionUiparam row : items) {
             log.info("{}, {}, {}", row.getKey(), row.getOrchestrionCategory(), row.getOrder());
         }

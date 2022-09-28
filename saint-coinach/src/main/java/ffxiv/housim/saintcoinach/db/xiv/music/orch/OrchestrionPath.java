@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach.db.xiv.entity;
+package ffxiv.housim.saintcoinach.db.xiv.music.orch;
 
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;

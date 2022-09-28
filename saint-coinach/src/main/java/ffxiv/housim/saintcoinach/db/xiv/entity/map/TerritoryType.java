@@ -3,7 +3,7 @@ package ffxiv.housim.saintcoinach.db.xiv.entity.map;
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
-import ffxiv.housim.saintcoinach.db.xiv.entity.bgm.BGMSituation;
+import ffxiv.housim.saintcoinach.db.xiv.music.bgm.BGMSituation;
 import ffxiv.housim.saintcoinach.texture.ImageFile;
 
 import java.util.HashMap;
