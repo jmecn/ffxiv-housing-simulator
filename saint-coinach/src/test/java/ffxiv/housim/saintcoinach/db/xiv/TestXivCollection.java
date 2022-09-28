@@ -105,6 +105,23 @@ public class TestXivCollection {
         }
     }
 
+
+    @Test
+    public void testNpcEquip() {
+        ARealmReversed aRealmReversed = null;
+        try {
+            aRealmReversed = new ARealmReversed(gameDir, Language.ChineseSimplified);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        XivCollection coll = aRealmReversed.getGameData();
+        IXivSheet<NpcEquip> items = coll.getSheet(NpcEquip.class);
+        for (NpcEquip row : items) {
+            log.info("{}, {}, {}, {}, {}, {}", row.getKey(), row.getBodyModel(), row.getBodyDye(), row.isVisor(), row.getHandsModel(), row.getHandsDye());
+        }
+    }
+
     @Test
     public void testStain() {
         ARealmReversed aRealmReversed = null;
