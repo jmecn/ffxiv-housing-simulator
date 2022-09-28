@@ -27,4 +27,13 @@ public class ImcVariant {
         this.partVisibilityMask = partVisibilityMask;
         this.effectNum = effectNum;
     }
+
+    @Override
+    public String toString() {
+        return "ImcVariant{" +
+                "materialNum=" + materialNum +
+                ", partVisibilityMask=" + partVisibilityMask +
+                ", effectNum=" + effectNum +
+                '}';
+    }
 }

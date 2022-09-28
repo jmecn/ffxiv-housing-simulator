@@ -44,11 +44,15 @@ public class FileCommonHeader {
         data.flip();
 
         headerLength = data.getInt();
+        if (headerLength == 0) {
+            log.warn("header length is 0!");
+            throw new IllegalArgumentException("Header length is 0!");
+        } else {
+            buffer = ByteBuffer.allocate(headerLength);
+        }
 
-        buffer = ByteBuffer.allocate(headerLength);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         buffer.putInt(headerLength);
-
         channel.read(buffer);
         buffer.flip();
 

@@ -10,6 +10,14 @@ public class Pair<K, V> {
     }
 
     @Override
+    public String toString() {
+        return "Pair{" +
+                "key=" + key +
+                ", val=" + val +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         return key.hashCode() * 13 + val.hashCode();
     }

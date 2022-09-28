@@ -337,4 +337,9 @@ public class ModelDefinition {
         buffer.position(ptr);
         return values;
     }
+
+    @Override
+    public String toString() {
+        return "ModelDefinition{" + file.getPath() + "}";
+    }
 }

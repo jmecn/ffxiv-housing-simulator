@@ -6,6 +6,7 @@ import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalSheet;
 import ffxiv.housim.saintcoinach.db.xiv.entity.*;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingFurniture;
+import ffxiv.housim.saintcoinach.utils.ModelHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -105,7 +106,6 @@ public class TestXivCollection {
         }
     }
 
-
     @Test
     public void testNpcEquip() {
         ARealmReversed aRealmReversed = null;
@@ -119,6 +119,27 @@ public class TestXivCollection {
         IXivSheet<NpcEquip> items = coll.getSheet(NpcEquip.class);
         for (NpcEquip row : items) {
             log.info("{}, {}, {}, {}, {}, {}", row.getKey(), row.getBodyModel(), row.getBodyDye(), row.isVisor(), row.getHandsModel(), row.getHandsDye());
+        }
+    }
+
+    @Test
+    public void testModelChara() {
+        ARealmReversed aRealmReversed = null;
+        try {
+            aRealmReversed = new ARealmReversed(gameDir, Language.ChineseSimplified);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        XivCollection coll = aRealmReversed.getGameData();
+        IXivSheet<ModelChara> items = coll.getSheet(ModelChara.class);
+        for (ModelChara row : items) {
+            log.info("{}, {}, {}, {}, {}", row.getKey(), row.getType(), row.getVariant(), row.getModelKey(), row.getBaseKey());
+            try {
+                log.info("{}", row.getType() == 3 ? ModelHelper.getMonsterModelDefinition(row) : null);
+            } catch (Exception e) {
+                log.error("getMonster model definition failed", e);
+            }
         }
     }
 

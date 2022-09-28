@@ -3,16 +3,9 @@ package ffxiv.housim.saintcoinach.db.xiv.entity;
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
-import ffxiv.housim.saintcoinach.io.PackCollection;
-import ffxiv.housim.saintcoinach.io.PackFile;
-import ffxiv.housim.saintcoinach.material.imc.ImcFile;
-import ffxiv.housim.saintcoinach.material.imc.ImcVariant;
-import ffxiv.housim.saintcoinach.scene.model.ModelDefinition;
-import ffxiv.housim.saintcoinach.scene.model.ModelFile;
-import ffxiv.housim.saintcoinach.utils.Pair;
 
 /**
- * desc:
+ * Class representing model data (non-humanoid).
  *
  * @author yanmaoyuan
  * @date 2022/9/28
@@ -22,55 +15,46 @@ public class ModelChara extends XivRow {
         super(sheet, sourceRow);
     }
 
-    public int getType() {
-        return asInt32("Type");
+    /**
+     * Gets the type of the current model.
+     *
+     * <pre>
+     * Confirmed values are:
+     *     2: Demihuman (chara/demihuman/d{Model}/obj/equipment/e{Base}/model/d{Model}e{Base}_{Variant}.mdl)
+     *         -> TODO: Variant to str map
+     *     3: Monster (chara/monster/m{Model}/base/b{Base}/model/m{Model}b{Base}.mdl)
+     *     4: Static object (?)
+     *     5: Attached to other NPC, Golem Soulstone, Titan Heart, etc.
+     * Unconfirmed:
+     *     1: Special body type? Gaius, Nero, Rhitatyn have this
+     * </pre>
+     * @return The type of the current model.
+     */
+    public short getType() {
+        return asInt16("Type");
     }
 
-    public int getModelKey() {
-        return asInt32("Model");
+    /**
+     * Gets the key for the current model's file.
+     * @return The key for the current model's file.
+     */
+    public short getModelKey() {
+        return asInt16("Model");
     }
 
-    public int getBaseKey() {
-        return asInt32("Base");
+    /**
+     * Gets the key for the base of the model to use.
+     * @return The key for the base of the model to use.
+     */
+    public short getBaseKey() {
+        return asInt16("Base");
     }
 
-    public int getVariant() {
-        return asInt32("Variant");
-    }
-
-    public Pair<ModelDefinition, ImcVariant> GetModelDefinition() {
-        switch (getType()) {
-            case 3:
-                return GetMonsterModelDefinition();
-            default:
-                throw new IllegalArgumentException();
-        }
-    }
-    
-    private Pair<ModelDefinition, ImcVariant> GetMonsterModelDefinition() {
-        final String ImcPathFormat = "chara/monster/m%1$04d/obj/body/b%2$04d/b%2$04d.imc";
-        final String ModelPathFormat = "chara/monster/m%1$04d/obj/body/b%2$04d/model/m%1$04db%2$04d.mdl";
-
-        String imcPath = String.format(ImcPathFormat, getModelKey(), getBaseKey());
-        String mdlPath = String.format(ModelPathFormat, getModelKey(), getBaseKey());
-
-        PackCollection packs = getSheet().getCollection().getPackCollection();
-
-        PackFile imcFileBase = packs.tryGetFile(imcPath);
-        PackFile mdlFileBase = packs.tryGetFile(mdlPath);
-
-        if (imcFileBase == null || mdlFileBase == null || !(mdlFileBase instanceof ModelFile)) {
-            throw new IllegalArgumentException("Unable to find files for {this}.");
-        }
-
-        try {
-            ModelDefinition model = ((ModelFile)mdlFileBase).getModelDefinition();
-            ImcFile imcFile = new ImcFile(imcFileBase);
-            ImcVariant variant = imcFile.getVariant(getVariant());
-
-            return new Pair<>(model, variant);
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Unable to load model for {this}.", ex);
-        }
+    /**
+     * Gets the variant of the model to use.
+     * @return The variant of the model to use.
+     */
+    public short getVariant() {
+        return asInt16("Variant");
     }
 }
