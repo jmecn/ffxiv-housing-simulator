@@ -67,19 +67,19 @@ public class Action extends ClassJobActionBase {
     }
 
     public ActionCostType getCostType()  {
-        return ActionCostType.of(asByte("PrimaryCost{Type}"));
+        return ActionCostType.of(asInt16("PrimaryCost{Type}"));
     }
 
     public int getCost() {
-        return asInt32("PrimaryCost{Value}");
+        return asInt16("PrimaryCost{Value}");
     }
 
-    public long getCastTime() {
-        return 100L * asInt32("Cast<100ms>");
+    public int getCastTime() {
+        return 100 * asInt16("Cast<100ms>");
     }
 
-    public long getRecastTime() {
-        return 100L * asInt32("Recast<100ms>");
+    public int getRecastTime() {
+        return 100 * asInt16("Recast<100ms>");
     }
 
     public int getMpCost(int level) {

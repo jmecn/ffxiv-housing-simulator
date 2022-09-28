@@ -4,10 +4,7 @@ import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalSheet;
-import ffxiv.housim.saintcoinach.db.xiv.entity.ClassJob;
-import ffxiv.housim.saintcoinach.db.xiv.entity.ClassJobCategory;
-import ffxiv.housim.saintcoinach.db.xiv.entity.Stain;
-import ffxiv.housim.saintcoinach.db.xiv.entity.StainTransient;
+import ffxiv.housim.saintcoinach.db.xiv.entity.*;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingFurniture;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -73,6 +70,38 @@ public class TestXivCollection {
         IXivSheet<ClassJob> items = coll.getSheet(ClassJob.class);
         for (ClassJob row : items) {
             log.info("{}, {}, {}, {}, {}, {}, {}, {}, {}, {}", row.getKey(), row.getName(), row.getAbbreviation(), row.getClassJobCategory(), row.getParentClassJob(), row.getStartingLevel(), row.getStartingWeapon(), row.getSoulCrystal(), row.getIcon(), row.getFramedIcon());
+        }
+    }
+
+    @Test
+    public void testGetAction() {
+        ARealmReversed aRealmReversed = null;
+        try {
+            aRealmReversed = new ARealmReversed(gameDir, Language.ChineseSimplified);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        XivCollection coll = aRealmReversed.getGameData();
+        IXivSheet<Action> items = coll.getSheet(Action.class);
+        for (Action row : items) {
+            log.info("{}, {}, {}, {}, {}, {}, {}, {}, {}, {}", row.getKey(), row.getName(), row.getIcon(), row.getGainedStatus(), row.getCastTime(), row.getRecastTime(), row.getActionTransient(), row.getActionCategory(), row.getCostType(), row.getCost());
+        }
+    }
+
+    @Test
+    public void testGetStatus() {
+        ARealmReversed aRealmReversed = null;
+        try {
+            aRealmReversed = new ARealmReversed(gameDir, Language.ChineseSimplified);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        XivCollection coll = aRealmReversed.getGameData();
+        IXivSheet<Status> items = coll.getSheet(Status.class);
+        for (Status row : items) {
+            log.info("{}, {}, {}, {}, {}, {}", row.getKey(), row.getName(), row.getDescription(), row.canDispel(), row.getIcon(), row.getCategory());
         }
     }
 
