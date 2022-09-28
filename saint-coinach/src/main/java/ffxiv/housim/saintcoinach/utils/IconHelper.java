@@ -7,8 +7,8 @@ import ffxiv.housim.saintcoinach.texture.ImageFile;
 
 public final class IconHelper {
 
-    //final static String IconFileFormat = "ui/icon/%03d000/%s%06d_hr1.tex";// 高清
-    final static String IconFileFormat = "ui/icon/%03d000/%s%06d.tex";
+    //final static String ICON_FILE_FORMAT = "ui/icon/%03d000/%s%06d_hr1.tex";// 高清
+    final static String ICON_FILE_FORMAT = "ui/icon/%03d000/%s%06d.tex";
 
     public static ImageFile getIcon(PackCollection pack, int nr) {
         return getIcon(pack, "", nr);
@@ -31,13 +31,13 @@ public final class IconHelper {
             type = type + "/";
         }
 
-        String filePath = String.format(IconFileFormat, nr / 1000, type, nr);
+        String filePath = String.format(ICON_FILE_FORMAT, nr / 1000, type, nr);
 
         PackFile file = pack.tryGetFile(filePath);
 
         if (file == null && type.length() > 0) {
             // Couldn't get specific type, try for generic version.
-            filePath = String.format(IconFileFormat, nr / 1000, "", nr);
+            filePath = String.format(ICON_FILE_FORMAT, nr / 1000, "", nr);
             file = pack.tryGetFile(filePath);
             if (file == null) {
                 // Couldn't get generic version either, that's a shame.

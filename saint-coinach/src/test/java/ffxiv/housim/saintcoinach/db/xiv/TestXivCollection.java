@@ -4,6 +4,8 @@ import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalSheet;
+import ffxiv.housim.saintcoinach.db.xiv.entity.ClassJob;
+import ffxiv.housim.saintcoinach.db.xiv.entity.ClassJobCategory;
 import ffxiv.housim.saintcoinach.db.xiv.entity.Stain;
 import ffxiv.housim.saintcoinach.db.xiv.entity.StainTransient;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingFurniture;
@@ -55,6 +57,22 @@ public class TestXivCollection {
         IRelationalSheet<?> items = coll.getSheet("HousingFurniture");
         for (IRelationalRow row : items) {
             System.out.println(row.get("Item"));
+        }
+    }
+
+    @Test
+    public void testGetClassJob() {
+        ARealmReversed aRealmReversed = null;
+        try {
+            aRealmReversed = new ARealmReversed(gameDir, Language.ChineseSimplified);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        XivCollection coll = aRealmReversed.getGameData();
+        IXivSheet<ClassJob> items = coll.getSheet(ClassJob.class);
+        for (ClassJob row : items) {
+            log.info("{}, {}, {}, {}, {}, {}, {}, {}, {}, {}", row.getKey(), row.getName(), row.getAbbreviation(), row.getClassJobCategory(), row.getParentClassJob(), row.getStartingLevel(), row.getStartingWeapon(), row.getSoulCrystal(), row.getIcon(), row.getFramedIcon());
         }
     }
 
