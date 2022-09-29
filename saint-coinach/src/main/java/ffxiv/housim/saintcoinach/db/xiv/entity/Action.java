@@ -74,12 +74,12 @@ public class Action extends ClassJobActionBase {
         return asInt16("PrimaryCost{Value}");
     }
 
-    public int getCastTime() {
-        return 100 * asInt16("Cast<100ms>");
+    public short getCastTime() {
+        return asInt16("Cast<100ms>");
     }
 
-    public int getRecastTime() {
-        return 100 * asInt16("Recast<100ms>");
+    public short getRecastTime() {
+        return asInt16("Recast<100ms>");
     }
 
     public int getMpCost(int level) {

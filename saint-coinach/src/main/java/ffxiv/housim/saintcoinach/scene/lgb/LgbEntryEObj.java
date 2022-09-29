@@ -2,8 +2,8 @@ package ffxiv.housim.saintcoinach.scene.lgb;
 
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivCollection;
-import ffxiv.housim.saintcoinach.db.xiv.entity.event.EObj;
-import ffxiv.housim.saintcoinach.db.xiv.entity.event.ExportedSG;
+import ffxiv.housim.saintcoinach.db.xiv.entity.EObj;
+import ffxiv.housim.saintcoinach.db.xiv.entity.ExportedSG;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.math.Vector3;

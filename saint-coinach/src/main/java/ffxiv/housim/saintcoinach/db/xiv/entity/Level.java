@@ -1,9 +1,8 @@
-package ffxiv.housim.saintcoinach.db.xiv.entity.map;
+package ffxiv.housim.saintcoinach.db.xiv.entity;
 
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
-import ffxiv.housim.saintcoinach.db.xiv.entity.ILocation;
 
 /**
  * Class representing a location in the game.

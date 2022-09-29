@@ -1,7 +1,11 @@
 package ffxiv.housim.saintcoinach.utils;
 
+import lombok.Getter;
+
 public class Pair<K, V> {
+    @Getter
     K key;
+    @Getter
     V val;
 
     public Pair(K k, V v) {

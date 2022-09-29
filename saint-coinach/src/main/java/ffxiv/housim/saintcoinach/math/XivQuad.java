@@ -1,10 +1,10 @@
 package ffxiv.housim.saintcoinach.math;
 
 public final class XivQuad {
-    short x;
-    short y;
-    short z;
-    short w;
+    public short x;
+    public short y;
+    public short z;
+    public short w;
 
     public XivQuad(long value) {
         x = (short) value;

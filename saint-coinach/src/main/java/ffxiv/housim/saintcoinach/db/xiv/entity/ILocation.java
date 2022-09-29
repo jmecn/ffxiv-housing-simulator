@@ -1,7 +1,5 @@
 package ffxiv.housim.saintcoinach.db.xiv.entity;
 
-import ffxiv.housim.saintcoinach.db.xiv.entity.map.PlaceName;
-
 /**
  * Interface for objects defining a location in a zone (in map-coordinates).
  */

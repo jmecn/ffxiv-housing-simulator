@@ -5,6 +5,7 @@ import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
 import ffxiv.housim.saintcoinach.texture.ImageFile;
 
+import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -51,7 +52,7 @@ public class Achievement extends XivRow implements IItemSource {
     }
 
     @Override
-    public Iterable<Item> getItems() {
+    public Collection<Item> getItems() {
         return Collections.singletonList(getItem());
     }
 

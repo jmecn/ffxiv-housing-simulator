@@ -30,7 +30,7 @@ import ffxiv.housim.app.state.CheckerBoardState;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
-import ffxiv.housim.saintcoinach.db.xiv.entity.map.TerritoryType;
+import ffxiv.housim.saintcoinach.db.xiv.entity.TerritoryType;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.scene.terrain.Territory;
 import lombok.extern.slf4j.Slf4j;

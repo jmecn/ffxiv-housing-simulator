@@ -1,4 +1,4 @@
-package ffxiv.housim.saintcoinach.db.xiv.entity.map;
+package ffxiv.housim.saintcoinach.db.xiv.entity;
 
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;

@@ -9,7 +9,7 @@ import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.entity.Item;
 import ffxiv.housim.saintcoinach.db.xiv.entity.Stain;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.*;
-import ffxiv.housim.saintcoinach.db.xiv.entity.map.TerritoryType;
+import ffxiv.housim.saintcoinach.db.xiv.entity.TerritoryType;
 import ffxiv.housim.saintcoinach.math.XivColor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

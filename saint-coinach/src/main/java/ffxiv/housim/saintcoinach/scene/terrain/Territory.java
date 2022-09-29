@@ -1,6 +1,6 @@
 package ffxiv.housim.saintcoinach.scene.terrain;
 
-import ffxiv.housim.saintcoinach.db.xiv.entity.map.TerritoryType;
+import ffxiv.housim.saintcoinach.db.xiv.entity.TerritoryType;
 import ffxiv.housim.saintcoinach.io.PackCollection;
 import ffxiv.housim.saintcoinach.io.PackFile;
 import ffxiv.housim.saintcoinach.scene.lgb.LgbFile;

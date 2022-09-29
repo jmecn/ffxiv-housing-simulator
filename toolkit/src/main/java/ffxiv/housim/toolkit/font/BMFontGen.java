@@ -11,7 +11,7 @@ import ffxiv.housim.saintcoinach.db.xiv.entity.Stain;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.FurnitureCatalogCategory;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingFurniture;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingItemCategory;
-import ffxiv.housim.saintcoinach.db.xiv.entity.map.TerritoryType;
+import ffxiv.housim.saintcoinach.db.xiv.entity.TerritoryType;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;

@@ -1,9 +1,11 @@
 package ffxiv.housim.saintcoinach.db.xiv.entity;
 
+import java.util.Collection;
+
 // TODO need implements
 public class ENpcs implements ILocatable, IQuantifiable {
     @Override
-    public Iterable<ILocation> getLocations() {
+    public Collection<ILocation> getLocations() {
         return null;
     }
 

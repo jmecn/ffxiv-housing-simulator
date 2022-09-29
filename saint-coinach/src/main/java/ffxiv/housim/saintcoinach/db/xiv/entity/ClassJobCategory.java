@@ -5,6 +5,7 @@ import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * desc:
@@ -14,9 +15,9 @@ import java.util.ArrayList;
  */
 public class ClassJobCategory extends XivRow {
 
-    private static final int ColumnOffset = 1;
+    private static final int COLUMN_OFFSET = 1;
 
-    private ClassJob[] classJobs;
+    private List<ClassJob> classJobs;
 
     public ClassJobCategory(IXivSheet sheet, IRelationalRow sourceRow) {
         super(sheet, sourceRow);
@@ -26,25 +27,23 @@ public class ClassJobCategory extends XivRow {
         return asString("Name");
     }
 
-    public ClassJob[] getClassJobs() {
+    public List<ClassJob> getClassJobs() {
         if (classJobs == null) {
             classJobs = buildClassJobs();
         }
         return classJobs;
     }
 
-    private ClassJob[] buildClassJobs() {
-        ArrayList<ClassJob> cjs = new ArrayList<>();
-        IXivSheet<ClassJob> cjSheet = getSheet().getCollection().getSheet(ClassJob.class);
-        for (ClassJob cj : cjSheet) {
-            Boolean isValid = (Boolean) get(ColumnOffset + cj.getKey());
+    private List<ClassJob> buildClassJobs() {
+        ArrayList<ClassJob> classJobs = new ArrayList<>();
+        IXivSheet<ClassJob> sheet = getSheet().getCollection().getSheet(ClassJob.class);
+        for (ClassJob classJob : sheet) {
+            Boolean isValid = (Boolean) get(COLUMN_OFFSET + classJob.getKey());
             if (isValid) {
-                cjs.add(cj);
+                classJobs.add(classJob);
             }
         }
-
-        classJobs = new ClassJob[cjs.size()];
-        return cjs.toArray(classJobs);
+        return classJobs;
     }
 
     @Override

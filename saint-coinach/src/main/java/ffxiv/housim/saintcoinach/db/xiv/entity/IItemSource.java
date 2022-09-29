@@ -1,5 +1,7 @@
 package ffxiv.housim.saintcoinach.db.xiv.entity;
 
+import java.util.Collection;
+
 /**
  * Interface for objects from which {@link Item}s can be obtained.
  */
@@ -10,5 +12,5 @@ public interface IItemSource {
      *
      * @return The {@link Item}s that can be obtained from the current object.
      */
-    Iterable<Item> getItems();
+    Collection<? extends Item> getItems();
 }

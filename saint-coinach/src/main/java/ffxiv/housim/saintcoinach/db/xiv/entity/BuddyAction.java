@@ -9,12 +9,10 @@ import ffxiv.housim.saintcoinach.texture.ImageFile;
  * desc:
  *
  * @author yanmaoyuan
- * @date 2022/9/28
+ * @date 2022/9/29
  */
-public abstract class ActionBase extends XivRow {
-    private ActionTransient actionTransient;
-
-    public ActionBase(IXivSheet sheet, IRelationalRow sourceRow) {
+public class BuddyAction extends XivRow {
+    public BuddyAction(IXivSheet sheet, IRelationalRow sourceRow) {
         super(sheet, sourceRow);
     }
 
@@ -23,20 +21,18 @@ public abstract class ActionBase extends XivRow {
     }
 
     public String getDescription() {
-        return getActionTransient().getDescription();
+        return asString("Description");
     }
 
     public ImageFile getIcon() {
         return asImage("Icon");
     }
-
-    public ActionTransient getActionTransient() {
-        if (actionTransient == null) {
-            getSheet().getCollection().getSheet(ActionTransient.class).get(getKey());
-        }
-        return actionTransient;
+    
+    public ImageFile getStatusIcon() {
+        return asImage("Icon{Status}");
     }
 
+    @Override
     public String toString() {
         return getName();
     }

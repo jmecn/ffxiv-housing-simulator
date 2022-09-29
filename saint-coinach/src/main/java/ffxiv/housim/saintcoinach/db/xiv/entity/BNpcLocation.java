@@ -1,6 +1,5 @@
 package ffxiv.housim.saintcoinach.db.xiv.entity;
 
-import ffxiv.housim.saintcoinach.db.xiv.entity.map.PlaceName;
 import lombok.Getter;
 
 /**
@@ -12,13 +11,13 @@ import lombok.Getter;
 public class BNpcLocation implements ILocation {
 
     @Getter
-    private PlaceName regionPlaceName;
+    private final PlaceName regionPlaceName;
     @Getter
-    private PlaceName placeName;
+    private final PlaceName placeName;
     @Getter
-    private int minimumLevel;
+    private final int minimumLevel;
     @Getter
-    private int maximumLevel;
+    private final int maximumLevel;
 
     public BNpcLocation(PlaceName regionPlaceName, PlaceName placeName, int minimumLevel, int maximumLevel) {
         this.regionPlaceName = regionPlaceName;
