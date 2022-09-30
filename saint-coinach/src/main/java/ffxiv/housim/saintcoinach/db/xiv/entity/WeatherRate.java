@@ -5,7 +5,6 @@ import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
 import ffxiv.housim.saintcoinach.utils.Pair;
-import sun.jvm.hotspot.utilities.Interval;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,7 @@ public class WeatherRate extends XivRow {
         for (int i = 0; i < count; i++) {
             String suffix = String.format("[%d]", i);
             Weather weather = (Weather) get("Weather" + suffix);
-            int rate = (int) get("Rate" + suffix);
+            short rate = (short) get("Rate" + suffix);
             w.add(weather);
             wr.add(new Pair<>(min + rate, weather));
 

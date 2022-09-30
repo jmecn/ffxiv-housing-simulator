@@ -3,9 +3,7 @@ package ffxiv.housim.saintcoinach.db.ex;
 import lombok.Getter;
 
 import java.nio.ByteBuffer;
-import java.util.Collection;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class DataRowV2 extends DataRowBase {
     final static int MetadataLength = 0x06;

@@ -2,6 +2,13 @@
   "sheet": "HousingExterior",
   "definitions": [
     {
+      "name": "ExteriorId"
+    },
+    {
+      "index": 1,
+      "name": "HousingItemCategory"
+    },
+    {
       "index": 2,
       "name": "PlaceName",
       "converter": {

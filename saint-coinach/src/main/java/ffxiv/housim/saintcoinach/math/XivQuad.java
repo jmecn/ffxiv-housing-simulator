@@ -12,4 +12,14 @@ public final class XivQuad {
         z = (short)(value >> 32);
         w = (short)(value >> 48);
     }
+
+    @Override
+    public String toString() {
+        return "XivQuad{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", w=" + w +
+                '}';
+    }
 }

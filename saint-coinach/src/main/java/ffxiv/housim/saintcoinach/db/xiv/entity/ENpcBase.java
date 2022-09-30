@@ -105,7 +105,9 @@ public class ENpcBase extends XivRow {
     public int getFacePaintColor() {
         return asInt32("FacePaintColor");
     }
-
+    public Behavior getBehavior() {
+        return as(Behavior.class);
+    }
     public XivQuad getModelMainHand() {
         return asQuad("Model{MainHand}");
     }

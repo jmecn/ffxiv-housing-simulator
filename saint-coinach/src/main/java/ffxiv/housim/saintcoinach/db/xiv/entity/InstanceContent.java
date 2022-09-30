@@ -15,7 +15,7 @@ public class InstanceContent extends ContentBase implements IItemSource {
 
     private InstanceContentData data;
 
-    protected InstanceContent(IXivSheet sheet, IRelationalRow sourceRow) {
+    public InstanceContent(IXivSheet sheet, IRelationalRow sourceRow) {
         super(sheet, sourceRow);
     }
 

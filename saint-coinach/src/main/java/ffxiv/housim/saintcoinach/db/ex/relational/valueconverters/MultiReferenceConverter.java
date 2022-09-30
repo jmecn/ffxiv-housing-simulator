@@ -38,12 +38,12 @@ public class MultiReferenceConverter implements IValueConverter<IRelationalRow> 
 
         int key;
 
-        if (rawValue instanceof Byte) {
-            Byte val = (Byte) rawValue;
-            key = val & 0xFF;
+        if (rawValue instanceof Integer) {
+            key = (int) rawValue;
         } else if (rawValue instanceof Short) {
-            Short val = (Short) rawValue;
-            key = val & 0xFFFF;
+            key = 0xFFFF & (short) rawValue;
+        } else if (rawValue instanceof Byte) {
+            key = 0xFF & (byte) rawValue;
         } else if (rawValue instanceof Number){
             Number val = (Number) rawValue;
             key = val.intValue();

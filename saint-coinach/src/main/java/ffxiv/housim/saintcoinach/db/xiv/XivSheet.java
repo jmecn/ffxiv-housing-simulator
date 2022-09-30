@@ -32,8 +32,13 @@ public class XivSheet<T extends IXivRow> implements IXivSheet<T> {
         }
     }
 
-    protected T createRow(IRelationalRow sourceRow) throws ReflectiveOperationException{
-        return rowConstructor.newInstance(this, sourceRow);
+    protected T createRow(IRelationalRow sourceRow) throws ReflectiveOperationException {
+        try {
+            log.debug("key:{}, name:{}", sourceRow.getKey(), sourceRow);
+            return rowConstructor.newInstance(this, sourceRow);
+        } catch (Throwable e) {
+            throw e;
+        }
     }
 
     @Override
@@ -78,8 +83,8 @@ public class XivSheet<T extends IXivRow> implements IXivSheet<T> {
         try {
             t = createRow(source.get(row));
             rows.put(row, t);
-        } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("Failed instance Row:{}, Class:{}, constructor:{}", source.get(row), getClass(), rowConstructor, e);
         }
         return t;
     }
@@ -123,8 +128,8 @@ public class XivSheet<T extends IXivRow> implements IXivSheet<T> {
                     try {
                         t = createRow(sourceRow);
                         rows.put(key, t);
-                    } catch (ReflectiveOperationException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        log.error("Failed instance Row:{}, Class:{}, constructor:{}", sourceRow, getClass(), rowConstructor, e);
                     }
                 }
                 return t;

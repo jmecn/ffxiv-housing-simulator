@@ -10,10 +10,12 @@ import ffxiv.housim.saintcoinach.db.ex.IRow;
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.ex.relational.IValueConverter;
 import ffxiv.housim.saintcoinach.db.ex.relational.complexlink.SheetLinkData;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Type;
 import java.util.Objects;
 
+@Slf4j
 public class ComplexLinkConverter implements IValueConverter<Object> {
 
     private SheetLinkData[] links;
@@ -30,7 +32,19 @@ public class ComplexLinkConverter implements IValueConverter<Object> {
 
     @Override
     public Object convert(IDataRow row, Object rawValue) {
-        int key = (int) rawValue;
+        int key;
+        if (rawValue instanceof Integer) {
+            key = (int) rawValue;
+        } else if (rawValue instanceof Short) {
+            key = 0xFFFF & (short) rawValue;
+        } else if (rawValue instanceof Byte) {
+            key = 0xFF & (byte) rawValue;
+        } else if (rawValue instanceof Boolean) {
+            key = (boolean) rawValue ? 1 : 0;
+        } else {
+            log.warn("rawValue expected as int/short, actually {}", rawValue.getClass());
+            return null;
+        }
         if (key == 0) {
             return null;
         }

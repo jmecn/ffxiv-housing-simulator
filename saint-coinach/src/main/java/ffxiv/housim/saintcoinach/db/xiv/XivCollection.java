@@ -214,6 +214,13 @@ public class XivCollection extends RelationalExCollection {
         }
     }
 
+    public Map<String, Class<IXivRow>> getSheetNameToTypeMap() {
+        if (sheetNameToTypeMap == null) {
+            buildSheetToTypeMap();
+        }
+        return sheetNameToTypeMap;
+    }
+
     private Class<IXivRow> getXivRowType(String name) {
         if (sheetNameToTypeMap == null) {
             buildSheetToTypeMap();

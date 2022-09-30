@@ -25,6 +25,7 @@ public class GrandCompany extends XivRow {
     public Item getSealItem() {
         return getSheet().getCollection().getSheet(Item.class).get(getKey() + SEAL_ITEM_OFFSET);
     }
+
     @Override
     public String toString() {
         return getName();

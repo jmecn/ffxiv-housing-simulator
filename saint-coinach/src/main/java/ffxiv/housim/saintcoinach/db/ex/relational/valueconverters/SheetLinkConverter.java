@@ -37,22 +37,21 @@ public class SheetLinkConverter implements IValueConverter<IRelationalRow> {
         }
 
         IRelationalSheet<?> sheet = coll.getSheet(targetSheet);
+        int key;
         if (rawValue instanceof Integer) {
-            int key = (int) rawValue;
-
-            return sheet.get(key);
+            key = (int) rawValue;
         } else if (rawValue instanceof Short) {
-            int key = (short) rawValue;
-
-            return sheet.get(key);
+            key = 0xFFFF & (short) rawValue;
+        } else if (rawValue instanceof Byte) {
+            key = 0xFF & (byte) rawValue;
         } else if (rawValue instanceof Boolean) {
-            int key = (boolean) rawValue ? 1 : 0;
-
-            return sheet.get(key);
+            key = (boolean) rawValue ? 1 : 0;
         } else {
-            log.warn("rawValue expected as int/short, actually {}", rawValue.getClass());
+            log.warn("rawValue expected as int/short/byte/bool, actually {}", rawValue.getClass());
             return null;
         }
+
+        return sheet.get(key);
     }
 
     @Override

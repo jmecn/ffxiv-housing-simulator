@@ -5,7 +5,6 @@ import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
 import ffxiv.housim.saintcoinach.db.xiv.XivRow;
 
-import java.util.Collections;
 import java.util.List;
 
 /**

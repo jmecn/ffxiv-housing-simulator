@@ -8,4 +8,12 @@ public class HousingEmploymentNpcRace extends XivRow {
     public HousingEmploymentNpcRace(IXivSheet sheet, IRelationalRow sourceRow) {
         super(sheet, sourceRow);
     }
+    public String getRace() {
+        return asString("Race");
+    }
+
+    @Override
+    public String toString() {
+        return getRace();
+    }
 }

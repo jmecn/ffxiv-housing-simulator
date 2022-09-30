@@ -40,7 +40,7 @@ public class EquipSlotCategory extends XivRow {
         List<EquipSlot> possible = new ArrayList<>();
 
         for (EquipSlot slot : getSheet().getCollection().getEquipSlots()) {
-            int val = (int) get(slot.getKey());
+            int val = (byte) get(slot.getKey());
             if (val > 0) {
                 possible.add(slot);
             } else if (val < 0) {

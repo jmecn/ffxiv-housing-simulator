@@ -5,11 +5,14 @@ import ffxiv.housim.saintcoinach.db.ex.DataRowV2;
 import ffxiv.housim.saintcoinach.db.ex.SubRow;
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalRow;
 import ffxiv.housim.saintcoinach.db.ex.relational.IRelationalSheet;
+import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.Constructor;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public class XivSheet2<T extends IXivSubRow> extends XivSheet<T> {
 
     private Map<Pair<Integer, Integer>, T> subRows = new ConcurrentHashMap<>();
@@ -51,8 +54,8 @@ public class XivSheet2<T extends IXivSubRow> extends XivSheet<T> {
                     try {
                         t = createRow(sourceRow);
                         subRows.put(key, t);
-                    } catch (ReflectiveOperationException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        log.error("Failed instance Row:{}, Class:{}", sourceRow, getClass(), e);
                     }
                 }
                 return t;
