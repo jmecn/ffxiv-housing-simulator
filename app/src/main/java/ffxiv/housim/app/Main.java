@@ -1,6 +1,5 @@
 package ffxiv.housim.app;
 
-import com.google.common.io.Resources;
 import com.jme3.system.AppSettings;
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
@@ -16,7 +15,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.prefs.BackingStoreException;
@@ -79,7 +77,6 @@ public class Main {
         setting.setGammaCorrection(false);
         setting.setRenderer(AppSettings.LWJGL_OPENGL41);
         setting.setUseRetinaFrameBuffer(false);
-
         // read from registry
         try {
             setting.load(Constants.TITLE);

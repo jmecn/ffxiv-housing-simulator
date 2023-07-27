@@ -2,8 +2,11 @@ package ffxiv.housim.saintcoinach.db.xiv.housing;
 
 import ffxiv.housim.saintcoinach.ARealmReversed;
 import ffxiv.housim.saintcoinach.db.ex.Language;
+import ffxiv.housim.saintcoinach.db.ex.relational.RelationalColumn;
+import ffxiv.housim.saintcoinach.db.ex.relational.RelationalHeader;
 import ffxiv.housim.saintcoinach.db.xiv.IXivRow;
 import ffxiv.housim.saintcoinach.db.xiv.IXivSheet;
+import ffxiv.housim.saintcoinach.db.xiv.XivSubRow;
 import ffxiv.housim.saintcoinach.db.xiv.entity.Item;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.*;
 import ffxiv.housim.saintcoinach.db.xiv.entity.housing.HousingItemCategory;
@@ -32,6 +35,41 @@ public class TestFurnitureCatalog {
         }
     }
 
+    @Test
+    public void testFurnitureCatalogCategory() {
+        foreach(FurnitureCatalogCategory.class);
+    }
+
+    public <T extends IXivRow> void foreach(Class<T> clazz) {
+        IXivSheet<T> sheet = aRealmReversed.getGameData().getSheet(clazz);
+
+        RelationalHeader header = sheet.getHeader();
+        RelationalColumn[] columns = header.getColumns();
+        String[] types = new String[columns.length];
+        for (int i = 0; i < columns.length; i++) {
+            types[i] = columns[i].getValueType();
+        }
+        log.info("{}: {}", sheet.getName(), types);
+
+        for (T xivRow : sheet) {
+            if (xivRow.getKey() == 0) {
+                continue;
+            }
+            Object[] values = new Object[columns.length];
+            for (int i = 0; i < columns.length; i++) {
+                values[i] = xivRow.get(columns[i].getIndex());
+            }
+
+            if (xivRow instanceof XivSubRow) {
+                XivSubRow xivSubRow = (XivSubRow) xivRow;
+                log.info("#{}: {}", xivSubRow.getFullKey(), values);
+            } else if (xivRow != null) {
+                log.info("#{}: {}", xivRow.getKey(), values);
+            }
+        }
+
+        log.info("row count: {}", sheet.getCount());
+    }
 
     @Test
     public void testFurnitureCatalog() {

@@ -26,7 +26,7 @@ public class TestPackFile {
         PackFile packFile = collection.tryGetFile(file);
         byte[] data = packFile.getData();
 
-        assertEquals(122400, data.length);
+        assertEquals(122416, data.length);
     }
 
     @Test

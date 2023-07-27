@@ -4,6 +4,14 @@
   "definitions": [
     {
       "name": "Category"
+    },
+    {
+      "index": 1,
+      "name": "HousingItemCategory"
+    },
+    {
+      "index": 2,
+      "name": "Order"
     }
   ]
 }

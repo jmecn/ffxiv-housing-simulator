@@ -195,7 +195,7 @@ public class ModelFactory {
         spatial.depthFirstTraversal(s -> {
             if (s instanceof Geometry) {
                 Geometry e = (Geometry) s;
-                log.info("e:{}, e", e.getName(), e);
+                log.info("name:{}, e:{}", e.getName(), e);
                 e.setMaterial(chairMat);
             }
         });

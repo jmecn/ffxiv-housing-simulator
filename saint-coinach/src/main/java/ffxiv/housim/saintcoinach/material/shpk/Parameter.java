@@ -1,11 +1,9 @@
 package ffxiv.housim.saintcoinach.material.shpk;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Parameter {
 
@@ -16,30 +14,29 @@ public class Parameter {
     private int id;
 
     @Getter
+    private int nameOffset;
+
+    @Getter
+    private int nameLength;
+
+    @Getter
     private short registerIndex;
     @Getter
     private short registerCount;
 
     @Getter
+    @Setter
     private String name;
 
     Parameter(ParameterType type, ByteBuffer buffer, int parameterListOffset) {
         this.type = type;
 
         this.id = buffer.getInt();
-        int nameOffset = buffer.getInt();
-        int nameLength = buffer.getInt();
+        this.nameOffset = buffer.getInt();
+        this.nameLength = buffer.getInt();
 
         this.registerIndex = buffer.getShort();
         this.registerCount = buffer.getShort();
-
-        int offset = parameterListOffset + nameOffset;
-        int length = nameLength;
-
-        byte[] bytes = new byte[length];
-        buffer.position(offset);
-        buffer.get(bytes);
-        this.name = new String(bytes, StandardCharsets.US_ASCII);
     }
 
     @Override

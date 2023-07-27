@@ -64,6 +64,11 @@
         </dependency>
         <dependency>
             <groupId>org.jmonkeyengine</groupId>
+            <artifactId>jme3-awt-dialogs</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jmonkeyengine</groupId>
             <artifactId>jme3-lwjgl3</artifactId>
             <scope>test</scope>
         </dependency>

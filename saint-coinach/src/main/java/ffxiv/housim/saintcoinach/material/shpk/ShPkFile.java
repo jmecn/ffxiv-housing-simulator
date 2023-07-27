@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -146,6 +147,24 @@ public class ShPkFile {
             parameters.add(new Parameter(ParameterType.Sampler, buffer, parameterListOffset));
         }
 
+        for(Shader shader : shaders) {
+            for (Parameter p : shader.getParameters()) {
+                byte[] bytes = new byte[p.getNameLength()];
+                buffer.position(parameterListOffset + p.getNameOffset());
+                buffer.get(bytes);
+                String name = new String(bytes, StandardCharsets.US_ASCII);
+                p.setName(name);
+            }
+        }
+
+        // 加载参数名
+        for (Parameter p : parameters) {
+            byte[] bytes = new byte[p.getNameLength()];
+            buffer.position(parameterListOffset + p.getNameOffset());
+            buffer.get(bytes);
+            String name = new String(bytes, StandardCharsets.US_ASCII);
+            p.setName(name);
+        }
         parameterMap = parameters.stream().collect(Collectors.toMap(Parameter::getId, Functions.identity()));
     }
 
